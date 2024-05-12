@@ -1,0 +1,26 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Data
+*.db
+data/
+
+# dbt
+target/
+dbt_packages/
+logs/
+
+# IPython
+.ipynb_checkpoints
+*.ipynb
+
+# Environment
+.venv/
+
+# Editor
+.vscode
+
+# Mac
+*.DS_Store

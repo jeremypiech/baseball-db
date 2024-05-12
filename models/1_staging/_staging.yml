@@ -1,0 +1,33 @@
+
+version: 2
+
+models:
+  - name: stg_retrosheet_events
+    columns:
+      - name: unique_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_retrosheet_games
+    columns:
+      - name: game_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_retrosheet_rosters
+    columns:
+      - name: unique_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_retrosheet_subs
+    columns:
+      - name: unique_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_statcast

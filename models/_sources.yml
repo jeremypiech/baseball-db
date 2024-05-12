@@ -1,0 +1,11 @@
+
+version: 2
+
+sources:
+  - name: raw
+    tables:
+      - name: retrosheet_events
+      - name: retrosheet_games
+      - name: retrosheet_rosters
+      - name: retrosheet_subs
+      - name: statcast
