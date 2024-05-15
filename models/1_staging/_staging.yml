@@ -2,6 +2,13 @@
 version: 2
 
 models:
+  - name: stg_chadwick_register
+    columns:
+        - name: key_person
+          data_tests:
+            - unique
+            - not_null
+
   - name: stg_retrosheet_events
     columns:
       - name: unique_id
