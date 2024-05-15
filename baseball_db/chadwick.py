@@ -80,7 +80,7 @@ class ChadwickRegister:
     def load(self) -> None:
         # Create a new table with every load
         fields_sql = ", ".join(" ".join(x) for x in self.PEOPLE_FIELD_DTYPES.items())
-        sql = f'create or replace table raw.chadwick_register({fields_sql});'
+        sql = f'create or replace table raw.chadwick_people({fields_sql});'
 
         con = duckdb.connect(DATABASE_NAME)
         con.execute(sql)
@@ -88,7 +88,7 @@ class ChadwickRegister:
         # Copy CSVs to table
         filepaths = sorted(self.raw_dir.glob('**/people*.csv'))
         for filepath in filepaths:
-            sql = f"copy raw.chadwick_register from '{filepath}' (header);"
+            sql = f"copy raw.chadwick_people from '{filepath}' (header);"
             con.execute(sql)
 
         con.close()

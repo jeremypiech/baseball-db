@@ -4,7 +4,7 @@ version: 2
 sources:
   - name: raw
     tables:
-      - name: chadwick_register
+      - name: chadwick_people
       - name: retrosheet_events
       - name: retrosheet_games
       - name: retrosheet_rosters
