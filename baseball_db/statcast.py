@@ -153,6 +153,8 @@ class Statcast:
         'spin_axis': 'BIGINT',  # SMALLINT
         'delta_home_win_exp': 'DECIMAL(18,8)',  # NUMERIC
         'delta_run_exp': 'DECIMAL(18,8)',  # NUMERIC
+        'bat_speed': 'DECIMAL(18,14)',
+        'swing_length': 'DECIMAL(18,8)',
     }
 
     def __init__(self, data_dir = 'data') -> None:
@@ -164,13 +166,13 @@ class Statcast:
 
     def search(
             self,
-            start_date: StrDate = datetime.date.today(),
-            end_date: StrDate = datetime.date.today(),
+            start_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1)),
+            end_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1)),
             player_type: str = 'pitcher',
         ) -> bytes:
         """Search MLB.com's Statcast database.
 
-        *Don't query for more than 4-5 days*
+        *Don't query for more than 3-4 days*
 
         Parameters
         ----------
@@ -196,7 +198,12 @@ class Statcast:
 
         return resp.content
 
-    def extract(self, start_date: StrDate = datetime.date.today(), end_date: StrDate = datetime.date.today()) -> None:
+    def extract(
+            self,
+            start_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1)),
+            end_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1))
+        ) -> None:
+
         start_date = datetime.date.fromisoformat(start_date) if isinstance(start_date, str) else start_date
         end_date = datetime.date.fromisoformat(end_date) if isinstance(end_date, str) else end_date
 
@@ -207,7 +214,8 @@ class Statcast:
             print(f'Searching {start:%Y-%m-%d} - {end:%Y-%m-%d}')
             content = self.search(start, end)
 
-            filepath = self.raw_dir/ f'statcast-{start:%Y-%m-%d}-{end:%Y-%m-%d}.csv'
+            filename = f'statcast-{start:%Y-%m-%d}.csv' if start_date == end_date else f'statcast-{start:%Y-%m-%d}-{end:%Y-%m-%d}.csv'
+            filepath = self.raw_dir / filename
             with open(filepath, 'wb') as f:
                 f.write(content)
 
