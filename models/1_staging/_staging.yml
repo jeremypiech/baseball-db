@@ -38,3 +38,8 @@ models:
           - not_null
 
   - name: stg_statcast
+    columns:
+      - name: unique_id
+        data_tests:
+          - unique
+          - not_null
