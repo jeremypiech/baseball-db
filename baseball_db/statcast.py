@@ -6,6 +6,8 @@ import typing
 
 from pathlib import Path
 
+from baseball_db.utils import date_range
+
 
 DATABASE_NAME = os.getenv('BASEBALL_DB_NAME', 'baseball.db')
 StrDate = typing.Union[str, datetime.date]
@@ -207,19 +209,22 @@ class Statcast:
         start_date = datetime.date.fromisoformat(start_date) if isinstance(start_date, str) else start_date
         end_date = datetime.date.fromisoformat(end_date) if isinstance(end_date, str) else end_date
 
-        start = start_date
-        while start <= end_date:
+        search_start_dates = date_range(start_date, end_date, 4)
+        for start in search_start_dates:
             end = min(start + datetime.timedelta(days=3), end_date)
 
             print(f'Searching {start:%Y-%m-%d} - {end:%Y-%m-%d}')
             content = self.search(start, end)
 
-            filename = f'statcast-{start:%Y-%m-%d}.csv' if start_date == end_date else f'statcast-{start:%Y-%m-%d}-{end:%Y-%m-%d}.csv'
+            filename = (
+                f'statcast-{start:%Y-%m-%d}.csv'
+                if start_date == end_date
+                else f'statcast-{start:%Y-%m-%d}-{end:%Y-%m-%d}.csv'
+            )
+
             filepath = self.raw_dir / filename
             with open(filepath, 'wb') as f:
                 f.write(content)
-
-            start = end + datetime.timedelta(days=1)
 
     def _create_table(self) -> None:
         fields_sql = ", ".join(" ".join(x) for x in self.FIELD_DTYPES.items())
@@ -247,3 +252,19 @@ class Statcast:
             con.execute(sql)
 
         con.close()
+
+    def extract_load(
+            self,
+            start_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1)),
+            end_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1)),
+        ) -> None:
+
+        start_date = datetime.date.fromisoformat(start_date) if isinstance(start_date, str) else start_date
+        end_date = datetime.date.fromisoformat(end_date) if isinstance(end_date, str) else end_date
+
+        self.extract(start_date, end_date)
+
+        filename_start_dates = date_range(start_date, end_date, 4)
+        for start in filename_start_dates:
+            for filepath in self.raw_dir.glob(f'statcast-{start:%Y-%m-%d}*'):
+                self.load_file(filepath.name)

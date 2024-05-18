@@ -98,3 +98,10 @@ class ChadwickRegister:
         for path in self.raw_dir.iterdir():
             if path.is_dir():
                 shutil.rmtree(path)
+
+    def extract_load(self) -> None:
+        """Download files and upload to database."""
+        self.download()
+        self.unzip()
+        self.load()
+        self.cleanup()
