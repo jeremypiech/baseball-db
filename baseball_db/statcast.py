@@ -218,7 +218,7 @@ class Statcast:
 
             filename = (
                 f'statcast-{start:%Y-%m-%d}.csv'
-                if start_date == end_date
+                if start == end
                 else f'statcast-{start:%Y-%m-%d}-{end:%Y-%m-%d}.csv'
             )
 
