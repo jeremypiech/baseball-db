@@ -16,7 +16,7 @@ select
     , batter as batter_id
     , pitcher as pitcher_id
     , events
-    , description as pitch_desc
+    , description as pitch_result_desc
 
     -- , spin_dir
     -- , spin_rate_deprecated
