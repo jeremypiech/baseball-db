@@ -40,4 +40,5 @@ capitalisation_policy = lower
 extended_capitalisation_policy = lower
 
 [sqlfluff:rules:convention.not_equal]
-preferred_not_equal_style = c_style  # `!=`
+# Use `!=` for not equals
+preferred_not_equal_style = c_style  
