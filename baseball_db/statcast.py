@@ -163,6 +163,8 @@ class Statcast:
         'bat_win_exp': 'DECIMAL(9, 4)',
         'age_pit_legacy': 'TINYINT',
         'age_bat_legacy': 'TINYINT',
+        'age_pit': 'TINYINT',
+        'age_bat': 'TINYINT',
         'n_thruorder_pitcher': 'TINYINT',
         'n_priorpa_thisgame_player_at_bat': 'TINYINT',
         'pitcher_days_since_prev_game': 'SMALLINT',
