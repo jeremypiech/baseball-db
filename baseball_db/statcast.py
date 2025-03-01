@@ -6,10 +6,10 @@ import typing
 
 from pathlib import Path
 
+from baseball_db import DATABASE_NAME
 from baseball_db.utils import date_range
 
 
-DATABASE_NAME = os.getenv('BASEBALL_DB_NAME', 'baseball.db')
 StrDate = typing.Union[str, datetime.date]
 
 

@@ -7,8 +7,7 @@ import subprocess
 from pathlib import Path
 from zipfile import ZipFile
 
-
-DATABASE_NAME = os.getenv('BASEBALL_DB_NAME', 'baseball.db')
+from baseball_db import DATABASE_NAME
 
 
 class Retrosheet:
