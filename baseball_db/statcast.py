@@ -282,7 +282,7 @@ class Statcast:
         start_date = datetime.date.fromisoformat(start_date) if isinstance(start_date, str) else start_date
         end_date = datetime.date.fromisoformat(end_date) if isinstance(end_date, str) else end_date
 
-        self.extract(start_date, end_date)
+        self.extract(start_date, end_date, days_step)
 
         filename_start_dates = date_range(start_date, end_date, days_step)
         for start in filename_start_dates:
