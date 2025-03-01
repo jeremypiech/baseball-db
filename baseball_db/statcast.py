@@ -1,6 +1,5 @@
 import datetime
 import duckdb
-import os
 import requests
 import typing
 
