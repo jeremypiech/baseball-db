@@ -4,7 +4,7 @@ with source as (
     select * from {{ source('raw', 'statcast') }}
 )
 
-select
+select distinct
     pitch_type
     , game_date
     , release_speed
