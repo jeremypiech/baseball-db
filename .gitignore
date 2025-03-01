@@ -22,5 +22,8 @@ logs/
 # Editor
 .vscode
 
+# Linter
+.ruff_cache
+
 # Mac
 *.DS_Store
