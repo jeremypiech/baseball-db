@@ -31,7 +31,7 @@ class Statcast:
         'stadium': '',
         'hfBBL': '',
         'hfNewZones': '',
-        'hfGT': 'R|PO|',
+        'hfGT': 'R|PO|S|',
         'hfSea': '',
         'hfC': '',
         'hfSit': '',
