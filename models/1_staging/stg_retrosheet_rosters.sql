@@ -31,8 +31,9 @@ select
     , position
     , year
 
+    , any_value(first_name) as first_name
     , any_value(last_name) as last_name
-    , any_value(first_name) as last_name
+
     , arg_max(bats, bats_rank) as bats
     , arg_max(throws, throws_rank) as throws
 
