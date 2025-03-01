@@ -63,98 +63,98 @@ class Statcast:
     }
     
     FIELD_DTYPES = {
-        'pitch_type': 'VARCHAR',  # VARCHAR
-        'game_date': 'DATE',  # DATE
-        'release_speed': 'DECIMAL(18,8)',  # NUMERIC
-        'release_pos_x': 'DECIMAL(18,8)',  # NUMERIC
-        'release_pos_z': 'DECIMAL(18,8)',  # NUMERIC
-        'player_name': 'VARCHAR',  # VARCHAR
-        'batter': 'BIGINT',  # INTEGER
-        'pitcher': 'BIGINT',  # INTEGER
-        'events': 'VARCHAR',  # VARCHAR
-        'description': 'VARCHAR',  # TEXT
-        'spin_dir': 'VARCHAR',  # NUMERIC
-        'spin_rate_deprecated': 'VARCHAR',  # NUMERIC
-        'break_angle_deprecated': 'VARCHAR',  # NUMERIC
-        'break_length_deprecated': 'VARCHAR',  # NUMERIC
-        'zone': 'BIGINT',  # SMALLINT
-        'des': 'VARCHAR',  # TEXT
-        'game_type': 'VARCHAR',  # VARCHAR
-        'stand': 'VARCHAR',  # VARCHAR
-        'p_throws': 'VARCHAR',  # VARCHAR
-        'home_team': 'VARCHAR',  # VARCHAR
-        'away_team': 'VARCHAR',  # VARCHAR
-        'type': 'VARCHAR',  # VARCHAR
-        'hit_location': 'BIGINT',  # SMALLINT
-        'bb_type': 'VARCHAR',  # VARCHAR
-        'balls': 'BIGINT',  # SMALLINT
-        'strikes': 'BIGINT',  # SMALLINT
-        'game_year': 'BIGINT',  # SMALLINT
-        'pfx_x': 'DECIMAL(18,8)',  # NUMERIC
-        'pfx_z': 'DECIMAL(18,8)',  # NUMERIC
-        'plate_x': 'DECIMAL(18,8)',  # NUMERIC
-        'plate_z': 'DECIMAL(18,8)',  # NUMERIC
-        'on_3b': 'BIGINT',  # INTEGER
-        'on_2b': 'BIGINT',  # INTEGER
-        'on_1b': 'BIGINT',  # INTEGER
-        'outs_when_up': 'BIGINT',  # SMALLINT
-        'inning': 'BIGINT',  # SMALLINT
-        'inning_topbot': 'VARCHAR',  # VARCHAR
-        'hc_x': 'DECIMAL(18,8)',  # NUMERIC
-        'hc_y': 'DECIMAL(18,8)',  # NUMERIC
-        'tfs_deprecated': 'VARCHAR',  # NUMERIC
-        'tfs_zulu_deprecated': 'VARCHAR',  # NUMERIC
-        'fielder_2': 'BIGINT',  # INTEGER
-        'umpire': 'VARCHAR',  # VARCHAR
-        'sv_id': 'VARCHAR',  # VARCHAR
-        'vx0': 'DECIMAL(18,8)',  # NUMERIC
-        'vy0': 'DECIMAL(18,8)',  # NUMERIC
-        'vz0': 'DECIMAL(18,8)',  # NUMERIC
-        'ax': 'DECIMAL(18,8)',  # NUMERIC
-        'ay': 'DECIMAL(18,8)',  # NUMERIC
-        'az': 'DECIMAL(18,8)',  # NUMERIC
-        'sz_top': 'DECIMAL(18,8)',  # NUMERIC
-        'sz_bot': 'DECIMAL(18,8)',  # NUMERIC
-        'hit_distance_sc': 'BIGINT',  # SMALLINT
-        'launch_speed': 'DECIMAL(18,8)',  # NUMERIC
-        'launch_angle': 'BIGINT',  # NUMERIC
-        'effective_speed': 'DECIMAL(18,8)',  # NUMERIC
-        'release_spin_rate': 'BIGINT',  # SMALLINT
-        'release_extension': 'DECIMAL(18,8)',  # NUMERIC
-        'game_pk': 'BIGINT',  # INTEGER
-        'pitcher_1': 'BIGINT',  # INTEGER
-        'fielder_2_1': 'BIGINT',  # INTEGER
-        'fielder_3': 'BIGINT',  # INTEGER
-        'fielder_4': 'BIGINT',  # INTEGER
-        'fielder_5': 'BIGINT',  # INTEGER
-        'fielder_6': 'BIGINT',  # INTEGER
-        'fielder_7': 'BIGINT',  # INTEGER
-        'fielder_8': 'BIGINT',  # INTEGER
-        'fielder_9': 'BIGINT',  # INTEGER
-        'release_pos_y': 'DECIMAL(18,8)',  # NUMERIC
-        'estimated_ba_using_speedangle': 'DECIMAL(18,8)',  # NUMERIC
-        'estimated_woba_using_speedangle': 'DECIMAL(18,8)',  # NUMERIC
-        'woba_value': 'DECIMAL(18,8)',  # NUMERIC
-        'woba_denom': 'BIGINT',  # NUMERIC
-        'babip_value': 'BIGINT',  # NUMERIC
-        'iso_value': 'BIGINT',  # NUMERIC
-        'launch_speed_angle': 'BIGINT',  # SMALLINT
-        'at_bat_number': 'BIGINT',  # SMALLINT
-        'pitch_number': 'BIGINT',  # SMALLINT
-        'pitch_name': 'VARCHAR',  # VARCHAR
-        'home_score': 'BIGINT',  # SMALLINT
-        'away_score': 'BIGINT',  # SMALLINT
-        'bat_score': 'BIGINT',  # SMALLINT
-        'fld_score': 'BIGINT',  # SMALLINT
-        'post_away_score': 'BIGINT',  # SMALLINT
-        'post_home_score': 'BIGINT',  # SMALLINT
-        'post_bat_score': 'BIGINT',  # SMALLINT
-        'post_fld_score': 'BIGINT',  # SMALLINT
-        'if_fielding_alignment': 'VARCHAR',  # VARCHAR
-        'of_fielding_alignment': 'VARCHAR',  # VARCHAR
-        'spin_axis': 'BIGINT',  # SMALLINT
-        'delta_home_win_exp': 'DECIMAL(18,8)',  # NUMERIC
-        'delta_run_exp': 'DECIMAL(18,8)',  # NUMERIC
+        'pitch_type': 'VARCHAR',
+        'game_date': 'DATE',
+        'release_speed': 'DECIMAL(18,8)',
+        'release_pos_x': 'DECIMAL(18,8)',
+        'release_pos_z': 'DECIMAL(18,8)',
+        'player_name': 'VARCHAR',
+        'batter': 'BIGINT',
+        'pitcher': 'BIGINT',
+        'events': 'VARCHAR',
+        'description': 'VARCHAR',
+        'spin_dir': 'VARCHAR',
+        'spin_rate_deprecated': 'VARCHAR',
+        'break_angle_deprecated': 'VARCHAR',
+        'break_length_deprecated': 'VARCHAR',
+        'zone': 'BIGINT',
+        'des': 'VARCHAR',
+        'game_type': 'VARCHAR',
+        'stand': 'VARCHAR',
+        'p_throws': 'VARCHAR',
+        'home_team': 'VARCHAR',
+        'away_team': 'VARCHAR',
+        'type': 'VARCHAR',
+        'hit_location': 'BIGINT',
+        'bb_type': 'VARCHAR',
+        'balls': 'BIGINT',
+        'strikes': 'BIGINT',
+        'game_year': 'BIGINT',
+        'pfx_x': 'DECIMAL(18,8)',
+        'pfx_z': 'DECIMAL(18,8)',
+        'plate_x': 'DECIMAL(18,8)',
+        'plate_z': 'DECIMAL(18,8)',
+        'on_3b': 'BIGINT',
+        'on_2b': 'BIGINT',
+        'on_1b': 'BIGINT',
+        'outs_when_up': 'BIGINT',
+        'inning': 'BIGINT',
+        'inning_topbot': 'VARCHAR',
+        'hc_x': 'DECIMAL(18,8)',
+        'hc_y': 'DECIMAL(18,8)',
+        'tfs_deprecated': 'VARCHAR',
+        'tfs_zulu_deprecated': 'VARCHAR',
+        'fielder_2': 'BIGINT',
+        'umpire': 'VARCHAR',
+        'sv_id': 'VARCHAR',
+        'vx0': 'DECIMAL(18,8)',
+        'vy0': 'DECIMAL(18,8)',
+        'vz0': 'DECIMAL(18,8)',
+        'ax': 'DECIMAL(18,8)',
+        'ay': 'DECIMAL(18,8)',
+        'az': 'DECIMAL(18,8)',
+        'sz_top': 'DECIMAL(18,8)',
+        'sz_bot': 'DECIMAL(18,8)',
+        'hit_distance_sc': 'BIGINT',
+        'launch_speed': 'DECIMAL(18,8)',
+        'launch_angle': 'BIGINT',
+        'effective_speed': 'DECIMAL(18,8)',
+        'release_spin_rate': 'BIGINT',
+        'release_extension': 'DECIMAL(18,8)',
+        'game_pk': 'BIGINT',
+        'pitcher_1': 'BIGINT',
+        'fielder_2_1': 'BIGINT',
+        'fielder_3': 'BIGINT',
+        'fielder_4': 'BIGINT',
+        'fielder_5': 'BIGINT',
+        'fielder_6': 'BIGINT',
+        'fielder_7': 'BIGINT',
+        'fielder_8': 'BIGINT',
+        'fielder_9': 'BIGINT',
+        'release_pos_y': 'DECIMAL(18,8)',
+        'estimated_ba_using_speedangle': 'DECIMAL(18,8)',
+        'estimated_woba_using_speedangle': 'DECIMAL(18,8)',
+        'woba_value': 'DECIMAL(18,8)',
+        'woba_denom': 'BIGINT',
+        'babip_value': 'BIGINT',
+        'iso_value': 'BIGINT',
+        'launch_speed_angle': 'BIGINT',
+        'at_bat_number': 'BIGINT',
+        'pitch_number': 'BIGINT',
+        'pitch_name': 'VARCHAR',
+        'home_score': 'BIGINT',
+        'away_score': 'BIGINT',
+        'bat_score': 'BIGINT',
+        'fld_score': 'BIGINT',
+        'post_away_score': 'BIGINT',
+        'post_home_score': 'BIGINT',
+        'post_bat_score': 'BIGINT',
+        'post_fld_score': 'BIGINT',
+        'if_fielding_alignment': 'VARCHAR',
+        'of_fielding_alignment': 'VARCHAR',
+        'spin_axis': 'BIGINT',
+        'delta_home_win_exp': 'DECIMAL(18,8)',
+        'delta_run_exp': 'DECIMAL(18,8)',
         'bat_speed': 'DECIMAL(18,14)',
         'swing_length': 'DECIMAL(18,8)',
     }
