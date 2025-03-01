@@ -34,7 +34,7 @@ select
         when 'D' then 'Divisional Series'
         when 'L' then 'League Championship Series'
         when 'W' then 'World Series'
-        end as game_type
+    end as game_type
 
     , stand as batter_stands
     , p_throws as pitcher_throws
@@ -107,7 +107,7 @@ select
         when 4 then 'Flare'
         when 5 then 'Solid Contact'
         when 6 then 'Barrel'
-        end as launch_speed_angle_type
+    end as launch_speed_angle_type
 
     , at_bat_number as game_pa_number
     , pitch_number as pa_pitch_number
@@ -128,6 +128,7 @@ select
     , bat_speed
     , swing_length
 
-    , {{ dbt_utils.generate_surrogate_key(['game_id', 'game_pa_number', 'pa_pitch_number']) }} as unique_id
+    , {{ dbt_utils.generate_surrogate_key(['game_id', 'game_pa_number', 'pa_pitch_number']) }}
+        as unique_id
 
 from source

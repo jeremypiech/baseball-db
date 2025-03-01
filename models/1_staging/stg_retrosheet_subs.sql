@@ -13,5 +13,6 @@ select
     , removed_id
     , removed_fld_cd
     , event_id
-    , {{ dbt_utils.generate_surrogate_key(['game_id', 'event_id', 'sub_id', 'sub_fld_cd']) }} as unique_id
+    , {{ dbt_utils.generate_surrogate_key(['game_id', 'event_id', 'sub_id', 'sub_fld_cd']) }}
+        as unique_id
 from source

@@ -163,6 +163,6 @@ select
     , ass10_fld_cd
     , unknown_out_exc_fl = 'T' as is_unknown_out_exc
     , uncertain_play_exc_fl = 'T' as is_uncertain_play_exc
-    , count_tx 
+    , count_tx
     , {{ dbt_utils.generate_surrogate_key(['game_id', 'event_id']) }} as unique_id
 from source

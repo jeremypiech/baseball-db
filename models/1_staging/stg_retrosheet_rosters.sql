@@ -11,16 +11,14 @@ with source as (
             when 'L' then 2
             when 'R' then 1
             else 0
-            end
-            as bats_rank
+        end as bats_rank
 
         , case throws
             when 'B' then 3
             when 'L' then 2
             when 'R' then 1
             else 0
-            end
-            as throws_rank
+        end as throws_rank
 
     from source
 )
@@ -37,7 +35,8 @@ select
     , arg_max(bats, bats_rank) as bats
     , arg_max(throws, throws_rank) as throws
 
-    , {{ dbt_utils.generate_surrogate_key(['player_id', 'team_id', 'year', 'position']) }} as unique_id
-    
+    , {{ dbt_utils.generate_surrogate_key(['player_id', 'team_id', 'year', 'position']) }}
+        as unique_id
+
 from ranks
-group by 1,2,3,4
+group by 1, 2, 3, 4

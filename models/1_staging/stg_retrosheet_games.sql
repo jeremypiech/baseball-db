@@ -4,7 +4,7 @@ with source as (
 
 select
     game_id
-    , strptime(game_dt, '%Y%m%d') :: date as game_date
+    , strptime(game_dt, '%Y%m%d')::date as game_date
     , game_ct as game_date_count
     -- , game_dy
     , nullif(start_game_tm, '0') as start_time
