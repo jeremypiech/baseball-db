@@ -4,7 +4,8 @@ __pycache__/
 *$py.class
 
 # Data
-*.db*
+*.db
+*.duckdb
 data/
 
 # dbt
@@ -17,6 +18,7 @@ logs/
 *.ipynb
 
 # Environment
+.env
 .venv/
 
 # Editor
