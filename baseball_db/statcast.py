@@ -203,15 +203,16 @@ class Statcast:
     def extract(
             self,
             start_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1)),
-            end_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1))
+            end_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1)),
+            days_step: int = 1,
         ) -> None:
 
         start_date = datetime.date.fromisoformat(start_date) if isinstance(start_date, str) else start_date
         end_date = datetime.date.fromisoformat(end_date) if isinstance(end_date, str) else end_date
 
-        search_start_dates = date_range(start_date, end_date, 4)
+        search_start_dates = date_range(start_date, end_date, days_step)
         for start in search_start_dates:
-            end = min(start + datetime.timedelta(days=3), end_date)
+            end = min(start + datetime.timedelta(days=days_step - 1), end_date)
 
             print(f'Searching {start:%Y-%m-%d} - {end:%Y-%m-%d}')
             content = self.search(start, end)
@@ -257,6 +258,7 @@ class Statcast:
             self,
             start_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1)),
             end_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1)),
+            days_step: int = 1,
         ) -> None:
 
         start_date = datetime.date.fromisoformat(start_date) if isinstance(start_date, str) else start_date
@@ -264,7 +266,7 @@ class Statcast:
 
         self.extract(start_date, end_date)
 
-        filename_start_dates = date_range(start_date, end_date, 4)
+        filename_start_dates = date_range(start_date, end_date, days_step)
         for start in filename_start_dates:
             for filepath in self.raw_dir.glob(f'statcast-{start:%Y-%m-%d}*'):
                 self.load_file(filepath.name)
