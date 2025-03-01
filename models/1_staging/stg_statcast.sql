@@ -61,9 +61,6 @@ select
 
     -- , tfs_deprecated
     -- , tfs_zulu_deprecated
-
-    , fielder_2 as catcher_id
-
     -- , umpire
 
     , sv_id
@@ -86,6 +83,7 @@ select
     -- , pitcher_1
     -- , fielder_2_1
 
+    , fielder_2 as fielder_2_id
     , fielder_3 as fielder_3_id
     , fielder_4 as fielder_4_id
     , fielder_5 as fielder_5_id
@@ -93,6 +91,7 @@ select
     , fielder_7 as fielder_7_id
     , fielder_8 as fielder_8_id
     , fielder_9 as fielder_9_id
+
     , release_pos_y
     , estimated_ba_using_speedangle
     , estimated_woba_using_speedangle
