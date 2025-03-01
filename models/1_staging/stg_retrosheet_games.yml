@@ -1,0 +1,9 @@
+version: 2
+
+models:
+  - name: stg_retrosheet_games
+    columns:
+      - name: game_id
+        data_tests:
+          - unique
+          - not_null

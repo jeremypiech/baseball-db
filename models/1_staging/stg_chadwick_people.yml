@@ -1,0 +1,9 @@
+version: 2
+
+models:
+  - name: stg_chadwick_people
+    columns:
+      - name: key_person
+        data_tests:
+          - unique
+          - not_null
