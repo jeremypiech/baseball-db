@@ -9,3 +9,8 @@ dependencies = [
     "duckdb>=1.2.0",
     "requests>=2.32.3",
 ]
+
+[dependency-groups]
+dev = [
+    "sqlfluff>=3.3.1",
+]

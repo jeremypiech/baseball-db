@@ -1,0 +1,43 @@
+[sqlfluff]
+dialect = duckdb
+ignore = templating
+ignore_templated_areas = True
+max_line_length = 100
+output_line_length = 100
+sql_file_exts = .sql
+templater = jinja
+
+rules = all
+exclude_rules = ambiguous.column_count, convention.terminator, structure.column_order
+
+[sqlfluff:indentation]
+indent_unit = space
+tab_space_size = 4
+indented_on_contents = False
+indented_then_contents = False
+allow_implicit_indents = True
+
+[sqlfluff:layout:type:comma]
+spacing_before = touch
+line_position = leading
+
+[sqlfluff:rules:aliasing.length]
+min_alias_length = 3
+
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.identifiers]
+extended_capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.functions]
+extended_capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.literals]
+capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.types]
+extended_capitalisation_policy = lower
+
+[sqlfluff:rules:convention.not_equal]
+preferred_not_equal_style = c_style  # `!=`
