@@ -13,8 +13,6 @@ exclude_rules = ambiguous.column_count, convention.terminator, structure.column_
 [sqlfluff:indentation]
 indent_unit = space
 tab_space_size = 4
-indented_on_contents = False
-indented_then_contents = False
 allow_implicit_indents = True
 
 [sqlfluff:layout:type:comma]
