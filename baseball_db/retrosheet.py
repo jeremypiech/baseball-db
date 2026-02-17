@@ -12,281 +12,525 @@ from baseball_db import DATABASE_NAME
 
 class Retrosheet:
     """Extract and load Retrosheet files."""
-    EVENT_FIELD_DTYPES = {
-        'GAME_ID': 'VARCHAR',
-        'AWAY_TEAM_ID': 'VARCHAR',
-        'INN_CT': 'INTEGER',
-        'BAT_HOME_ID': 'INTEGER',
-        'OUTS_CT': 'INTEGER',
-        'BALLS_CT': 'INTEGER',
-        'STRIKES_CT': 'INTEGER',
-        'PITCH_SEQ_TX': 'VARCHAR',
-        'AWAY_SCORE_CT': 'INTEGER',
-        'HOME_SCORE_CT': 'INTEGER',
-        'BAT_ID': 'VARCHAR',
-        'BAT_HAND_CD': 'VARCHAR',
-        'RESP_BAT_ID': 'VARCHAR',
-        'RESP_BAT_HAND_CD': 'VARCHAR',
-        'PIT_ID': 'VARCHAR',
-        'PIT_HAND_CD': 'VARCHAR',
-        'RESP_PIT_ID': 'VARCHAR',
-        'RESP_PIT_HAND_CD': 'VARCHAR',
-        'POS2_FLD_ID': 'VARCHAR',
-        'POS3_FLD_ID': 'VARCHAR',
-        'POS4_FLD_ID': 'VARCHAR',
-        'POS5_FLD_ID': 'VARCHAR',
-        'POS6_FLD_ID': 'VARCHAR',
-        'POS7_FLD_ID': 'VARCHAR',
-        'POS8_FLD_ID': 'VARCHAR',
-        'POS9_FLD_ID': 'VARCHAR',
-        'BASE1_RUN_ID': 'VARCHAR',
-        'BASE2_RUN_ID': 'VARCHAR',
-        'BASE3_RUN_ID': 'VARCHAR',
-        'EVENT_TX': 'VARCHAR',
-        'LEADOFF_FL': 'VARCHAR',
-        'PH_FL': 'VARCHAR',
-        'BAT_FLD_CD': 'INTEGER',
-        'BAT_LINEUP_ID': 'INTEGER',
-        'EVENT_CD': 'INTEGER',
-        'BAT_EVENT_FL': 'VARCHAR',
-        'AB_FL': 'VARCHAR',
-        'H_CD': 'INTEGER',
-        'SH_FL': 'VARCHAR',
-        'SF_FL': 'VARCHAR',
-        'EVENT_OUTS_CT': 'INTEGER',
-        'DP_FL': 'VARCHAR',
-        'TP_FL': 'VARCHAR',
-        'RBI_CT': 'INTEGER',
-        'WP_FL': 'VARCHAR',
-        'PB_FL': 'VARCHAR',
-        'FLD_CD': 'INTEGER',
-        'BATTEDBALL_CD': 'VARCHAR',
-        'BUNT_FL': 'VARCHAR',
-        'FOUL_FL': 'VARCHAR',
-        'BATTEDBALL_LOC_TX': 'VARCHAR',
-        'ERR_CT': 'INTEGER',
-        'ERR1_FLD_CD': 'VARCHAR',
-        'ERR1_CD': 'VARCHAR',
-        'ERR2_FLD_CD': 'VARCHAR',
-        'ERR2_CD': 'VARCHAR',
-        'ERR3_FLD_CD': 'VARCHAR',
-        'ERR3_CD': 'VARCHAR',
-        'BAT_DEST_ID': 'VARCHAR',
-        'RUN1_DEST_ID': 'VARCHAR',
-        'RUN2_DEST_ID': 'VARCHAR',
-        'RUN3_DEST_ID': 'VARCHAR',
-        'BAT_PLAY_TX': 'VARCHAR',
-        'RUN1_PLAY_TX': 'VARCHAR',
-        'RUN2_PLAY_TX': 'VARCHAR',
-        'RUN3_PLAY_TX': 'VARCHAR',
-        'RUN1_SB_FL': 'VARCHAR',
-        'RUN2_SB_FL': 'VARCHAR',
-        'RUN3_SB_FL': 'VARCHAR',
-        'RUN1_CS_FL': 'VARCHAR',
-        'RUN2_CS_FL': 'VARCHAR',
-        'RUN3_CS_FL': 'VARCHAR',
-        'RUN1_PK_FL': 'VARCHAR',
-        'RUN2_PK_FL': 'VARCHAR',
-        'RUN3_PK_FL': 'VARCHAR',
-        'RUN1_RESP_PIT_ID': 'VARCHAR',
-        'RUN2_RESP_PIT_ID': 'VARCHAR',
-        'RUN3_RESP_PIT_ID': 'VARCHAR',
-        'GAME_NEW_FL': 'VARCHAR',
-        'GAME_END_FL': 'VARCHAR',
-        'PR_RUN1_FL': 'VARCHAR',
-        'PR_RUN2_FL': 'VARCHAR',
-        'PR_RUN3_FL': 'VARCHAR',
-        'REMOVED_FOR_PR_RUN1_ID': 'VARCHAR',
-        'REMOVED_FOR_PR_RUN2_ID': 'VARCHAR',
-        'REMOVED_FOR_PR_RUN3_ID': 'VARCHAR',
-        'REMOVED_FOR_PH_BAT_ID': 'VARCHAR',
-        'REMOVED_FOR_PH_BAT_FLD_CD': 'INTEGER',
-        'PO1_FLD_CD': 'INTEGER',
-        'PO2_FLD_CD': 'INTEGER',
-        'PO3_FLD_CD': 'INTEGER',
-        'ASS1_FLD_CD': 'INTEGER',
-        'ASS2_FLD_CD': 'INTEGER',
-        'ASS3_FLD_CD': 'INTEGER',
-        'ASS4_FLD_CD': 'INTEGER',
-        'ASS5_FLD_CD': 'INTEGER',
-        'EVENT_ID': 'INTEGER',
-        'HOME_TEAM_ID': 'VARCHAR',
-        'BAT_TEAM_ID': 'VARCHAR',
-        'FLD_TEAM_ID': 'VARCHAR',
-        'BAT_LAST_ID': 'VARCHAR',
-        'INN_NEW_FL': 'VARCHAR',
-        'INN_END_FL': 'VARCHAR',
-        'START_BAT_SCORE_CT': 'INTEGER',
-        'START_FLD_SCORE_CT': 'INTEGER',
-        'INN_RUNS_CT': 'INTEGER',
-        'GAME_PA_CT': 'INTEGER',
-        'INN_PA_CT': 'INTEGER',
-        'PA_NEW_FL': 'VARCHAR',
-        'PA_TRUNC_FL': 'VARCHAR',
-        'START_BASES_CD': 'INTEGER',
-        'END_BASES_CD': 'INTEGER',
-        'BAT_START_FL': 'VARCHAR',
-        'RESP_BAT_START_FL': 'VARCHAR',
-        'BAT_ON_DECK_ID': 'VARCHAR',
-        'BAT_IN_HOLD_ID': 'VARCHAR',
-        'PIT_START_FL': 'VARCHAR',
-        'RESP_PIT_START_FL': 'VARCHAR',
-        'RUN1_FLD_CD': 'INTEGER',
-        'RUN1_LINEUP_CD': 'INTEGER',
-        'RUN1_ORIGIN_EVENT_ID': 'INTEGER',
-        'RUN2_FLD_CD': 'INTEGER',
-        'RUN2_LINEUP_CD': 'INTEGER',
-        'RUN2_ORIGIN_EVENT_ID': 'INTEGER',
-        'RUN3_FLD_CD': 'INTEGER',
-        'RUN3_LINEUP_CD': 'INTEGER',
-        'RUN3_ORIGIN_EVENT_ID': 'INTEGER',
-        'RUN1_RESP_CAT_ID': 'VARCHAR',
-        'RUN2_RESP_CAT_ID': 'VARCHAR',
-        'RUN3_RESP_CAT_ID': 'VARCHAR',
-        'PA_BALL_CT': 'INTEGER',
-        'PA_CALLED_BALL_CT': 'INTEGER',
-        'PA_INTENT_BALL_CT': 'INTEGER',
-        'PA_PITCHOUT_BALL_CT': 'INTEGER',
-        'PA_HITBATTER_BALL_CT': 'INTEGER',
-        'PA_OTHER_BALL_CT': 'INTEGER',
-        'PA_STRIKE_CT': 'INTEGER',
-        'PA_CALLED_STRIKE_CT': 'INTEGER',
-        'PA_SWINGMISS_STRIKE_CT': 'INTEGER',
-        'PA_FOUL_STRIKE_CT': 'INTEGER',
-        'PA_INPLAY_STRIKE_CT': 'INTEGER',
-        'PA_OTHER_STRIKE_CT': 'INTEGER',
-        'EVENT_RUNS_CT': 'INTEGER',
-        'FLD_ID': 'VARCHAR',
-        'BASE2_FORCE_FL': 'VARCHAR',
-        'BASE3_FORCE_FL': 'VARCHAR',
-        'BASE4_FORCE_FL': 'VARCHAR',
-        'BAT_SAFE_ERR_FL': 'VARCHAR',
-        'BAT_FATE_ID': 'INTEGER',
-        'RUN1_FATE_ID': 'INTEGER',
-        'RUN2_FATE_ID': 'INTEGER',
-        'RUN3_FATE_ID': 'INTEGER',
-        'FATE_RUNS_CT': 'INTEGER',
-        'ASS6_FLD_CD': 'INTEGER',
-        'ASS7_FLD_CD': 'INTEGER',
-        'ASS8_FLD_CD': 'INTEGER',
-        'ASS9_FLD_CD': 'INTEGER',
-        'ASS10_FLD_CD': 'INTEGER',
-        'UNKNOWN_OUT_EXC_FL': 'VARCHAR',
-        'UNCERTAIN_PLAY_EXC_FL': 'VARCHAR',
-        'COUNT_TX': 'VARCHAR',
+    ALLPLAYERS_FIELD_DTYPES = {
+        'id': 'VARCHAR',
+        'last': 'VARCHAR',
+        'first': 'VARCHAR',
+        'bat': 'VARCHAR',
+        'throw': 'VARCHAR',
+        'team': 'VARCHAR',
+        'g': 'USMALLINT',
+        'g_p': 'USMALLINT',
+        'g_sp': 'USMALLINT',
+        'g_rp': 'USMALLINT',
+        'g_c': 'USMALLINT',
+        'g_1b': 'USMALLINT',
+        'g_2b': 'USMALLINT',
+        'g_3b': 'USMALLINT',
+        'g_ss': 'USMALLINT',
+        'g_lf': 'USMALLINT',
+        'g_cf': 'USMALLINT',
+        'g_rf': 'USMALLINT',
+        'g_of': 'USMALLINT',
+        'g_dh': 'USMALLINT',
+        'g_ph': 'USMALLINT',
+        'g_pr': 'USMALLINT',
+        'first_g': 'VARCHAR',
+        'last_g': 'VARCHAR',
+        'season': 'USMALLINT'
     }
 
-    GAME_FIELD_DTYPES = {
-        'GAME_ID': 'VARCHAR',
-        'GAME_DT': 'VARCHAR',
-        'GAME_CT': 'INTEGER',
-        'GAME_DY': 'VARCHAR',
-        'START_GAME_TM': 'VARCHAR',
-        'DH_FL': 'VARCHAR',
-        'DAYNIGHT_PARK_CD': 'VARCHAR',
-        'AWAY_TEAM_ID': 'VARCHAR',
-        'HOME_TEAM_ID': 'VARCHAR',
-        'PARK_ID': 'VARCHAR',
-        'AWAY_START_PIT_ID': 'VARCHAR',
-        'HOME_START_PIT_ID': 'VARCHAR',
-        'BASE4_UMP_ID': 'VARCHAR',
-        'BASE1_UMP_ID': 'VARCHAR',
-        'BASE2_UMP_ID': 'VARCHAR',
-        'BASE3_UMP_ID': 'VARCHAR',
-        'LF_UMP_ID': 'VARCHAR',
-        'RF_UMP_ID': 'VARCHAR',
-        'ATTEND_PARK_CT': 'BIGINT',
-        'SCORER_RECORD_ID': 'VARCHAR',
-        'TRANSLATOR_RECORD_ID': 'VARCHAR',
-        'INPUTTER_RECORD_ID': 'VARCHAR',
-        'INPUT_RECORD_TS': 'VARCHAR',
-        'EDIT_RECORD_TS': 'VARCHAR',
-        'METHOD_RECORD_CD': 'INTEGER',
-        'PITCHES_RECORD_CD': 'INTEGER',
-        'TEMP_PARK_CT': 'INTEGER',
-        'WIND_DIRECTION_PARK_CD': 'INTEGER',
-        'WIND_SPEED_PARK_CT': 'INTEGER',
-        'FIELD_PARK_CD': 'INTEGER',
-        'PRECIP_PARK_CD': 'INTEGER',
-        'SKY_PARK_CD': 'INTEGER',
-        'MINUTES_GAME_CT': 'INTEGER',
-        'INN_CT': 'INTEGER',
-        'AWAY_SCORE_CT': 'INTEGER',
-        'HOME_SCORE_CT': 'INTEGER',
-        'AWAY_HITS_CT': 'INTEGER',
-        'HOME_HITS_CT': 'INTEGER',
-        'AWAY_ERR_CT': 'INTEGER',
-        'HOME_ERR_CT': 'INTEGER',
-        'AWAY_LOB_CT': 'INTEGER',
-        'HOME_LOB_CT': 'INTEGER',
-        'WIN_PIT_ID': 'VARCHAR',
-        'LOSE_PIT_ID': 'VARCHAR',
-        'SAVE_PIT_ID': 'VARCHAR',
-        'GWRBI_BAT_ID': 'VARCHAR',
-        'AWAY_LINEUP1_BAT_ID': 'VARCHAR',
-        'AWAY_LINEUP1_FLD_CD': 'INTEGER',
-        'AWAY_LINEUP2_BAT_ID': 'VARCHAR',
-        'AWAY_LINEUP2_FLD_CD': 'INTEGER',
-        'AWAY_LINEUP3_BAT_ID': 'VARCHAR',
-        'AWAY_LINEUP3_FLD_CD': 'INTEGER',
-        'AWAY_LINEUP4_BAT_ID': 'VARCHAR',
-        'AWAY_LINEUP4_FLD_CD': 'INTEGER',
-        'AWAY_LINEUP5_BAT_ID': 'VARCHAR',
-        'AWAY_LINEUP5_FLD_CD': 'INTEGER',
-        'AWAY_LINEUP6_BAT_ID': 'VARCHAR',
-        'AWAY_LINEUP6_FLD_CD': 'INTEGER',
-        'AWAY_LINEUP7_BAT_ID': 'VARCHAR',
-        'AWAY_LINEUP7_FLD_CD': 'INTEGER',
-        'AWAY_LINEUP8_BAT_ID': 'VARCHAR',
-        'AWAY_LINEUP8_FLD_CD': 'INTEGER',
-        'AWAY_LINEUP9_BAT_ID': 'VARCHAR',
-        'AWAY_LINEUP9_FLD_CD': 'INTEGER',
-        'HOME_LINEUP1_BAT_ID': 'VARCHAR',
-        'HOME_LINEUP1_FLD_CD': 'INTEGER',
-        'HOME_LINEUP2_BAT_ID': 'VARCHAR',
-        'HOME_LINEUP2_FLD_CD': 'INTEGER',
-        'HOME_LINEUP3_BAT_ID': 'VARCHAR',
-        'HOME_LINEUP3_FLD_CD': 'INTEGER',
-        'HOME_LINEUP4_BAT_ID': 'VARCHAR',
-        'HOME_LINEUP4_FLD_CD': 'INTEGER',
-        'HOME_LINEUP5_BAT_ID': 'VARCHAR',
-        'HOME_LINEUP5_FLD_CD': 'INTEGER',
-        'HOME_LINEUP6_BAT_ID': 'VARCHAR',
-        'HOME_LINEUP6_FLD_CD': 'INTEGER',
-        'HOME_LINEUP7_BAT_ID': 'VARCHAR',
-        'HOME_LINEUP7_FLD_CD': 'INTEGER',
-        'HOME_LINEUP8_BAT_ID': 'VARCHAR',
-        'HOME_LINEUP8_FLD_CD': 'INTEGER',
-        'HOME_LINEUP9_BAT_ID': 'VARCHAR',
-        'HOME_LINEUP9_FLD_CD': 'INTEGER',
-        'AWAY_FINISH_PIT_ID': 'VARCHAR',
-        'HOME_FINISH_PIT_ID': 'VARCHAR',
+    BATTING_FIELD_DTYPES = {
+        'gid': 'VARCHAR',
+        'id': 'VARCHAR',
+        'team': 'VARCHAR',
+        'b_lp': 'USMALLINT',
+        'b_seq': 'USMALLINT',
+        'stattype': 'VARCHAR',
+        'b_pa': 'USMALLINT',
+        'b_ab': 'USMALLINT',
+        'b_r': 'USMALLINT',
+        'b_h': 'USMALLINT',
+        'b_d': 'USMALLINT',
+        'b_t': 'USMALLINT',
+        'b_hr': 'USMALLINT',
+        'b_rbi': 'USMALLINT',
+        'b_sh': 'USMALLINT',
+        'b_sf': 'USMALLINT',
+        'b_hbp': 'USMALLINT',
+        'b_w': 'USMALLINT',
+        'b_iw': 'USMALLINT',
+        'b_k': 'USMALLINT',
+        'b_sb': 'USMALLINT',
+        'b_cs': 'USMALLINT',
+        'b_gdp': 'USMALLINT',
+        'b_xi': 'USMALLINT',
+        'b_roe': 'USMALLINT',
+        'dh': 'USMALLINT',
+        'ph': 'USMALLINT',
+        'pr': 'USMALLINT',
+        'date': 'VARCHAR',
+        'number': 'USMALLINT',
+        'site': 'VARCHAR',
+        'vishome': 'VARCHAR',
+        'opp': 'VARCHAR',
+        'win': 'USMALLINT',
+        'loss': 'USMALLINT',
+        'tie': 'USMALLINT',
+        'gametype': 'VARCHAR',
+        'box': 'VARCHAR',
+        'pbp': 'VARCHAR'
     }
 
-    SUB_FIELD_DTYPES = {
-        'GAME_ID': 'VARCHAR',
-        'INN_CT': 'INTEGER',
-        'BAT_HOME_ID': 'INTEGER',
-        'SUB_ID': 'VARCHAR',
-        'SUB_HOME_ID': 'INTEGER',
-        'SUB_LINEUP_ID': 'INTEGER',
-        'SUB_FLD_CD': 'INTEGER',
-        'REMOVED_ID': 'VARCHAR',
-        'REMOVED_FLD_CD': 'INTEGER',
-        'EVENT_ID': 'INTEGER',
+    DISCREPS_FIELD_DTYPES = {
+        'ID': 'VARCHAR',
+        'Player': 'VARCHAR',
+        'Year': 'USMALLINT',
+        'Team': 'VARCHAR',
+        'Type': 'VARCHAR',
+        'Pos': 'VARCHAR',
+        'Cat': 'VARCHAR',
+        'Game': 'VARCHAR',
+        'Retro': 'USMALLINT',
+        'Official': 'USMALLINT',
+        '"Cross"': 'VARCHAR',
+        'Code': 'VARCHAR',
+        'X': 'VARCHAR',
+        'Notes': 'VARCHAR',
+        'Accepted': 'VARCHAR'
     }
 
-    ROSTER_FIELD_DTYPES = {
-        'PLAYER_ID': 'VARCHAR',
-        'LAST_NAME': 'VARCHAR',
-        'FIRST_NAME': 'VARCHAR',
-        'BATS': 'VARCHAR',
-        'THROWS': 'VARCHAR',
-        'TEAM_ID': 'VARCHAR',
-        'POSITION': 'VARCHAR',
-        'YEAR': 'BIGINT',
+    EJECTIONS_FIELD_DTYPES = {
+        'GAMEID': 'VARCHAR',
+        'DATE': 'VARCHAR',
+        'DH': 'USMALLINT',
+        'EJECTEE': 'VARCHAR',
+        'EJECTEENAME': 'VARCHAR',
+        'TEAM': 'VARCHAR',
+        'JOB': 'VARCHAR',
+        'UMPIRE': 'VARCHAR',
+        'UMPIRENAME': 'VARCHAR',
+        'INNING': 'SMALLINT',
+        'REASON': 'VARCHAR',
+    }
+
+    FIELDING_FIELD_DTYPES = {
+        'gid': 'VARCHAR',
+        'id': 'VARCHAR',
+        'team': 'VARCHAR',
+        'd_seq': 'USMALLINT',
+        'd_pos': 'VARCHAR',
+        'stattype': 'VARCHAR',
+        'd_ifouts': 'USMALLINT',
+        'd_po': 'USMALLINT',
+        'd_a': 'USMALLINT',
+        'd_e': 'USMALLINT',
+        'd_dp': 'USMALLINT',
+        'd_tp': 'USMALLINT',
+        'd_pb': 'USMALLINT',
+        'd_wp': 'USMALLINT',
+        'd_sb': 'USMALLINT',
+        'd_cs': 'USMALLINT',
+        'd_gs': 'USMALLINT',
+        'date': 'VARCHAR',
+        'number': 'USMALLINT',
+        'site': 'VARCHAR',
+        'vishome': 'VARCHAR',
+        'opp': 'VARCHAR',
+        'win': 'USMALLINT',
+        'loss': 'USMALLINT',
+        'tie': 'USMALLINT',
+        'gametype': 'VARCHAR',
+        'box': 'VARCHAR',
+        'pbp': 'VARCHAR'
+    }
+
+    GAMEINFO_FIELD_DTYPES = {
+        'gid': 'VARCHAR',
+        'visteam': 'VARCHAR',
+        'hometeam': 'VARCHAR',
+        'site': 'VARCHAR',
+        'date': 'VARCHAR',
+        'number': 'USMALLINT',
+        'starttime': 'VARCHAR',
+        'daynight': 'VARCHAR',
+        'innings': 'USMALLINT',
+        'tiebreaker': 'USMALLINT',
+        'usedh': 'BOOLEAN',
+        'htbf': 'BOOLEAN',
+        'timeofgame': 'VARCHAR',
+        'attendance': 'VARCHAR',
+        'fieldcond': 'VARCHAR',
+        'precip': 'VARCHAR',
+        'sky': 'VARCHAR',
+        'temp': 'VARCHAR',
+        'winddir': 'VARCHAR',
+        'windspeed': 'VARCHAR',
+        'oscorer': 'VARCHAR',
+        'forfeit': 'VARCHAR',
+        'suspend': 'VARCHAR',
+        'umphome': 'VARCHAR',
+        'ump1b': 'VARCHAR',
+        'ump2b': 'VARCHAR',
+        'ump3b': 'VARCHAR',
+        'umplf': 'VARCHAR',
+        'umprf': 'VARCHAR',
+        'wp': 'VARCHAR',
+        'lp': 'VARCHAR',
+        'save': 'VARCHAR',
+        'gametype': 'VARCHAR',
+        'vruns': 'USMALLINT',
+        'hruns': 'USMALLINT',
+        'wteam': 'VARCHAR',
+        'lteam': 'VARCHAR',
+        'line': 'VARCHAR',
+        'batteries': 'VARCHAR',
+        'lineups': 'VARCHAR',
+        'box': 'VARCHAR',
+        'pbp': 'VARCHAR',
+        'season': 'USMALLINT'
     }
     
+    PITCHING_FIELD_DTYPES = {
+        'gid': 'VARCHAR',
+        'id': 'VARCHAR',
+        'team': 'VARCHAR',
+        'p_seq': 'USMALLINT',
+        'stattype': 'VARCHAR',
+        'p_ipouts': 'USMALLINT',
+        'p_noout': 'USMALLINT',
+        'p_bfp': 'USMALLINT',
+        'p_h': 'USMALLINT',
+        'p_d': 'USMALLINT',
+        'p_t': 'USMALLINT',
+        'p_hr': 'USMALLINT',
+        'p_r': 'USMALLINT',
+        'p_er': 'USMALLINT',
+        'p_w': 'USMALLINT',
+        'p_iw': 'USMALLINT',
+        'p_k': 'USMALLINT',
+        'p_hbp': 'USMALLINT',
+        'p_wp': 'USMALLINT',
+        'p_bk': 'USMALLINT',
+        'p_sh': 'USMALLINT',
+        'p_sf': 'USMALLINT',
+        'p_sb': 'USMALLINT',
+        'p_cs': 'USMALLINT',
+        'p_pb': 'USMALLINT',
+        'wp': 'USMALLINT',
+        'lp': 'USMALLINT',
+        'save': 'USMALLINT',
+        'gs': 'USMALLINT',
+        'gf': 'USMALLINT',
+        'cg': 'USMALLINT',
+        'date': 'VARCHAR',
+        'number': 'USMALLINT',
+        'site': 'VARCHAR',
+        'vishome': 'VARCHAR',
+        'opp': 'VARCHAR',
+        'win': 'USMALLINT',
+        'loss': 'USMALLINT',
+        'tie': 'USMALLINT',
+        'gametype': 'VARCHAR',
+        'box': 'VARCHAR',
+        'pbp': 'VARCHAR'
+
+    }
+
+    PLAYS_FIELD_DTYPES = {
+        'gid': 'VARCHAR',
+        'event': 'VARCHAR',
+        'inning': 'VARCHAR',
+        'top_bot': 'USMALLINT',
+        'vis_home': 'USMALLINT',
+        'site': 'VARCHAR',
+        'batteam': 'VARCHAR',
+        'pitteam': 'VARCHAR',
+        'score_v': 'USMALLINT',
+        'score_h': 'USMALLINT',
+        'batter': 'VARCHAR',
+        'pitcher': 'VARCHAR',
+        'lp': 'USMALLINT',
+        'bat_f': 'USMALLINT',
+        'bathand': 'VARCHAR',
+        'pithand': 'VARCHAR',
+        'balls': 'VARCHAR',
+        'strikes': 'VARCHAR',
+        'count': 'VARCHAR',
+        'pitches': 'VARCHAR',
+        'nump': 'SMALLINT',
+        'pa': 'USMALLINT',
+        'ab': 'USMALLINT',
+        'single': 'USMALLINT',
+        'double': 'USMALLINT',
+        'triple': 'USMALLINT',
+        'hr': 'USMALLINT',
+        'sh': 'USMALLINT',
+        'sf': 'USMALLINT',
+        'hbp': 'USMALLINT',
+        'walk': 'USMALLINT',
+        'k': 'USMALLINT',
+        'xi': 'USMALLINT',
+        'roe': 'USMALLINT',
+        'fc': 'USMALLINT',
+        'othout': 'USMALLINT',
+        'noout': 'USMALLINT',
+        'oth': 'USMALLINT',
+        'bip': 'USMALLINT',
+        'bunt': 'USMALLINT',
+        'ground': 'USMALLINT',
+        'fly': 'USMALLINT',
+        'line': 'USMALLINT',
+        'iw': 'USMALLINT',
+        'gdp': 'USMALLINT',
+        'othdp': 'USMALLINT',
+        'tp': 'USMALLINT',
+        'fle': 'USMALLINT',
+        'wp': 'USMALLINT',
+        'pb': 'USMALLINT',
+        'bk': 'USMALLINT',
+        'oa': 'USMALLINT',
+        'di': 'USMALLINT',
+        'sb2': 'USMALLINT',
+        'sb3': 'USMALLINT',
+        'sbh': 'USMALLINT',
+        'cs2': 'USMALLINT',
+        'cs3': 'USMALLINT',
+        'csh': 'USMALLINT',
+        'pko1': 'USMALLINT',
+        'pko2': 'USMALLINT',
+        'pko3': 'USMALLINT',
+        'k_safe': 'USMALLINT',
+        'e1': 'USMALLINT',
+        'e2': 'USMALLINT',
+        'e3': 'USMALLINT',
+        'e4': 'USMALLINT',
+        'e5': 'USMALLINT',
+        'e6': 'USMALLINT',
+        'e7': 'USMALLINT',
+        'e8': 'USMALLINT',
+        'e9': 'USMALLINT',
+        'outs_pre': 'USMALLINT',
+        'outs_post': 'USMALLINT',
+        'br1_pre': 'VARCHAR',
+        'br2_pre': 'VARCHAR',
+        'br3_pre': 'VARCHAR',
+        'br1_post': 'VARCHAR',
+        'br2_post': 'VARCHAR',
+        'br3_post': 'VARCHAR',
+        'lob_id1': 'VARCHAR',
+        'lob_id2': 'VARCHAR',
+        'lob_id3': 'VARCHAR',
+        'pr1_pre': 'VARCHAR',
+        'pr2_pre': 'VARCHAR',
+        'pr3_pre': 'VARCHAR',
+        'pr1_post': 'VARCHAR',
+        'pr2_post': 'VARCHAR',
+        'pr3_post': 'VARCHAR',
+        'run_b': 'VARCHAR',
+        'run1': 'VARCHAR',
+        'run2': 'VARCHAR',
+        'run3': 'VARCHAR',
+        'prun_b': 'VARCHAR',
+        'prun1': 'VARCHAR',
+        'prun2': 'VARCHAR',
+        'prun3': 'VARCHAR',
+        'ur_b': 'VARCHAR',
+        'ur1': 'VARCHAR',
+        'ur2': 'VARCHAR',
+        'ur3': 'VARCHAR',
+        'rbi_b': 'VARCHAR',
+        'rbi1': 'VARCHAR',
+        'rbi2': 'VARCHAR',
+        'rbi3': 'VARCHAR',
+        'runs': 'USMALLINT',
+        'rbi': 'USMALLINT',
+        'er': 'USMALLINT',
+        'tur': 'USMALLINT',
+        'l1': 'VARCHAR',
+        'l2': 'VARCHAR',
+        'l3': 'VARCHAR',
+        'l4': 'VARCHAR',
+        'l5': 'VARCHAR',
+        'l6': 'VARCHAR',
+        'l7': 'VARCHAR',
+        'l8': 'VARCHAR',
+        'l9': 'VARCHAR',
+        'lf1': 'USMALLINT',
+        'lf2': 'USMALLINT',
+        'lf3': 'USMALLINT',
+        'lf4': 'USMALLINT',
+        'lf5': 'USMALLINT',
+        'lf6': 'USMALLINT',
+        'lf7': 'USMALLINT',
+        'lf8': 'USMALLINT',
+        'lf9': 'USMALLINT',
+        'f2': 'VARCHAR',
+        'f3': 'VARCHAR',
+        'f4': 'VARCHAR',
+        'f5': 'VARCHAR',
+        'f6': 'VARCHAR',
+        'f7': 'VARCHAR',
+        'f8': 'VARCHAR',
+        'f9': 'VARCHAR',
+        'po0': 'USMALLINT',
+        'po1': 'USMALLINT',
+        'po2': 'USMALLINT',
+        'po3': 'USMALLINT',
+        'po4': 'USMALLINT',
+        'po5': 'USMALLINT',
+        'po6': 'USMALLINT',
+        'po7': 'USMALLINT',
+        'po8': 'USMALLINT',
+        'po9': 'USMALLINT',
+        'a1': 'USMALLINT',
+        'a2': 'USMALLINT',
+        'a3': 'USMALLINT',
+        'a4': 'USMALLINT',
+        'a5': 'USMALLINT',
+        'a6': 'USMALLINT',
+        'a7': 'USMALLINT',
+        'a8': 'USMALLINT',
+        'a9': 'USMALLINT',
+        'fseq': 'VARCHAR',
+        'batout1': 'USMALLINT',
+        'batout2': 'USMALLINT',
+        'batout3': 'USMALLINT',
+        'brout_b': 'USMALLINT',
+        'brout1': 'USMALLINT',
+        'brout2': 'USMALLINT',
+        'brout3': 'USMALLINT',
+        'firstf': 'USMALLINT',
+        'loc': 'VARCHAR',
+        'hittype': 'VARCHAR',
+        'dpopp': 'USMALLINT',
+        '"pivot"': 'VARCHAR',
+        'pn': 'USMALLINT',
+        'umphome': 'VARCHAR',
+        'ump1b': 'VARCHAR',
+        'ump2b': 'VARCHAR',
+        'ump3b': 'VARCHAR',
+        'umplf': 'VARCHAR',
+        'umprf': 'VARCHAR',
+        'date': 'VARCHAR',
+        'gametype': 'VARCHAR',
+        'pbp': 'VARCHAR'
+    }
+
+    TEAMSTATS_FIELD_DTYPES = {
+        'gid': 'VARCHAR',
+        'team': 'VARCHAR',
+        'inn1': 'VARCHAR',
+        'inn2': 'VARCHAR',
+        'inn3': 'VARCHAR',
+        'inn4': 'VARCHAR',
+        'inn5': 'VARCHAR',
+        'inn6': 'VARCHAR',
+        'inn7': 'VARCHAR',
+        'inn8': 'VARCHAR',
+        'inn9': 'VARCHAR',
+        'inn10': 'VARCHAR',
+        'inn11': 'VARCHAR',
+        'inn12': 'VARCHAR',
+        'inn13': 'VARCHAR',
+        'inn14': 'VARCHAR',
+        'inn15': 'VARCHAR',
+        'inn16': 'VARCHAR',
+        'inn17': 'VARCHAR',
+        'inn18': 'VARCHAR',
+        'inn19': 'VARCHAR',
+        'inn20': 'VARCHAR',
+        'inn21': 'VARCHAR',
+        'inn22': 'VARCHAR',
+        'inn23': 'VARCHAR',
+        'inn24': 'VARCHAR',
+        'inn25': 'VARCHAR',
+        'inn26': 'VARCHAR',
+        'inn27': 'VARCHAR',
+        'inn28': 'VARCHAR',
+        'lob': 'SMALLINT',
+        'mgr': 'VARCHAR',
+        'stattype': 'VARCHAR',
+        'b_pa': 'USMALLINT',
+        'b_ab': 'USMALLINT',
+        'b_r': 'USMALLINT',
+        'b_h': 'USMALLINT',
+        'b_d': 'USMALLINT',
+        'b_t': 'USMALLINT',
+        'b_hr': 'USMALLINT',
+        'b_rbi': 'USMALLINT',
+        'b_sh': 'USMALLINT',
+        'b_sf': 'USMALLINT',
+        'b_hbp': 'USMALLINT',
+        'b_w': 'VARCHAR',
+        'b_iw': 'USMALLINT',
+        'b_k': 'VARCHAR',
+        'b_sb': 'USMALLINT',
+        'b_cs': 'USMALLINT',
+        'b_gdp': 'USMALLINT',
+        'b_xi': 'USMALLINT',
+        'b_roe': 'USMALLINT',
+        'p_ipouts': 'USMALLINT',
+        'p_noout': 'USMALLINT',
+        'p_bfp': 'USMALLINT',
+        'p_h': 'USMALLINT',
+        'p_d': 'USMALLINT',
+        'p_t': 'USMALLINT',
+        'p_hr': 'USMALLINT',
+        'p_r': 'USMALLINT',
+        'p_er': 'USMALLINT',
+        'p_w': 'VARCHAR',
+        'p_iw': 'USMALLINT',
+        'p_k': 'VARCHAR',
+        'p_hbp': 'USMALLINT',
+        'p_wp': 'USMALLINT',
+        'p_bk': 'USMALLINT',
+        'p_sh': 'USMALLINT',
+        'p_sf': 'USMALLINT',
+        'p_sb': 'USMALLINT',
+        'p_cs': 'USMALLINT',
+        'p_pb': 'USMALLINT',
+        'd_po': 'USMALLINT',
+        'd_a': 'USMALLINT',
+        'd_e': 'USMALLINT',
+        'd_dp': 'USMALLINT',
+        'd_tp': 'USMALLINT',
+        'd_pb': 'USMALLINT',
+        'd_wp': 'USMALLINT',
+        'd_sb': 'USMALLINT',
+        'd_cs': 'USMALLINT',
+        'start_l1': 'VARCHAR',
+        'start_l2': 'VARCHAR',
+        'start_l3': 'VARCHAR',
+        'start_l4': 'VARCHAR',
+        'start_l5': 'VARCHAR',
+        'start_l6': 'VARCHAR',
+        'start_l7': 'VARCHAR',
+        'start_l8': 'VARCHAR',
+        'start_l9': 'VARCHAR',
+        'start_f1': 'VARCHAR',
+        'start_f2': 'VARCHAR',
+        'start_f3': 'VARCHAR',
+        'start_f4': 'VARCHAR',
+        'start_f5': 'VARCHAR',
+        'start_f6': 'VARCHAR',
+        'start_f7': 'VARCHAR',
+        'start_f8': 'VARCHAR',
+        'start_f9': 'VARCHAR',
+        'start_f10': 'VARCHAR',
+        'date': 'VARCHAR',
+        'number': 'USMALLINT',
+        'site': 'VARCHAR',
+        'vishome': 'VARCHAR',
+        'opp': 'VARCHAR',
+        'win': 'USMALLINT',
+        'loss': 'USMALLINT',
+        'tie': 'USMALLINT',
+        'gametype': 'VARCHAR',
+        'box': 'VARCHAR',
+        'pbp': 'VARCHAR'
+    }
+
     def __init__(self, data_dir = 'data') -> None:
         data_dir = Path(data_dir)
 
@@ -299,157 +543,55 @@ class Retrosheet:
 
     def download(self) -> None:
         """Download Retrosheet files."""
-        url = 'https://www.retrosheet.org/downloads/alldata.zip'
+        url = 'https://www.retrosheet.org/downloads/csvdownloads.zip'
         resp = requests.get(url)
 
-        filepath = self.raw_dir / 'alldata.zip'
+        filepath = self.raw_dir / 'csvdownloads.zip'
         with open(filepath, 'wb') as f:
             f.write(resp.content)
 
     def unzip(self) -> None:
         """Unzip Retrosheet files."""
-        filepath = self.raw_dir / 'alldata.zip'
+        filepath = self.raw_dir / 'csvdownloads.zip'
         with ZipFile(filepath, 'r') as zf:
             zf.extractall(self.raw_dir)
 
-    def move_team_files(self) -> None:
-        """Move team files to events folder in order to run Chadwick CLI."""
-        in_dir = self.raw_dir / 'teams'
-        out_dir = self.raw_dir / 'events'
+    def load(self, data_model: str) -> None:
+        """Load Retrosheet data into database."""
+        if data_model not in (
+            'allplayers',
+            'batting',
+            'discreps',
+            'ejections',
+            'fielding',
+            'gameinfo',
+            'pitching',
+            'plays',
+            'teamstats'
+        ):
+            raise Exception('Not a valid data model.')
 
-        for f in in_dir.glob('TEAM*'):
-            out_path = out_dir / f.name
-            f.rename(out_path)
+        filepath = self.raw_dir / 'csvdownloads' / f'{data_model}.csv'
 
-    def parse_events(self) -> None:
-        """Parses Retrosheet event files with Chadwick CLI and saves to csv."""
-        # Get all years
-        in_dir = self.raw_dir / 'events'
-        files = in_dir.glob('*.EV?')
-        years = {int(f.name[:4]) for f in files}
-
-        # Run Chadwick
-        out_dir = self.parsed_dir / 'events'
-        out_dir.mkdir(exist_ok=True)
-
-        for year in years:
-            out_path = out_dir / f'{year}.csv'
-
-            cmd = f'cwevent -y {year} -n -f 0-96 -x 0-63 {year}*.EV?'
-            with open(out_path, 'w+') as f:
-                subprocess.run(
-                    cmd,
-                    shell=True,
-                    stdout=f,
-                    stderr=subprocess.DEVNULL,
-                    cwd=in_dir,
-                )
-
-    def parse_games(self) -> None:
-        """Parses Retrosheet event files for game summaries with Chadwick CLI
-        and saves to csvs.
-        """
-        # Get all years
-        in_dir = self.raw_dir / 'events'
-        files = in_dir.glob('*.EV?')
-        years = {int(f.name[:4]) for f in files}
-
-        # Run Chadwick
-        out_dir = self.parsed_dir / 'games'
-        out_dir.mkdir(exist_ok=True)
-
-        for year in years:
-            out_path = out_dir / f'{year}.csv'
-
-            cmd = f'cwgame -y {year} -n -f 0-83 {year}*.EV?'
-            with open(out_path, 'w+') as f:
-                subprocess.run(
-                    cmd,
-                    shell=True,
-                    stdout=f,
-                    stderr=subprocess.DEVNULL,
-                    cwd=in_dir,
-                )
-
-    def parse_subs(self) -> None:
-        """Parses Retrosheet event files for substitutions with Chadwick
-        CLI and saves to csvs.
-        """
-        # Get all years
-        in_dir = self.raw_dir / 'events'
-        files = in_dir.glob('*.EV?')
-        years = {int(f.name[:4]) for f in files}
-
-        # Run Chadwick
-        out_dir = self.parsed_dir / 'subs'
-        out_dir.mkdir(exist_ok=True)
-
-        for year in years:
-            out_path = out_dir / f'{year}.csv'
-
-            cmd = f'cwsub -y {year} -n {year}*.EV?'
-            with open(out_path, 'w+') as f:
-                subprocess.run(
-                    cmd,
-                    shell=True,
-                    stdout=f,
-                    stderr=subprocess.DEVNULL,
-                    cwd=in_dir,
-                )
-
-    def parse_rosters(self) -> None:
-        """Parses Retrosheet roster files and saves to csvs."""
-        # Get all years
-        in_dir = self.raw_dir / 'rosters'
-        files = in_dir.glob('*.ROS')
-        years = {int(f.name[3:7]) for f in files}
-
-        # Build csv with every team's rosters for each season
-        out_dir = self.parsed_dir / 'rosters'
-        out_dir.mkdir(exist_ok=True)
-
-        for year in years:
-            out_path = out_dir / f'{year}.csv'
-            with open(out_path, 'w', newline='') as out_file:
-                writer = csv.writer(out_file)
-
-                header = ['PLAYER_ID', 'LAST_NAME', 'FIRST_NAME', 'BATS', 'THROWS', 'TEAM_ID', 'POSITION', 'YEAR']
-                writer.writerow(header)
-
-                in_csvs = in_dir.glob(f'*{year}.ROS')
-                for in_csv in in_csvs:
-                    with open(in_csv, newline='') as in_file:
-                        reader = csv.reader(in_file)
-                        for row in reader:
-                            writer.writerow(row + [year])        
-
-    def _create_table(self, table: str) -> None:
-        table_field_dtypes = {
-            'events': self.EVENT_FIELD_DTYPES,
-            'games': self.GAME_FIELD_DTYPES,
-            'subs': self.SUB_FIELD_DTYPES,
-            'rosters': self.ROSTER_FIELD_DTYPES,
+        field_dtypes_map = {
+            'allplayers': self.ALLPLAYERS_FIELD_DTYPES,
+            'batting': self.BATTING_FIELD_DTYPES,
+            'discreps': self.DISCREPS_FIELD_DTYPES,
+            'ejections': self.EJECTIONS_FIELD_DTYPES,
+            'fielding': self.FIELDING_FIELD_DTYPES,
+            'gameinfo': self.GAMEINFO_FIELD_DTYPES,
+            'pitching': self.PITCHING_FIELD_DTYPES,
+            'plays': self.PLAYS_FIELD_DTYPES,
+            'teamstats': self.TEAMSTATS_FIELD_DTYPES
         }
+        field_dtypes = field_dtypes_map[data_model]
 
-        field_dtypes = table_field_dtypes[table]
+        fields_sql = ",\n".join(" ".join(i) for i in field_dtypes.items())
 
-        fields_sql = ", ".join(" ".join(x) for x in field_dtypes.items())
-        sql = f'create table if not exists raw.retrosheet_{table}({fields_sql});'
-
-        print(DATABASE_NAME)
+        sql = f"""
+            CREATE OR REPLACE TABLE raw.retrosheet_{data_model} ({fields_sql});
+            COPY raw.retrosheet_{data_model} FROM '{filepath}' (HEADER);
+        """
         con = duckdb.connect(DATABASE_NAME)
         con.execute(sql)
-        con.close()
-            
-    def load_seasons(self, table: str, years: int | list[int]) -> None:
-        if isinstance(years, int):
-            years = [years]
-
-        con = duckdb.connect(DATABASE_NAME)
-
-        for year in years:
-            filepath = self.parsed_dir / table / f'{year}.csv'
-            sql = f"copy raw.retrosheet_{table} from '{filepath}' (header);"
-            con.execute(sql)
-
         con.close()
