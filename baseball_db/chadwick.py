@@ -77,19 +77,22 @@ class ChadwickRegister:
             zf.extractall(self.raw_dir)
 
     def load(self) -> None:
-        # Create a new table with every load
-        fields_sql = ", ".join(" ".join(x) for x in self.PEOPLE_FIELD_DTYPES.items())
-        sql = f'create or replace table raw.chadwick_people({fields_sql});'
+        filepaths = sorted(self.raw_dir.glob(f'**/people*.csv'))
+        filepaths = [str(p) for p in filepaths]
+
+        sql = f"""
+            CREATE OR REPLACE TABLE raw.chadwick_people AS
+
+                SELECT *
+                FROM read_csv(
+                    {filepaths},
+                    header = true,
+                    columns = {self.PEOPLE_FIELD_DTYPES}
+                )
+        """
 
         con = duckdb.connect(DATABASE_NAME)
         con.execute(sql)
-
-        # Copy CSVs to table
-        filepaths = sorted(self.raw_dir.glob('**/people*.csv'))
-        for filepath in filepaths:
-            sql = f"copy raw.chadwick_people from '{filepath}' (header);"
-            con.execute(sql)
-
         con.close()
 
     def cleanup(self) -> None:
