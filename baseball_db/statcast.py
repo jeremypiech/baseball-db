@@ -175,6 +175,11 @@ class Statcast:
         'api_break_x_arm': 'DECIMAL(9, 4)',
         'api_break_x_batter_in': 'DECIMAL(9, 4)',
         'arm_angle': 'DECIMAL(9, 4)',
+        'attack_angle': 'DECIMAL(18, 15)',
+        'attack_direction': 'DECIMAL(18, 15)',
+        'swing_path_tilt': 'DECIMAL(18, 15)',
+        'intercept_ball_minus_batter_pos_x_inches': 'DECIMAL(18, 15)',
+        'intercept_ball_minus_batter_pos_y_inches': 'DECIMAL(18, 15)',
     }
 
     def __init__(self, data_dir = 'data') -> None:
@@ -245,46 +250,22 @@ class Statcast:
             with open(filepath, 'wb') as f:
                 f.write(content)
 
-    def _create_table(self) -> None:
-        fields_sql = ", ".join(" ".join(x) for x in self.FIELD_DTYPES.items())
-        sql = f'create table if not exists raw.statcast({fields_sql});'
+    def load(self) -> None:
+        """Load Statcast csv files into database."""
+        filepaths = sorted(self.raw_dir.glob('*.csv'))
+        filepaths = [str(p) for p in filepaths]
+
+        sql = f"""
+            CREATE OR REPLACE TABLE raw.statcast AS
+
+                SELECT *
+                FROM read_csv(
+                    {filepaths},
+                    header = true,
+                    columns = {self.FIELD_DTYPES}
+                )
+        """
 
         con = duckdb.connect(DATABASE_NAME)
         con.execute(sql)
         con.close()
-
-    def load_file(self, filename: str) -> None:
-        filepath = self.raw_dir / filename
-        sql = f"copy raw.statcast from '{filepath}' (header);"
-
-        con = duckdb.connect(DATABASE_NAME)
-        con.execute(sql)
-        con.close()
-
-    def load_season(self, year: int) -> None:
-        con = duckdb.connect(DATABASE_NAME)
-
-        # Copy CSV to table
-        filepaths = sorted(self.raw_dir.glob(f'statcast-{year}*.csv'))
-        for filepath in filepaths:
-            sql = f"copy raw.statcast from '{filepath}' (header);"
-            con.execute(sql)
-
-        con.close()
-
-    def extract_load(
-            self,
-            start_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1)),
-            end_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1)),
-            days_step: int = 1,
-        ) -> None:
-
-        start_date = datetime.date.fromisoformat(start_date) if isinstance(start_date, str) else start_date
-        end_date = datetime.date.fromisoformat(end_date) if isinstance(end_date, str) else end_date
-
-        self.extract(start_date, end_date, days_step)
-
-        filename_start_dates = date_range(start_date, end_date, days_step)
-        for start in filename_start_dates:
-            for filepath in self.raw_dir.glob(f'statcast-{start:%Y-%m-%d}*'):
-                self.load_file(filepath.name)
