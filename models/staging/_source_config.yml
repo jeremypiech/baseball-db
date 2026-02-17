@@ -4,8 +4,13 @@ sources:
   - name: raw
     tables:
       - name: chadwick_people
-      - name: retrosheet_events
-      - name: retrosheet_games
-      - name: retrosheet_rosters
-      - name: retrosheet_subs
+      - name: retrosheet_allplayers
+      - name: retrosheet_batting
+      - name: retrosheet_discreps
+      - name: retrosheet_ejections
+      - name: retrosheet_fielding
+      - name: retrosheet_gameinfo
+      - name: retrosheet_pitching
+      - name: retrosheet_plays
+      - name: retrosheet_teamstats
       - name: statcast
