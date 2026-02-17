@@ -5,6 +5,9 @@ WITH source AS (
 )
 
 SELECT DISTINCT
+    {{ dbt_utils.generate_surrogate_key(['game_id', 'game_pa_number', 'pa_pitch_number']) }}
+        AS unique_key
+
     pitch_type,
     game_date,
     release_speed,
@@ -127,8 +130,5 @@ SELECT DISTINCT
     delta_run_exp,
     bat_speed,
     swing_length,
-
-    {{ dbt_utils.generate_surrogate_key(['game_id', 'game_pa_number', 'pa_pitch_number']) }}
-        AS unique_id
 
 FROM source
