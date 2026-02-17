@@ -32,8 +32,8 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   baseball_db:
     # Config indicated by + and applies to all files under models/example/
-    1_staging:
+    staging:
       +materialized: view
 
-    2_marts:
-      +materialized: view
+    mart:
+      +materialized: table
