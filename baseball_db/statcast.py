@@ -2,6 +2,7 @@ import datetime
 import duckdb
 import requests
 import typing
+import time
 
 from pathlib import Path
 
@@ -246,13 +247,17 @@ class Statcast:
                 else f'statcast-{start:%Y-%m-%d}-{end:%Y-%m-%d}.csv'
             )
 
-            filepath = self.raw_dir / filename
+            dir = self.raw_dir / f'{start:%Y}'
+            dir.mkdir(exist_ok=True)
+            
+            filepath = dir / filename
+            
             with open(filepath, 'wb') as f:
                 f.write(content)
 
     def load(self) -> None:
         """Load Statcast csv files into database."""
-        filepaths = sorted(self.raw_dir.glob('*.csv'))
+        filepaths = sorted(self.raw_dir.glob('**/*.csv'))
         filepaths = [str(p) for p in filepaths]
 
         sql = f"""
