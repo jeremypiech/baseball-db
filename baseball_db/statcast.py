@@ -1,20 +1,17 @@
 import datetime
 import duckdb
-import requests
 import typing
-import time
 
 from pathlib import Path
 
-from baseball_db import DATABASE_NAME
-from baseball_db.utils import date_range
+from baseball_db.constants import DATABASE_NAME
 
 
 StrDate = typing.Union[str, datetime.date]
 
 
 class Statcast:
-    """Extract and load Statcast data.
+    """Load Statcast data.
     
     Attributes
     ----------
@@ -183,94 +180,68 @@ class Statcast:
         'intercept_ball_minus_batter_pos_y_inches': 'DECIMAL(18, 15)',
     }
 
-    def __init__(self, data_dir = 'data') -> None:
-        data_dir = Path(data_dir)
-        self.raw_dir = data_dir / 'raw' / 'statcast'
+    def __init__(self, data_dir: str = 'data') -> None:
+        self.data_dir = Path(data_dir) / 'statcast'
+        self.data_dir.mkdir(parents=True, exist_ok=True)
 
-        # Create directory if it does not exist
-        self.raw_dir.mkdir(parents=True, exist_ok=True)
-
-    def search(
-            self,
-            start_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1)),
-            end_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1)),
-            player_type: str = 'pitcher',
-        ) -> bytes:
-        """Search MLB.com's Statcast database.
-
-        *Don't query for more than 3-4 days*
-
-        Parameters
-        ----------
-        start_date : str or datetime.date
-            Start date, inclusive. If str, must use ISO format (YYYY-MM-DD).
-        end_date : str or datetime.date
-            End date, inclusive. If str, must use ISO format (YYYY-MM-DD).
-        player_type : str, default = "pitcher"
-            "pitcher" or "batter"
-        url_params : dict
-        """
-        start_date = datetime.date.fromisoformat(start_date) if isinstance(start_date, str) else start_date
-        end_date = datetime.date.fromisoformat(end_date) if isinstance(end_date, str) else end_date
-
-        params = self.DEFAULT_URL_PARAMS.copy()
-        params['hfSea'] = f'{start_date.year}|'
-        params['game_date_gt'] = f'{start_date:%Y-%m-%d}'
-        params['game_date_lt'] = f'{end_date:%Y-%m-%d}'
-        params['player_type'] = player_type
-
-        url = 'https://baseballsavant.mlb.com/statcast_search/csv'
-        resp = requests.get(url, params=params)
-
-        return resp.content
-
-    def extract(
-            self,
-            start_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1)),
-            end_date: StrDate = (datetime.date.today() - datetime.timedelta(days=1)),
-            days_step: int = 1,
-        ) -> None:
-
-        start_date = datetime.date.fromisoformat(start_date) if isinstance(start_date, str) else start_date
-        end_date = datetime.date.fromisoformat(end_date) if isinstance(end_date, str) else end_date
-
-        search_start_dates = date_range(start_date, end_date, days_step)
-        for start in search_start_dates:
-            end = min(start + datetime.timedelta(days=days_step - 1), end_date)
-
-            print(f'Searching {start:%Y-%m-%d} - {end:%Y-%m-%d}')
-            content = self.search(start, end)
-
-            filename = (
-                f'statcast-{start:%Y-%m-%d}.csv'
-                if start == end
-                else f'statcast-{start:%Y-%m-%d}-{end:%Y-%m-%d}.csv'
-            )
-
-            dir = self.raw_dir / f'{start:%Y}'
-            dir.mkdir(exist_ok=True)
-            
-            filepath = dir / filename
-            
-            with open(filepath, 'wb') as f:
-                f.write(content)
-
-    def load(self) -> None:
-        """Load Statcast csv files into database."""
-        filepaths = sorted(self.raw_dir.glob('**/*.csv'))
-        filepaths = [str(p) for p in filepaths]
+    def _create_table(self) -> None:
+        """Create the raw.statcast table."""
+        fields_sql = ",\n".join([f"{field} {dtype}" for field, dtype in self.FIELD_DTYPES.items()])
 
         sql = f"""
-            CREATE OR REPLACE TABLE raw.statcast AS
-
-                SELECT *
-                FROM read_csv(
-                    {filepaths},
-                    header = true,
-                    columns = {self.FIELD_DTYPES}
-                )
+            CREATE TABLE IF NOT EXISTS raw.statcast (
+                {fields_sql},
+                PRIMARY KEY (game_pk, at_bat_number, pitch_number)
+            );
         """
 
         con = duckdb.connect(DATABASE_NAME)
         con.execute(sql)
+        con.close()
+
+    def load(self, years: int | list[int]) -> None:
+        """Load Statcast CSVs into raw.statcast table.
+        
+        If there the primary key (game_pk, at_bat_number, pitch_number) already
+        exists in the table, the old record is deleted and the new record is
+        inserted.
+
+        Parameters
+        ----------
+        years: int or list of ints
+            Seasons of CSVs to load. Each season should have its own folder
+            of CSVs in the data directory.
+        """
+        years = [years] if isinstance(years, int) else years
+
+        con = duckdb.connect(DATABASE_NAME)
+
+        for year in years:
+            filepaths = sorted(self.data_dir.glob(f'**/{year}/*.csv'))
+            filepaths = [str(p) for p in filepaths]
+
+            sql = f"""
+                CREATE TABLE raw.temp_statcast AS
+
+                    SELECT *
+                    FROM read_csv(
+                        {filepaths},
+                        header = true,
+                        columns = {self.FIELD_DTYPES}
+                    );
+            """
+            con.execute(sql)
+
+            con.execute("""
+                ALTER TABLE raw.temp_statcast
+                ADD PRIMARY KEY (game_pk, at_bat_number, pitch_number);
+            """)
+            
+            con.execute("""
+                INSERT OR REPLACE INTO raw.statcast
+                SELECT * FROM raw.temp_statcast;
+            """)
+
+            con.execute("DROP TABLE raw.temp_statcast;")
+
         con.close()

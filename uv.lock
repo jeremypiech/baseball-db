@@ -66,16 +66,16 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "dbt-core", specifier = ">=1.10.13" },
-    { name = "dbt-duckdb", specifier = ">=1.9.6" },
-    { name = "python-dotenv", specifier = ">=1.1.1" },
-    { name = "requests", specifier = ">=2.32.5" },
+    { name = "dbt-core", specifier = ">=1.11" },
+    { name = "dbt-duckdb", specifier = ">=1.10" },
+    { name = "python-dotenv", specifier = ">=1.2" },
+    { name = "requests", specifier = ">=2.32" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "ruff", specifier = ">=0.14.1" },
-    { name = "sqlfluff", specifier = ">=3.4.2" },
+    { name = "ruff", specifier = ">=0.15" },
+    { name = "sqlfluff", specifier = ">=4.0" },
 ]
 
 [[package]]

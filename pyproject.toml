@@ -16,3 +16,7 @@ dev = [
     "ruff>=0.15",
     "sqlfluff>=4.0",
 ]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["baseball_db*"]
