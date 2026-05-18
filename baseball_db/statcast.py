@@ -143,7 +143,7 @@ class Statcast:
         self.data_dir = Path(data_dir) / 'statcast'
         self.data_dir.mkdir(parents=True, exist_ok=True)
 
-    def _create_table(self) -> None:
+    def create_table(self) -> None:
         """Create the raw.statcast table."""
         fields_sql = ",\n".join([f"{field} {dtype}" for field, dtype in self.FIELD_DTYPES.items()])
 
