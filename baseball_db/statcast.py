@@ -15,50 +15,9 @@ class Statcast:
     
     Attributes
     ----------
-    raw_dir : pathlib.PosixPath
+    data_dir : pathlib.PosixPath
         Directory for downloaded files.
     """
-    DEFAULT_URL_PARAMS = {
-        'all': 'true',
-        'hfPT': '',
-        'hfAB': '',
-        'hfBBT': '',
-        'hfPR': '',
-        'hfZ': '',
-        'stadium': '',
-        'hfBBL': '',
-        'hfNewZones': '',
-        'hfGT': 'R|PO|S|',
-        'hfSea': '',
-        'hfC': '',
-        'hfSit': '',
-        'hfOuts': '',
-        'opponent': '',
-        'pitcher_throws': '',
-        'batter_stands': '',
-        'hfSA': '',
-        'hfInfield': '',
-        'team': '',
-        'position': '',
-        'hfOutfield': '',
-        'hfRO': '',
-        'home_road': '',
-        'game_date_gt': '',
-        'game_date_lt': '',
-        'hfFlag': '',
-        'hfPull': '',
-        'metric_1': '',
-        'hfInn': '',
-        'min_pitches': '0',
-        'min_results': '0',
-        'group_by': 'name',
-        'sort_col': 'pitches',
-        'player_event_sort': 'h_launch_speed',
-        'sort_order': 'asc',
-        'min_pas': '0',
-        'type': 'details',
-    }
-    
     FIELD_DTYPES = {
         'pitch_type': 'VARCHAR',
         'game_date': 'DATE',

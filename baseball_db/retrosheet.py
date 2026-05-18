@@ -1,17 +1,16 @@
-import csv
 import duckdb
-import os
 import requests
-import subprocess
 
 from pathlib import Path
 from zipfile import ZipFile
 
-from baseball_db import DATABASE_NAME
+from baseball_db.constants import DATABASE_NAME
 
 
 class Retrosheet:
-    """Extract and load Retrosheet files."""
+    """Extract and load Retrosheet data.
+    https://www.retrosheet.org/downloads/csvcontents.html
+    """
     ALLPLAYERS_FIELD_DTYPES = {
         'id': 'VARCHAR',
         'last': 'VARCHAR',
@@ -532,29 +531,23 @@ class Retrosheet:
     }
 
     def __init__(self, data_dir = 'data') -> None:
-        data_dir = Path(data_dir)
-
-        self.raw_dir = data_dir / 'raw' / 'retrosheet'
-        self.parsed_dir = data_dir / 'parsed' / 'retrosheet'
-
-        # Create directories if they do not exist
-        self.raw_dir.mkdir(parents=True, exist_ok=True)
-        self.parsed_dir.mkdir(parents=True, exist_ok=True)
+        self.data_dir = Path(data_dir) / 'retrosheet'
+        self.data_dir.mkdir(parents=True, exist_ok=True)
 
     def download(self) -> None:
         """Download Retrosheet files."""
         url = 'https://www.retrosheet.org/downloads/csvdownloads.zip'
         resp = requests.get(url)
 
-        filepath = self.raw_dir / 'csvdownloads.zip'
+        filepath = self.data_dir / 'csvdownloads.zip'
         with open(filepath, 'wb') as f:
             f.write(resp.content)
 
     def unzip(self) -> None:
         """Unzip Retrosheet files."""
-        filepath = self.raw_dir / 'csvdownloads.zip'
+        filepath = self.data_dir / 'csvdownloads.zip'
         with ZipFile(filepath, 'r') as zf:
-            zf.extractall(self.raw_dir)
+            zf.extractall(self.data_dir)
 
     def load(self, data_model: str) -> None:
         """Load Retrosheet data into database."""
@@ -571,7 +564,7 @@ class Retrosheet:
         ):
             raise Exception('Not a valid data model.')
 
-        filepath = self.raw_dir / 'csvdownloads' / f'{data_model}.csv'
+        filepath = self.data_dir / 'csvdownloads' / f'{data_model}.csv'
 
         field_dtypes_map = {
             'allplayers': self.ALLPLAYERS_FIELD_DTYPES,

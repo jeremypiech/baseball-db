@@ -1,16 +1,21 @@
 import duckdb
-import os
 import requests
 import shutil
 
 from pathlib import Path
 from zipfile import ZipFile
 
-from baseball_db import DATABASE_NAME
+from baseball_db.constants import DATABASE_NAME
 
 
 class ChadwickRegister:
-
+    """Extract and load Chadwick Baseball Bureau persons data.
+    
+    Attributes
+    ----------
+    data_dir : pathlib.PosixPath
+        Directory for downloaded files.
+    """
     PEOPLE_FIELD_DTYPES = {
         'key_person': 'VARCHAR',
         'key_uuid': 'VARCHAR',
@@ -55,29 +60,26 @@ class ChadwickRegister:
     }
 
     def __init__(self, data_dir = 'data') -> None:
-        data_dir = Path(data_dir)
-        self.raw_dir = data_dir / 'raw' / 'chadwick-register'
-
-        # Create directory if it does not exist
-        self.raw_dir.mkdir(parents=True, exist_ok=True)
+        self.data_dir = Path(data_dir) / 'chadwick'
+        self.data_dir.mkdir(parents=True, exist_ok=True)
 
     def download(self) -> None:
         """Download Chadwick register files."""
         url = 'https://github.com/chadwickbureau/register/archive/refs/heads/master.zip'
         resp = requests.get(url)
 
-        filepath = self.raw_dir / 'register.zip'
+        filepath = self.data_dir / 'register.zip'
         with open(filepath, 'wb') as f:
             f.write(resp.content)
 
     def unzip(self) -> None:
         """Unzip Chadwick register files."""
-        filepath = self.raw_dir / 'register.zip'
+        filepath = self.data_dir / 'register.zip'
         with ZipFile(filepath, 'r') as zf:
-            zf.extractall(self.raw_dir)
+            zf.extractall(self.data_dir)
 
     def load(self) -> None:
-        filepaths = sorted(self.raw_dir.glob(f'**/people*.csv'))
+        filepaths = sorted(self.data_dir.glob(f'**/people*.csv'))
         filepaths = [str(p) for p in filepaths]
 
         sql = f"""
@@ -97,7 +99,7 @@ class ChadwickRegister:
 
     def cleanup(self) -> None:
         """Removes unzipped files."""
-        for path in self.raw_dir.iterdir():
+        for path in self.data_dir.iterdir():
             if path.is_dir():
                 shutil.rmtree(path)
 
