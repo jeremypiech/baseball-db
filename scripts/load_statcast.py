@@ -16,7 +16,7 @@ def main():
         current_year = datetime.datetime.now(datetime.UTC).year
         sc.load(current_year)
 
-        print(f"Updated Statcast data.")
+        print("Updated Statcast data.")
         sys.exit(0)
 
     except Exception as e:
