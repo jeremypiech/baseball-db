@@ -1,0 +1,87 @@
+version: 2
+
+models:
+  - name: stg_retrosheet_players
+    description: >
+      Season-level player appearance data from Retrosheet. Each row represents a player's
+      appearances for a single team in a single season. Players who appeared for multiple
+      teams in a season will have one row per team.
+    columns:
+      - name: id
+        description: Retrosheet player ID (RetroID).
+
+      - name: last
+        description: Player's last name.
+
+      - name: first
+        description: Player's first name.
+
+      - name: bat
+        description: How the player bats. B = Both (switch hitter), L = Left, R = Right. Unknown batting is indicated by "?".
+
+      - name: throw
+        description: How the player throws. L = Left, R = Right. Unknown throwing is indicated by "?".
+
+      - name: team
+        description: Retrosheet Team ID. Each player will have a separate row for each team for which they appeared.
+
+      - name: g
+        description: Total games played.
+
+      - name: g_p
+        description: Games played as a pitcher.
+
+      - name: g_sp
+        description: Games played as a starting pitcher.
+
+      - name: g_rp
+        description: Games played as a relief pitcher.
+
+      - name: g_c
+        description: Games played as a catcher.
+
+      - name: g_1b
+        description: Games played as a first baseman.
+
+      - name: g_2b
+        description: Games played as a second baseman.
+
+      - name: g_3b
+        description: Games played as a third baseman.
+
+      - name: g_ss
+        description: Games played as a shortstop.
+
+      - name: g_lf
+        description: Games played as a left fielder.
+
+      - name: g_cf
+        description: Games played as a center fielder.
+
+      - name: g_rf
+        description: Games played as a right fielder.
+
+      - name: g_of
+        description: Games played as an outfielder (any outfield position).
+
+      - name: g_dh
+        description: Games played as a designated hitter.
+
+      - name: g_ph
+        description: Games played as a pinch hitter.
+
+      - name: g_pr
+        description: Games played as a pinch runner.
+
+      - name: first_g
+        description: >
+          First game played by the player in the season for this team for which Retrosheet has
+          game information. Includes all game types.
+
+      - name: last_g
+        description: >
+          Last game played by the player in the season for this team for which Retrosheet has
+          game information. Includes all game types.
+
+      - name: season
+        description: Season (year). Players are listed separately for each team-season in which they played.

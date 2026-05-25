@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  version: 2
+
+models:
+  - name: stg_retrosheet_ejections
+    description: >
+      Record of every known ejection in MLB history compiled by Retrosheet, covering
+      more than 19,000 ejections. Each row represents a single ejection, including the
+      game context, the person ejected, the ejecting umpire, the inning, and a brief
+      reason where known. Negro League data are not yet included.
+    columns:
+      - name: gameid
+        description: Retrosheet Game ID for the game in which the ejection occurred.
+
+      - name: date
+        description: Date of the game in MM/DD/YYYY format.
+
+      - name: dh
+        description: >
+          Game number for the date. Blank for single games; 1, 2, etc. for
+          doubleheaders or tripleheaders.
+
+      - name: ejectee
+        description: Retrosheet Player ID of the individual who was ejected.
+
+      - name: ejecteename
+        description: Full name of the individual who was ejected.
+
+      - name: team
+        description: Retrosheet Team abbreviation of the ejected person's team at the time of ejection.
+
+      - name: job
+        description: >
+          Role of the ejected person. P = Player, M = Manager, C = Coach.
+
+      - name: umpire
+        description: Retrosheet Player ID of the umpire who issued the ejection.
+
+      - name: umpirename
+        description: Full name of the umpire who issued the ejection.
+
+      - name: inning
+        description: >
+          Inning in which the ejection occurred. -1 indicates the inning is unknown.
+
+      - name: reason
+        description: Brief description of the reason for the ejection (e.g., "Arguing balls and strikes", "Called third strike").

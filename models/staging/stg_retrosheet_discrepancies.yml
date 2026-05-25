@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: stg_retrosheet_discrepancies
+    description: >
+      Team-game level batting, pitching, and fielding statistics from Retrosheet. One row
+      per team per game. Includes inning-by-inning run scoring, batting totals, pitching
+      totals, fielding totals, and starting lineup/fielder information. The stattype column
+      indicates whether values are standard, official, or bounded estimates.
+    columns:
+      - name: id
+        description: ""
+
+      - name: player
+        description: ""
+
+      - name: year
+        description: ""
+
+      - name: team
+        description: ""
+
+      - name: type
+        description: ""
+
+      - name: pos
+        description: ""
+
+      - name: cat
+        description: ""
+
+      - name: game
+        description: ""
+
+      - name: retro
+        description: ""
+
+      - name: official
+        description: ""
+
+      - name: cross
+        description: ""
+
+      - name: code
+        description: ""
+
+      - name: x
+        description: ""
+
+      - name: notes
+        description: ""
+
+      - name: accepted
+        description: ""

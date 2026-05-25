@@ -1,0 +1,296 @@
+version: 2
+
+models:
+  - name: stg_retrosheet_team_stats
+    description: >
+      Team-game level batting, pitching, and fielding statistics from Retrosheet. One row
+      per team per game. Includes inning-by-inning run scoring, batting totals, pitching
+      totals, fielding totals, and starting lineup/fielder information. The stattype column
+      indicates whether values are standard, official, or bounded estimates.
+    columns:
+      - name: gid
+        description: Unique Retrosheet Game ID.
+
+      - name: team
+        description: Retrosheet Team ID.
+
+      - name: inn1
+        description: Runs scored by the team in the 1st inning.
+
+      - name: inn2
+        description: Runs scored by the team in the 2nd inning.
+
+      - name: inn3
+        description: Runs scored by the team in the 3rd inning.
+
+      - name: inn4
+        description: Runs scored by the team in the 4th inning.
+
+      - name: inn5
+        description: Runs scored by the team in the 5th inning.
+
+      - name: inn6
+        description: Runs scored by the team in the 6th inning.
+
+      - name: inn7
+        description: Runs scored by the team in the 7th inning.
+
+      - name: inn8
+        description: Runs scored by the team in the 8th inning.
+
+      - name: inn9
+        description: Runs scored by the team in the 9th inning.
+
+      - name: inn10
+        description: Runs scored by the team in the 10th inning (and similarly inn11 through inn28 for extra innings up to the 28th).
+
+      - name: lob
+        description: Total runners left on base by the team.
+
+      - name: mgr
+        description: >
+          Retrosheet ID of the in-game manager for the team. Note: this field has not been
+          populated yet for Negro League games.
+
+      - name: stattype
+        description: >
+          Indicates the nature of the statistics row. 'value' = standard computed stats;
+          'official' = identifies discrepancies between Retrosheet accounts and official statistics;
+          'lower' = lower bound estimate to highlight data uncertainty;
+          'upper' = upper bound estimate to highlight data uncertainty.
+
+      - name: b_pa
+        description: Total plate appearances by the team's batters.
+
+      - name: b_ab
+        description: Total at bats by the team's batters.
+
+      - name: b_r
+        description: Total runs scored by the team.
+
+      - name: b_h
+        description: Total hits by the team's batters.
+
+      - name: b_d
+        description: Total doubles by the team's batters.
+
+      - name: b_t
+        description: Total triples by the team's batters.
+
+      - name: b_hr
+        description: Total home runs by the team's batters.
+
+      - name: b_rbi
+        description: Total runs batted in by the team's batters.
+
+      - name: b_sh
+        description: Total sacrifice hits (bunts) by the team's batters.
+
+      - name: b_sf
+        description: Total sacrifice flies by the team's batters.
+
+      - name: b_hbp
+        description: Total times the team's batters were hit by a pitch.
+
+      - name: b_w
+        description: Total walks (including intentional) by the team's batters.
+
+      - name: b_iw
+        description: Total intentional walks by the team's batters.
+
+      - name: b_k
+        description: Total strikeouts by the team's batters.
+
+      - name: b_sb
+        description: Total stolen bases by the team's baserunners.
+
+      - name: b_cs
+        description: Total times the team's baserunners were caught stealing.
+
+      - name: b_gdp
+        description: Total times the team's batters grounded into a double play.
+
+      - name: b_xi
+        description: Total times the team's batters reached base on catcher's interference.
+
+      - name: b_roe
+        description: Total times the team's batters reached base via error.
+
+      - name: p_ipouts
+        description: Total outs recorded by the team's pitchers, expressed as innings pitched multiplied by 3.
+
+      - name: p_noout
+        description: Total batters faced by the team's pitchers in innings in which no outs were recorded.
+
+      - name: p_bfp
+        description: Total batters faced by the team's pitchers.
+
+      - name: p_h
+        description: Total hits allowed by the team's pitchers.
+
+      - name: p_d
+        description: Total doubles allowed by the team's pitchers.
+
+      - name: p_t
+        description: Total triples allowed by the team's pitchers.
+
+      - name: p_hr
+        description: Total home runs allowed by the team's pitchers.
+
+      - name: p_r
+        description: Total runs allowed by the team's pitchers.
+
+      - name: p_er
+        description: Total earned runs allowed by the team's pitchers.
+
+      - name: p_w
+        description: Total walks allowed by the team's pitchers.
+
+      - name: p_iw
+        description: Total intentional walks allowed by the team's pitchers.
+
+      - name: p_k
+        description: Total strikeouts recorded by the team's pitchers.
+
+      - name: p_hbp
+        description: Total batters hit by pitch by the team's pitchers.
+
+      - name: p_wp
+        description: Total wild pitches by the team's pitchers.
+
+      - name: p_bk
+        description: Total balks by the team's pitchers.
+
+      - name: p_sh
+        description: Total sacrifice hits allowed by the team's pitchers.
+
+      - name: p_sf
+        description: Total sacrifice flies allowed by the team's pitchers.
+
+      - name: p_sb
+        description: Total stolen bases allowed by the team's pitchers/catchers.
+
+      - name: p_cs
+        description: Total times opposing baserunners were caught stealing against this team.
+
+      - name: p_pb
+        description: Total passed balls allowed by the team's catchers.
+
+      - name: d_po
+        description: Total putouts by the team's fielders.
+
+      - name: d_a
+        description: Total assists by the team's fielders.
+
+      - name: d_e
+        description: Total errors committed by the team's fielders.
+
+      - name: d_dp
+        description: Total double plays turned by the team.
+
+      - name: d_tp
+        description: Total triple plays turned by the team.
+
+      - name: d_pb
+        description: Total passed balls allowed by the team's catchers (fielding context).
+
+      - name: d_wp
+        description: Total wild pitches allowed by the team (fielding context).
+
+      - name: d_sb
+        description: Total stolen bases allowed by the team (fielding context).
+
+      - name: d_cs
+        description: Total caught stealings recorded by the team (fielding context).
+
+      - name: start_l1
+        description: Retrosheet Player ID of the starter batting in lineup position 1.
+
+      - name: start_l2
+        description: Retrosheet Player ID of the starter batting in lineup position 2.
+
+      - name: start_l3
+        description: Retrosheet Player ID of the starter batting in lineup position 3.
+
+      - name: start_l4
+        description: Retrosheet Player ID of the starter batting in lineup position 4.
+
+      - name: start_l5
+        description: Retrosheet Player ID of the starter batting in lineup position 5.
+
+      - name: start_l6
+        description: Retrosheet Player ID of the starter batting in lineup position 6.
+
+      - name: start_l7
+        description: Retrosheet Player ID of the starter batting in lineup position 7.
+
+      - name: start_l8
+        description: Retrosheet Player ID of the starter batting in lineup position 8.
+
+      - name: start_l9
+        description: Retrosheet Player ID of the starter batting in lineup position 9.
+
+      - name: start_f1
+        description: Retrosheet Player ID of the starting pitcher (fielding position 1).
+
+      - name: start_f2
+        description: Retrosheet Player ID of the starting catcher (fielding position 2).
+
+      - name: start_f3
+        description: Retrosheet Player ID of the starting first baseman (fielding position 3).
+
+      - name: start_f4
+        description: Retrosheet Player ID of the starting second baseman (fielding position 4).
+
+      - name: start_f5
+        description: Retrosheet Player ID of the starting third baseman (fielding position 5).
+
+      - name: start_f6
+        description: Retrosheet Player ID of the starting shortstop (fielding position 6).
+
+      - name: start_f7
+        description: Retrosheet Player ID of the starting left fielder (fielding position 7).
+
+      - name: start_f8
+        description: Retrosheet Player ID of the starting center fielder (fielding position 8).
+
+      - name: start_f9
+        description: Retrosheet Player ID of the starting right fielder (fielding position 9).
+
+      - name: start_f10
+        description: Retrosheet Player ID of the starting designated hitter (fielding position 10).
+
+      - name: date
+        description: Date of the game.
+
+      - name: number
+        description: Game number (0 if single game; 1, 2, etc. if multiple games on the same date).
+
+      - name: site
+        description: Retrosheet Park ID indicating the location of the game.
+
+      - name: vishome
+        description: Indicates whether the team was the visiting or home team. v = visiting, h = home.
+
+      - name: opp
+        description: Retrosheet Team ID of the opponent.
+
+      - name: win
+        description: Equal to 1 if the team won the game.
+
+      - name: loss
+        description: Equal to 1 if the team lost the game.
+
+      - name: tie
+        description: Equal to 1 if the game ended in a tie.
+
+      - name: gametype
+        description: Type of game (e.g., regular-season, exhibition, post-season).
+
+      - name: box
+        description: Indicates whether a box score is available. Blank indicates no.
+
+      - name: pbp
+        description: >
+          Indicates whether a play-by-play account is available. d = deduced account;
+          y = play-by-play account from a newspaper or scorecard. Blank indicates no account.
