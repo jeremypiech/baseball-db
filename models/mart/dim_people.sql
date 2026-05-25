@@ -3,8 +3,8 @@ WITH stg_chadwick_people AS (
 )
 
 SELECT
-    key_person,
     key_uuid,
+    key_person,
     key_mlbam,
     key_retro,
     key_bbref,
