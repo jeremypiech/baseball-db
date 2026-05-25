@@ -1,5 +1,6 @@
 import duckdb
 import requests
+import shutil
 
 from pathlib import Path
 from zipfile import ZipFile
@@ -548,6 +549,11 @@ class Retrosheet:
         filepath = self.data_dir / 'csvdownloads.zip'
         with ZipFile(filepath, 'r') as zf:
             zf.extractall(self.data_dir)
+    
+    def cleanup(self) -> None:
+        """Removes downloaded zip file."""
+        filepath = self.data_dir / 'csvdownloads.zip'
+        filepath.unlink()
 
     def load(self, data_model: str) -> None:
         """Load Retrosheet data into database."""
@@ -564,7 +570,7 @@ class Retrosheet:
         ):
             raise Exception('Not a valid data model.')
 
-        filepath = self.data_dir / 'csvdownloads' / f'{data_model}.csv'
+        filepath = self.data_dir / f'{data_model}.csv'
 
         field_dtypes_map = {
             'allplayers': self.ALLPLAYERS_FIELD_DTYPES,
@@ -588,3 +594,22 @@ class Retrosheet:
         con = duckdb.connect(DATABASE_NAME)
         con.execute(sql)
         con.close()
+
+    def extract_load_all(self) -> None:
+        """Download files and upload to database."""
+        self.download()
+        self.unzip()
+        self.cleanup()
+
+        for data_model in [
+            'allplayers',
+            'batting',
+            'discreps',
+            'ejections',
+            'fielding',
+            'gameinfo',
+            'pitching',
+            'plays',
+            'teamstats'
+        ]:
+            self.load(data_model)
