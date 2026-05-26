@@ -16,11 +16,6 @@ tab_space_size = 4
 implicit_indents = allow
 indented_on_contents = False
 
-[sqlfluff:layout:type:alias_expression]
-spacing_before = align
-align_within = select_clause
-align_scope = bracketed
-
 [sqlfluff:layout:type:comma]
 spacing_before = touch
 line_position = trailing
