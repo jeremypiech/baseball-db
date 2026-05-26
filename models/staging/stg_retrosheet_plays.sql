@@ -179,7 +179,7 @@ SELECT
     ump3b                                                 AS ump_3b_id,
     umplf                                                 AS ump_lf_id,
     umprf                                                 AS ump_rf_id,
-    date                                                  AS game_date,
+    strptime(date, '%Y%m%d')::DATE                        AS game_date,
     gametype                                              AS game_type,
     pbp                                                   AS pbp_source
 
