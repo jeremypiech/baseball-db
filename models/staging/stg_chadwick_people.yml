@@ -3,63 +3,63 @@ version: 2
 models:
   - name: stg_chadwick_people
     columns:
-      - name: key_uuid
+      - name: chadwick_unique_id
         description: The primary key. This is guaranteed not to be re-used to label a different identity.
         data_tests:
           - unique
           - not_null
 
-      - name: key_person
+      - name: chadwick_person_id
         description: >
           The first eight (hex) digits of the key_uuid. It is guaranteed that this is unique at any
           given time. However, over time the same short key may be re-used for a different identity.
 
-      - name: key_retro
-        description: The person's Retrosheet identifier.
+      - name: retrosheet_id
+        description: The person's Retrosheet ID.
 
-      - name: key_mlbam
-        description: The person's identifier at MLBAM.
+      - name: mlbam_id
+        description: The person's ID at MLBAM.
 
-      - name: key_bbref
-        description: The person's identifier on Major League pages on baseball-reference.com.
+      - name: bbref_id
+        description: The person's ID on major league pages on baseball-reference.com.
 
-      - name: key_bbref_minors
-        description: The person's identifier on minor league pages on baseball-reference.com.
+      - name: bbref_minors_id
+        description: The person's ID on minor league pages on baseball-reference.com.
 
-      - name: key_fangraphs
-        description: The person's identifier on fangraphs.com.
+      - name: fangraphs_id
+        description: The person's ID on fangraphs.com.
 
-      - name: key_npb
-        description: The person’s identifier on the NPB official site, npb.or.jp.
+      - name: npb_id
+        description: The person’s ID on the NPB official site, npb.or.jp.
 
-      - name: key_sr_nfl
-        description: The person's identifier on pro-football-reference.com.
+      - name: sr_nfl_id
+        description: The person's ID on pro-football-reference.com.
 
-      - name: key_sr_nba
-        description: The person's identifier on basketball-reference.com.
+      - name: sr_nba_id
+        description: The person's ID on basketball-reference.com.
 
-      - name: key_sr_nhl
-        description: The person's identifier on hockey-reference.com.
+      - name: sr_nhl_id
+        description: The person's ID on hockey-reference.com.
 
-      - name: key_wikidata
-        description: The person's identifier on wikidata.org.
+      - name: wikidata_id
+        description: The person's ID on wikidata.org.
 
-      - name: name_last
-        description: The person's last name.
-
-      - name: name_first
+      - name: first_name
         description: The person's first name.
 
-      - name: name_given
+      - name: last_name
+        description: The person's last name.
+
+      - name: given_name
         description: The person's given name.
 
-      - name: name_suffix
+      - name: suffix_name
         description: The person's suffix, if applicable.
 
-      - name: name_matrilineal
+      - name: matrilineal_name
         description: The person's matrilineal name.
 
-      - name: name_nick
+      - name: nickname
         description: The person's nickname.
 
       - name: birth_year
@@ -80,50 +80,50 @@ models:
       - name: death_day
         description: The person's death day.
 
-      - name: pro_played_first
+      - name: pro_played_first_season
         description: The person's first year of playing pro. 
 
-      - name: pro_played_last
+      - name: pro_played_last_season
         description: The person's last year of playing pro. 
 
-      - name: mlb_played_first
+      - name: mlb_played_first_season
         description: The person's first year of playing in MLB. 
 
-      - name: mlb_played_last
+      - name: mlb_played_last_season
         description: The person's last year of playing in MLB. 
 
-      - name: col_played_first
+      - name: col_played_first_season
         description: The person's first year of playing college. 
 
-      - name: col_played_last
+      - name: col_played_last_season
         description: The person's last year of playing college. 
 
-      - name: pro_managed_first
+      - name: pro_managed_first_season
         description: The person's first year of managing pro. 
 
-      - name: pro_managed_last
+      - name: pro_managed_last_season
         description: The person's last year of managing pro. 
 
-      - name: mlb_managed_first
+      - name: mlb_managed_first_season
         description: The person's first year of managing in MLB. 
 
-      - name: mlb_managed_last
+      - name: mlb_managed_last_season
         description: The person's last year of managing in MLB. 
 
-      - name: col_managed_first
+      - name: col_managed_first_season
         description: The person's first year of managing college. 
 
-      - name: col_managed_last
+      - name: col_managed_last_season
         description: The person's last year of managing college. 
 
-      - name: pro_umpired_first
+      - name: pro_umpired_first_season
         description: The person's first year of umpiring pro. 
 
-      - name: pro_umpired_last
+      - name: pro_umpired_last_season
         description: The person's last year of umpiring pro. 
 
-      - name: mlb_umpired_first
+      - name: mlb_umpired_first_season
         description: The person's first year of umpiring in MLB. 
 
-      - name: mlb_umpired_last
+      - name: mlb_umpired_last_season
         description: The person's last year of umpiring in MLB. 
