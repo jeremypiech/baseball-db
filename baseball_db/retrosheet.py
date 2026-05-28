@@ -40,6 +40,18 @@ class Retrosheet:
         'season': 'USMALLINT'
     }
 
+    BALLPARKS_FIELD_DTYPES = {
+        'PARKID': 'VARCHAR',
+        'NAME': 'VARCHAR',
+        'AKA': 'VARCHAR',
+        'CITY': 'VARCHAR',
+        'STATE': 'VARCHAR',
+        'START': 'VARCHAR',
+        '"END"': 'VARCHAR',
+        'LEAGUE': 'VARCHAR',
+        'NOTES': 'VARCHAR',
+    }
+
     BATTING_FIELD_DTYPES = {
         'gid': 'VARCHAR',
         'id': 'VARCHAR',
@@ -417,6 +429,15 @@ class Retrosheet:
         'pbp': 'VARCHAR'
     }
 
+    TEAMS_FIELD_DTYPES = {
+        'TEAM': 'VARCHAR',
+        'LEAGUE': 'VARCHAR',
+        'CITY': 'VARCHAR',
+        'NICKNAME': 'VARCHAR',
+        'FIRST': 'INTEGER',
+        'LAST': 'INTEGER',
+    }
+
     TEAMSTATS_FIELD_DTYPES = {
         'gid': 'VARCHAR',
         'team': 'VARCHAR',
@@ -535,30 +556,42 @@ class Retrosheet:
         self.data_dir = Path(data_dir) / 'retrosheet'
         self.data_dir.mkdir(parents=True, exist_ok=True)
 
-    def download(self) -> None:
+    def download(self, file: str = 'csvdownloads') -> None:
         """Download Retrosheet files."""
-        url = 'https://www.retrosheet.org/downloads/csvdownloads.zip'
+        if file not in ('ballparks', 'csvdownloads', 'teams'):
+            raise Exception('Not a valid file.')
+        
+        if file == 'csvdownloads':
+            url = 'https://www.retrosheet.org/downloads/csvdownloads.zip'
+        else:
+            url = f'https://www.retrosheet.org/{file}.zip'
+        
         resp = requests.get(url)
 
-        filepath = self.data_dir / 'csvdownloads.zip'
+        filepath = self.data_dir / f'{file}.zip'
         with open(filepath, 'wb') as f:
             f.write(resp.content)
 
-    def unzip(self) -> None:
+    def unzip(self, file: str = 'csvdownloads') -> None:
         """Unzip Retrosheet files."""
-        filepath = self.data_dir / 'csvdownloads.zip'
+        if file not in ('ballparks', 'csvdownloads', 'teams'):
+            raise Exception('Not a valid file.')
+
+        filepath = self.data_dir / f'{file}.zip'
         with ZipFile(filepath, 'r') as zf:
             zf.extractall(self.data_dir)
-    
+
     def cleanup(self) -> None:
-        """Removes downloaded zip file."""
-        filepath = self.data_dir / 'csvdownloads.zip'
-        filepath.unlink()
+        """Removes downloaded zip files."""
+        zipfiles = self.data_dir.glob('*.zip')
+        for file in zipfiles:
+            file.unlink()
 
     def load(self, data_model: str) -> None:
         """Load Retrosheet data into database."""
         if data_model not in (
             'allplayers',
+            'ballparks',
             'batting',
             'discreps',
             'ejections',
@@ -566,6 +599,7 @@ class Retrosheet:
             'gameinfo',
             'pitching',
             'plays',
+            'teams',
             'teamstats'
         ):
             raise Exception('Not a valid data model.')
@@ -574,6 +608,7 @@ class Retrosheet:
 
         field_dtypes_map = {
             'allplayers': self.ALLPLAYERS_FIELD_DTYPES,
+            'ballparks': self.BALLPARKS_FIELD_DTYPES,
             'batting': self.BATTING_FIELD_DTYPES,
             'discreps': self.DISCREPS_FIELD_DTYPES,
             'ejections': self.EJECTIONS_FIELD_DTYPES,
@@ -581,6 +616,7 @@ class Retrosheet:
             'gameinfo': self.GAMEINFO_FIELD_DTYPES,
             'pitching': self.PITCHING_FIELD_DTYPES,
             'plays': self.PLAYS_FIELD_DTYPES,
+            'teams': self.TEAMS_FIELD_DTYPES,
             'teamstats': self.TEAMSTATS_FIELD_DTYPES
         }
         field_dtypes = field_dtypes_map[data_model]
@@ -597,19 +633,23 @@ class Retrosheet:
 
     def extract_load_all(self) -> None:
         """Download files and upload to database."""
-        self.download()
-        self.unzip()
+        # for file in ['ballparks', 'csvdownloads', 'teams']:
+        for file in ['ballparks', 'teams']:
+            self.download(file)
+            self.unzip(file)
+
         self.cleanup()
 
-        for data_model in [
-            'allplayers',
-            'batting',
-            'discreps',
-            'ejections',
-            'fielding',
-            'gameinfo',
-            'pitching',
-            'plays',
-            'teamstats'
-        ]:
+        # for data_model in [
+        #     'allplayers',
+        #     'batting',
+        #     'discreps',
+        #     'ejections',
+        #     'fielding',
+        #     'gameinfo',
+        #     'pitching',
+        #     'plays',
+        #     'teamstats'
+        # ]:
+        for data_model in ['ballparks', 'teams']:
             self.load(data_model)
