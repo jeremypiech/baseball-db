@@ -9,7 +9,7 @@ models:
       2017 and beyond uses Statcast.
     columns:
       - name: unique_key
-        descripton: "Combination of the game ID, plate appearance number, and pitch number."
+        description: "Combination of the game ID, plate appearance number, and pitch number."
         data_tests:
           - unique
           - not_null
