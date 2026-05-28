@@ -5,6 +5,7 @@ sources:
     tables:
       - name: chadwick_people
       - name: retrosheet_allplayers
+      - name: retrosheet_ballparks
       - name: retrosheet_batting
       - name: retrosheet_discreps
       - name: retrosheet_ejections
@@ -12,5 +13,6 @@ sources:
       - name: retrosheet_gameinfo
       - name: retrosheet_pitching
       - name: retrosheet_plays
+      - name: retrosheet_teams
       - name: retrosheet_teamstats
       - name: statcast

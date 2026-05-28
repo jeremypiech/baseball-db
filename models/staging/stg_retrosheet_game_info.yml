@@ -6,53 +6,113 @@ models:
       Game-level metadata from Retrosheet. One row per game containing information about
       game conditions, umpires, outcomes, and data availability.
     columns:
-      - name: gid
-        description: Unique Retrosheet Game ID.
+      - name: game_id
+        description: Retrosheet game ID.
+        data_tests:
+          - unique
+          - not_null
 
-      - name: visteam
-        description: Retrosheet Team ID of the visiting team.
+      - name: vis_team_id
+        description: Retrosheet team ID of the visiting team.
 
-      - name: hometeam
-        description: Retrosheet Team ID of the home team.
+      - name: home_team_id
+        description: Retrosheet team ID of the home team.
 
-      - name: site
-        description: Retrosheet Park ID indicating the site (ballpark) where the game was played.
+      - name: vis_score
+        description: Total runs scored by the visiting team.
 
-      - name: date
+      - name: home_score
+        description: Total runs scored by the home team.
+
+      - name: season
+        description: Season (year) in which the game took place.
+
+      - name: game_date
         description: Date the game was played.
 
-      - name: number
+      - name: date_game_number
+        description: Game number for the date.
+
+      - name: game_type
         description: >
-          Game number for the date. 0 if it was a single game on that date; 1, 2, or
-          (in rare cases) 3 for doubleheaders or tripleheaders.
+          Type of game (e.g., regular-season, exhibition, post-season). Note: gametype 'playoff'
+          indicates tiebreaker games (e.g., the "Bobby Thomson" and "Bucky Dent" games) which
+          have historically been treated as regular-season games by MLB.
 
-      - name: starttime
-        description: Starting time of the game, if known.
+      - name: win_team_id
+        description: Retrosheet team ID of the winning team.
 
-      - name: daynight
-        description: Indicates whether the game was played during the day or at night (D or N).
+      - name: loss_team_id
+        description: Retrosheet team ID of the losing team.
 
-      - name: innings
+      - name: win_pitcher_id
+        description: Retrosheet player ID of the winning pitcher.
+
+      - name: loss_pitcher_id
+        description: Retrosheet player ID of the losing pitcher.
+
+      - name: save_pitcher_id
+        description: Retrosheet player ID of the pitcher who earned the save, if any.
+
+      - name: park_id
+        description: Retrosheet Park ID indicating the site (ballpark) where the game was played.
+
+      - name: ump_home_id
+        description: Retrosheet ID of the home-plate umpire, if known.
+
+      - name: ump_1b_id
+        description: Retrosheet ID of the 1st base umpire, if known.
+
+      - name: ump_2b_id
+        description: Retrosheet ID of the 2nd base umpire, if known.
+
+      - name: ump_3b_id
+        description: Retrosheet ID of the 3rd base umpire, if known.
+
+      - name: ump_lf_id
+        description: Retrosheet ID of the left field umpire, if known.
+
+      - name: ump_rf_id
+        description: Retrosheet ID of the right field umpire, if known.
+
+      - name: official_scorer_id
+        description: Retrosheet ID of the official scorer, if known.
+
+      - name: is_forfeit
+        description: Indicates whether the game was forfeited.
+
+      - name: has_dh
+        description: Indicates whether the designated hitter rule was used.
+
+      - name: has_home_bats_first
+        description: Indicates whether the home team batted first.
+
+      - name: scheduled_innings
         description: Scheduled number of innings. Blank indicates the game was scheduled for the standard 9 innings.
+
+      - name: suspended_game_completion_date
+        description: >
+          Indicates whether the game was suspended. Blank indicates no suspension. If the game
+          was suspended, the value contains the date on which the game was completed.
 
       - name: tiebreaker
         description: >
           Indicates whether the game used a tiebreaker rule (e.g., runner placed on 2nd base
           to start extra innings). Blank indicates no tiebreaker was used.
 
-      - name: usedh
-        description: Indicates whether the designated hitter rule was used. Blank indicates no DH.
-
-      - name: htbf
-        description: Indicates whether the home team batted first. Blank indicates no.
-
-      - name: timeofgame
+      - name: time_of_game
         description: Length of the game in minutes.
 
       - name: attendance
         description: Announced attendance at the game.
 
-      - name: fieldcond
+      - name: start_time
+        description: Starting time of the game, if known.
+
+      - name: day_night
+        description: Indicates whether the game was played during the day or at night.
+
+      - name: field_cond
         description: Field conditions at game time, if known (e.g., dry, wet, soaked).
 
       - name: precip
@@ -62,88 +122,31 @@ models:
         description: Sky conditions at game time, if known (e.g., sunny, cloudy, overcast).
 
       - name: temp
-        description: Temperature in degrees Fahrenheit at game time.
+        description: >
+          Temperature in degrees Fahrenheit at game time. Zero (0) degree games are
+          overrepresented as it's used as a placeholder for unknown.
 
-      - name: winddir
+      - name: wind_dir
         description: Wind direction at game time (e.g., fromLF, toRF, calm).
 
-      - name: windspeed
+      - name: wind_speed
         description: Wind speed in miles per hour at game time.
 
-      - name: oscorer
-        description: Retrosheet ID of the official scorer, if known.
-
-      - name: forfeit
-        description: Indicates whether the game was forfeited and which team forfeited. Blank indicates no forfeit.
-
-      - name: suspend
+      - name: batteries_known
         description: >
-          Indicates whether the game was suspended. Blank indicates no suspension. If the game
-          was suspended, the value contains the date on which the game was completed.
-
-      - name: umphome
-        description: Retrosheet ID of the home-plate umpire, if known.
-
-      - name: ump1b
-        description: Retrosheet ID of the 1st base umpire, if known.
-
-      - name: ump2b
-        description: Retrosheet ID of the 2nd base umpire, if known.
-
-      - name: ump3b
-        description: Retrosheet ID of the 3rd base umpire, if known.
-
-      - name: umplf
-        description: Retrosheet ID of the left field umpire, if known.
-
-      - name: umprf
-        description: Retrosheet ID of the right field umpire, if known.
-
-      - name: wp
-        description: Retrosheet Player ID of the winning pitcher.
-
-      - name: lp
-        description: Retrosheet Player ID of the losing pitcher.
-
-      - name: save
-        description: Retrosheet Player ID of the pitcher who earned the save, if any.
-
-      - name: gametype
-        description: >
-          Type of game (e.g., regular-season, exhibition, post-season). Note: gametype 'playoff'
-          indicates tiebreaker games (e.g., the "Bobby Thomson" and "Bucky Dent" games) which
-          have historically been treated as regular-season games by MLB.
-
-      - name: vruns
-        description: Total runs scored by the visiting team.
-
-      - name: hruns
-        description: Total runs scored by the home team.
-
-      - name: wteam
-        description: Retrosheet Team ID of the winning team.
-
-      - name: lteam
-        description: Retrosheet Team ID of the losing team.
-
-      - name: line
-        description: Indicates whether the line score of the game is known. Blank indicates no.
-
-      - name: batteries
-        description: >
-          Indicates whether the teams' batteries are known. p = pitchers known;
+          Indicates whether the teams' batteries are known. pitchers = pitchers known;
           both = pitchers and catchers known. Blank indicates batteries are not known.
 
-      - name: lineups
-        description: Indicates whether the teams' lineups are known. Blank indicates no.
+      - name: has_box_score
+        description: Indicates whether a box score is available.
 
-      - name: box
-        description: Indicates whether a box score is available. Blank indicates no.
+      - name: has_line_score
+        description: Indicates whether the line score of the game is known.
 
-      - name: pbp
+      - name: has_lineups_known
+        description: Indicates whether the teams' lineups are known.
+
+      - name: pbp_account
         description: >
           Indicates whether a play-by-play account is available. d = deduced account;
           y = play-by-play account from a newspaper or scorecard. Blank indicates no account.
-
-      - name: season
-        description: Season (year) in which the game took place.

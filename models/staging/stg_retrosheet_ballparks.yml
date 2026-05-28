@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: stg_retrosheet_ballparks
+    description: ""
+    columns:
+      - name: park_id
+        description: "Retrosheet Park ID."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: ballpark_name
+        description: "Name of the ballpark."
+
+      - name: other_names
+        description: "Other or former names."
+
+      - name: league
+        description: "Leagues the ballpark has hosted."
+
+      - name: city
+        description: "City where the ballpark is located."
+
+      - name: state
+        description: "State where the ballpark is located."
+
+      - name: first_game_date
+        description: "Date of first game."
+
+      - name: last_game_date
+        description: "Date of most recent game."
+
+      - name: notes
+        description: "Additional information about the ballpark."

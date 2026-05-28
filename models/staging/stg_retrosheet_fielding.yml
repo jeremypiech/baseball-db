@@ -8,97 +8,106 @@ models:
       will have multiple rows distinguished by d_seq. Catcher-specific stats (d_pb, d_wp,
       d_sb, d_cs) are only populated for catchers (d_pos = 2).
     columns:
-      - name: gid
-        description: Unique Retrosheet Game ID.
+      - name: unique_key
+        description: "Combination of the game ID, player ID, team ID, stat type, position and position sequence."
+        data_tests:
+          - unique
+          - not_null
 
-      - name: id
-        description: Retrosheet Player ID.
+      - name: game_id
+        description: Retrosheet game ID.
 
-      - name: team
-        description: Retrosheet Team ID.
+      - name: player_id
+        description: Retrosheet player ID.
 
-      - name: d_seq
-        description: >
-          The sequence order of fielding positions for a player who played multiple positions
-          in a game. 1 = first position played, 2 = second position played, etc.
+      - name: team_id
+        description: Retrosheet team ID.
 
-      - name: d_pos
-        description: >
-          Fielding position played. Standard numeric position codes apply:
-          1 = Pitcher, 2 = Catcher, 3 = 1B, 4 = 2B, 5 = 3B, 6 = SS,
-          7 = LF, 8 = CF, 9 = RF, 10 = DH.
-
-      - name: stattype
+      - name: stat_type
         description: >
           Indicates the nature of the statistics row. 'value' = standard computed stats;
           'official' = identifies discrepancies between Retrosheet accounts and official statistics;
           'lower' = lower bound estimate to highlight data uncertainty;
           'upper' = upper bound estimate to highlight data uncertainty.
 
-      - name: d_ifouts
-        description: Defensive outs (innings) for which the player played this specific fielding position.
+      - name: pos
+        description: >
+          Fielding position played. Standard numeric position codes apply:
+          1 = Pitcher, 2 = Catcher, 3 = 1B, 4 = 2B, 5 = 3B, 6 = SS,
+          7 = LF, 8 = CF, 9 = RF, 10 = DH.
 
-      - name: d_po
-        description: Putouts recorded by the player at this fielding position.
+      - name: pos_seq
+        description: >
+          The sequence order of fielding positions for a player who played multiple positions
+          in a game. 1 = first position played, 2 = second position played, etc.
 
-      - name: d_a
-        description: Assists recorded by the player at this fielding position.
-
-      - name: d_e
-        description: Errors committed by the player at this fielding position.
-
-      - name: d_dp
-        description: Double plays turned by the player at this fielding position.
-
-      - name: d_tp
-        description: Triple plays turned by the player at this fielding position.
-
-      - name: d_pb
-        description: Passed balls allowed. Populated only for catchers (d_pos = 2).
-
-      - name: d_wp
-        description: Wild pitches allowed while catching. Populated only for catchers (d_pos = 2).
-
-      - name: d_sb
-        description: Stolen bases allowed while catching. Populated only for catchers (d_pos = 2).
-
-      - name: d_cs
-        description: Opposing baserunners caught stealing while catching. Populated only for catchers (d_pos = 2).
-
-      - name: d_gs
-        description: Indicates whether the player started the game at this fielding position.
-
-      - name: date
+      - name: game_date
         description: Date of the game.
 
-      - name: number
-        description: Game number (0 if single game; 1, 2, etc. if multiple games on the same date).
+      - name: date_game_number
+        description: Game number for the date.
 
-      - name: site
-        description: Retrosheet Park ID indicating the location of the game.
-
-      - name: vishome
-        description: Indicates whether the team was the visiting or home team. v = visiting, h = home.
-
-      - name: opp
-        description: Retrosheet Team ID of the opponent.
-
-      - name: win
-        description: Equal to 1 if the team won the game.
-
-      - name: loss
-        description: Equal to 1 if the team lost the game.
-
-      - name: tie
-        description: Equal to 1 if the game ended in a tie.
-
-      - name: gametype
+      - name: game_type
         description: Type of game (e.g., regular-season, exhibition, post-season).
 
-      - name: box
-        description: Indicates whether a box score is available. Blank indicates no.
+      - name: opp_team_id
+        description: Retrosheet team ID of the opponent.
 
-      - name: pbp
+      - name: park_id
+        description: Retrosheet Park ID indicating the location of the game.
+
+      - name: outs_played
+        description: Defensive outs (innings) for which the player played this specific fielding position.
+
+      - name: po
+        description: Putouts recorded by the player at this fielding position.
+
+      - name: a
+        description: Assists recorded by the player at this fielding position.
+
+      - name: e
+        description: Errors committed by the player at this fielding position.
+
+      - name: dp
+        description: Double plays turned by the player at this fielding position.
+
+      - name: tp
+        description: Triple plays turned by the player at this fielding position.
+
+      - name: pb
+        description: Passed balls allowed. Populated only for catchers (d_pos = 2).
+
+      - name: wp
+        description: Wild pitches allowed while catching. Populated only for catchers (d_pos = 2).
+
+      - name: sb
+        description: Stolen bases allowed while catching. Populated only for catchers (d_pos = 2).
+
+      - name: cs
+        description: Opposing baserunners caught stealing while catching. Populated only for catchers (d_pos = 2).
+
+      - name: is_gs
+        description: Indicates whether the player started the game at this fielding position.
+
+      - name: opp
+        description: Retrosheet team ID of the opponent.
+
+      - name: team_win
+        description: Equal to 1 if the team won the game.
+
+      - name: team_loss
+        description: Equal to 1 if the team lost the game.
+
+      - name: team_tie
+        description: Equal to 1 if the game ended in a tie.
+
+      - name: vis_home
+        description: Indicates whether the team was the visiting or home team.
+
+      - name: has_box_score
+        description: Indicates whether a box score is available.
+
+      - name: pbp_source
         description: >
           Indicates whether a play-by-play account is available. d = deduced account;
           y = play-by-play account from a newspaper or scorecard. Blank indicates no account.

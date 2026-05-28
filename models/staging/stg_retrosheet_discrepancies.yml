@@ -2,53 +2,58 @@ version: 2
 
 models:
   - name: stg_retrosheet_discrepancies
-    description: >
-      Team-game level batting, pitching, and fielding statistics from Retrosheet. One row
-      per team per game. Includes inning-by-inning run scoring, batting totals, pitching
-      totals, fielding totals, and starting lineup/fielder information. The stattype column
-      indicates whether values are standard, official, or bounded estimates.
+    description: Statistical discrepancies.
     columns:
-      - name: id
-        description: ""
+      - name: discrepancy_id
+        description: Retrosheet discrepancy ID.
 
-      - name: player
-        description: ""
+      - name: player_id
+        description: Retrosheet player ID.
 
-      - name: year
-        description: ""
+      - name: season
+        description: Season (year).
 
-      - name: team
-        description: ""
+      - name: game_id
+        description: Retrosheet game ID.
 
-      - name: type
-        description: ""
+      - name: team_id
+        description: Retrosheet team ID.
 
-      - name: pos
-        description: ""
+      - name: related_discrepancy_id
+        description: Discrepancy ID of any related discrepancy.
 
-      - name: cat
-        description: ""
+      - name: discrepancy_type
+        description: Dicrepancy type (O - batting, D - defense, P - pitching).
 
-      - name: game
-        description: ""
+      - name: discrepancy_code
+        description: >
+          Code of the discrepancy - possible values are:
+          SWAP - stats were (perhaps partially) swapped between players
+          IMP - batter has an impossible batting line (H > AB, Ks > AB - H, and so on)
+          COL - stat put in wrong column for player
+          COPY - the number was apparently copied incorrectly from the player dailies.
+          DUP - two players were at the same position in a game and one position had
+          no players
+          ADD - apparent addition error on sheets
+          OPP - a mismatch between one team's hitting and the other team's pitching
+          statistics
+          PAA - an unexplained anomaly in a team's plate appearances by batting order
+          10.18 - run charged to incorrect pitcher per 10.18(g)
 
-      - name: retro
-        description: ""
+      - name: field_pos
+        description: Position abbreviation if it's a defensive discrepancy.
 
-      - name: official
-        description: ""
+      - name: stat_type
+        description: Statistic of the discrepancy.
 
-      - name: cross
-        description: ""
+      - name: retrosheet_value
+        description: Retrosheet value.
 
-      - name: code
-        description: ""
-
-      - name: x
-        description: ""
+      - name: official_value
+        description: Official value.
 
       - name: notes
-        description: ""
+        description: Notes on the discrepancy.
 
-      - name: accepted
-        description: ""
+      - name: is_accepted
+        description: Indicates whether discrepancy has been accepted and is now part of the official record.

@@ -7,23 +7,32 @@ models:
       appearances for a single team in a single season. Players who appeared for multiple
       teams in a season will have one row per team.
     columns:
-      - name: id
+      - name: unique_key
+        description: "Combination of the player ID, team ID, and season."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: player_id
         description: Retrosheet player ID (RetroID).
 
-      - name: last
+      - name: team_id
+        description: Retrosheet team ID. Each player will have a separate row for each team for which they appeared.
+
+      - name: season
+        description: Season (year). Players are listed separately for each team-season in which they played.
+
+      - name: first_name
+        description: Player's first name.
+      
+      - name: last_name
         description: Player's last name.
 
-      - name: first
-        description: Player's first name.
-
-      - name: bat
+      - name: bats
         description: How the player bats. B = Both (switch hitter), L = Left, R = Right. Unknown batting is indicated by "?".
 
-      - name: throw
+      - name: throws
         description: How the player throws. L = Left, R = Right. Unknown throwing is indicated by "?".
-
-      - name: team
-        description: Retrosheet Team ID. Each player will have a separate row for each team for which they appeared.
 
       - name: g
         description: Total games played.
@@ -73,15 +82,12 @@ models:
       - name: g_pr
         description: Games played as a pinch runner.
 
-      - name: first_g
+      - name: first_game_date
         description: >
           First game played by the player in the season for this team for which Retrosheet has
           game information. Includes all game types.
 
-      - name: last_g
+      - name: last_game_date
         description: >
           Last game played by the player in the season for this team for which Retrosheet has
           game information. Includes all game types.
-
-      - name: season
-        description: Season (year). Players are listed separately for each team-season in which they played.

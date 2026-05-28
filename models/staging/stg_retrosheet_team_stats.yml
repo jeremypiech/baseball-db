@@ -8,56 +8,182 @@ models:
       totals, fielding totals, and starting lineup/fielder information. The stattype column
       indicates whether values are standard, official, or bounded estimates.
     columns:
-      - name: gid
-        description: Unique Retrosheet Game ID.
+      - name: unique_key
+        description: "Combination of the game ID, team ID, and stat type."
+        data_tests:
+          - unique
+          - not_null
 
-      - name: team
-        description: Retrosheet Team ID.
+      - name: game_id
+        description: Retrosheet game ID.
 
-      - name: inn1
-        description: Runs scored by the team in the 1st inning.
+      - name: team_id
+        description: Retrosheet team ID.
 
-      - name: inn2
-        description: Runs scored by the team in the 2nd inning.
-
-      - name: inn3
-        description: Runs scored by the team in the 3rd inning.
-
-      - name: inn4
-        description: Runs scored by the team in the 4th inning.
-
-      - name: inn5
-        description: Runs scored by the team in the 5th inning.
-
-      - name: inn6
-        description: Runs scored by the team in the 6th inning.
-
-      - name: inn7
-        description: Runs scored by the team in the 7th inning.
-
-      - name: inn8
-        description: Runs scored by the team in the 8th inning.
-
-      - name: inn9
-        description: Runs scored by the team in the 9th inning.
-
-      - name: inn10
-        description: Runs scored by the team in the 10th inning (and similarly inn11 through inn28 for extra innings up to the 28th).
-
-      - name: lob
-        description: Total runners left on base by the team.
-
-      - name: mgr
-        description: >
-          Retrosheet ID of the in-game manager for the team. Note: this field has not been
-          populated yet for Negro League games.
-
-      - name: stattype
+      - name: stat_type
         description: >
           Indicates the nature of the statistics row. 'value' = standard computed stats;
           'official' = identifies discrepancies between Retrosheet accounts and official statistics;
           'lower' = lower bound estimate to highlight data uncertainty;
           'upper' = upper bound estimate to highlight data uncertainty.
+
+      - name: game_date
+        description: Date of the game.
+
+      - name: date_game_number
+        description: Game number for the date.
+
+      - name: game_type
+        description: Type of game (e.g., regular-season, exhibition, post-season).
+
+      - name: f1_starter_id
+        description: Retrosheet player ID of the starting pitcher (fielding position 1).
+
+      - name: f2_starter_id
+        description: Retrosheet player ID of the starting catcher (fielding position 2).
+
+      - name: f3_starter_id
+        description: Retrosheet player ID of the starting first baseman (fielding position 3).
+
+      - name: f4_starter_id
+        description: Retrosheet player ID of the starting second baseman (fielding position 4).
+
+      - name: f5_starter_id
+        description: Retrosheet player ID of the starting third baseman (fielding position 5).
+
+      - name: f6_starter_id
+        description: Retrosheet player ID of the starting shortstop (fielding position 6).
+
+      - name: f7_starter_id
+        description: Retrosheet player ID of the starting left fielder (fielding position 7).
+
+      - name: f8_starter_id
+        description: Retrosheet player ID of the starting center fielder (fielding position 8).
+
+      - name: f9_starter_id
+        description: Retrosheet player ID of the starting right fielder (fielding position 9).
+
+      - name: f10_starter_id
+        description: Retrosheet player ID of the starting designated hitter (fielding position 10).
+
+      - name: l1_starter_id
+        description: Retrosheet player ID of the starter batting in lineup position 1.
+
+      - name: l2_starter_id
+        description: Retrosheet player ID of the starter batting in lineup position 2.
+
+      - name: l3_starter_id
+        description: Retrosheet player ID of the starter batting in lineup position 3.
+
+      - name: l4_starter_id
+        description: Retrosheet player ID of the starter batting in lineup position 4.
+
+      - name: l5_starter_id
+        description: Retrosheet player ID of the starter batting in lineup position 5.
+
+      - name: l6_starter_id
+        description: Retrosheet player ID of the starter batting in lineup position 6.
+
+      - name: l7_starter_id
+        description: Retrosheet player ID of the starter batting in lineup position 7.
+
+      - name: l8_starter_id
+        description: Retrosheet player ID of the starter batting in lineup position 8.
+
+      - name: l9_starter_id
+        description: Retrosheet player ID of the starter batting in lineup position 9.
+
+      - name: manager_id
+        description: >
+          Retrosheet ID of the in-game manager for the team. Note: this field has not been
+          populated yet for Negro League games.
+
+      - name: park_id
+        description: Retrosheet Park ID indicating the location of the game.
+
+      - name: inn1_runs
+        description: Runs scored by the team in the 1st inning.
+
+      - name: inn2_runs
+        description: Runs scored by the team in the 2nd inning.
+
+      - name: inn3_runs
+        description: Runs scored by the team in the 3rd inning.
+
+      - name: inn4_runs
+        description: Runs scored by the team in the 4th inning.
+
+      - name: inn5_runs
+        description: Runs scored by the team in the 5th inning.
+
+      - name: inn6_runs
+        description: Runs scored by the team in the 6th inning.
+
+      - name: inn7_runs
+        description: Runs scored by the team in the 7th inning.
+
+      - name: inn8_runs
+        description: Runs scored by the team in the 8th inning.
+
+      - name: inn9_runs
+        description: Runs scored by the team in the 9th inning.
+
+      - name: inn10_runs
+        description: Runs scored by the team in the 10th inning.
+
+      - name: inn11_runs
+        description: Runs scored by the team in the 11th inning.
+
+      - name: inn12_runs
+        description: Runs scored by the team in the 12th inning.
+
+      - name: inn13_runs
+        description: Runs scored by the team in the 13th inning.
+
+      - name: inn14_runs
+        description: Runs scored by the team in the 14th inning.
+
+      - name: inn15_runs
+        description: Runs scored by the team in the 15th inning.
+
+      - name: inn16_runs
+        description: Runs scored by the team in the 16th inning.
+
+      - name: inn17_runs
+        description: Runs scored by the team in the 17th inning.
+
+      - name: inn18_runs
+        description: Runs scored by the team in the 18th inning.
+
+      - name: inn19_runs
+        description: Runs scored by the team in the 19th inning.
+
+      - name: inn20_runs
+        description: Runs scored by the team in the 20th inning.
+
+      - name: inn21_runs
+        description: Runs scored by the team in the 21st inning.
+
+      - name: inn22_runs
+        description: Runs scored by the team in the 22nd inning.
+
+      - name: inn23_runs
+        description: Runs scored by the team in the 23rd inning.
+
+      - name: inn24_runs
+        description: Runs scored by the team in the 24th inning.
+
+      - name: inn25_runs
+        description: Runs scored by the team in the 25th inning.
+
+      - name: inn26_runs
+        description: Runs scored by the team in the 26th inning.
+
+      - name: inn27_runs
+        description: Runs scored by the team in the 27th inning.
+
+      - name: inn28_runs
+        description: Runs scored by the team in the 28th inning.
 
       - name: b_pa
         description: Total plate appearances by the team's batters.
@@ -92,10 +218,10 @@ models:
       - name: b_hbp
         description: Total times the team's batters were hit by a pitch.
 
-      - name: b_w
+      - name: b_bb
         description: Total walks (including intentional) by the team's batters.
 
-      - name: b_iw
+      - name: b_ibb
         description: Total intentional walks by the team's batters.
 
       - name: b_k
@@ -116,13 +242,16 @@ models:
       - name: b_roe
         description: Total times the team's batters reached base via error.
 
-      - name: p_ipouts
+      - name: b_lob
+        description: Total runners left on base by the team.
+
+      - name: p_outs_recorded
         description: Total outs recorded by the team's pitchers, expressed as innings pitched multiplied by 3.
 
-      - name: p_noout
+      - name: p_no_out_inning_bf
         description: Total batters faced by the team's pitchers in innings in which no outs were recorded.
 
-      - name: p_bfp
+      - name: p_bf
         description: Total batters faced by the team's pitchers.
 
       - name: p_h
@@ -143,10 +272,10 @@ models:
       - name: p_er
         description: Total earned runs allowed by the team's pitchers.
 
-      - name: p_w
+      - name: p_bb
         description: Total walks allowed by the team's pitchers.
 
-      - name: p_iw
+      - name: p_ibb
         description: Total intentional walks allowed by the team's pitchers.
 
       - name: p_k
@@ -203,94 +332,28 @@ models:
       - name: d_cs
         description: Total caught stealings recorded by the team (fielding context).
 
-      - name: start_l1
-        description: Retrosheet Player ID of the starter batting in lineup position 1.
-
-      - name: start_l2
-        description: Retrosheet Player ID of the starter batting in lineup position 2.
-
-      - name: start_l3
-        description: Retrosheet Player ID of the starter batting in lineup position 3.
-
-      - name: start_l4
-        description: Retrosheet Player ID of the starter batting in lineup position 4.
-
-      - name: start_l5
-        description: Retrosheet Player ID of the starter batting in lineup position 5.
-
-      - name: start_l6
-        description: Retrosheet Player ID of the starter batting in lineup position 6.
-
-      - name: start_l7
-        description: Retrosheet Player ID of the starter batting in lineup position 7.
-
-      - name: start_l8
-        description: Retrosheet Player ID of the starter batting in lineup position 8.
-
-      - name: start_l9
-        description: Retrosheet Player ID of the starter batting in lineup position 9.
-
-      - name: start_f1
-        description: Retrosheet Player ID of the starting pitcher (fielding position 1).
-
-      - name: start_f2
-        description: Retrosheet Player ID of the starting catcher (fielding position 2).
-
-      - name: start_f3
-        description: Retrosheet Player ID of the starting first baseman (fielding position 3).
-
-      - name: start_f4
-        description: Retrosheet Player ID of the starting second baseman (fielding position 4).
-
-      - name: start_f5
-        description: Retrosheet Player ID of the starting third baseman (fielding position 5).
-
-      - name: start_f6
-        description: Retrosheet Player ID of the starting shortstop (fielding position 6).
-
-      - name: start_f7
-        description: Retrosheet Player ID of the starting left fielder (fielding position 7).
-
-      - name: start_f8
-        description: Retrosheet Player ID of the starting center fielder (fielding position 8).
-
-      - name: start_f9
-        description: Retrosheet Player ID of the starting right fielder (fielding position 9).
-
-      - name: start_f10
-        description: Retrosheet Player ID of the starting designated hitter (fielding position 10).
-
-      - name: date
-        description: Date of the game.
-
-      - name: number
-        description: Game number (0 if single game; 1, 2, etc. if multiple games on the same date).
-
-      - name: site
-        description: Retrosheet Park ID indicating the location of the game.
-
       - name: vishome
-        description: Indicates whether the team was the visiting or home team. v = visiting, h = home.
+        description: Indicates whether the team was the visiting or home team.
 
       - name: opp
-        description: Retrosheet Team ID of the opponent.
+        description: Retrosheet team ID of the opponent.
 
-      - name: win
+      - name: team_win
         description: Equal to 1 if the team won the game.
 
-      - name: loss
+      - name: team_loss
         description: Equal to 1 if the team lost the game.
 
-      - name: tie
+      - name: team_tie
         description: Equal to 1 if the game ended in a tie.
 
-      - name: gametype
-        description: Type of game (e.g., regular-season, exhibition, post-season).
+      - name: vis_home
+        description: Indicates whether the team was the visiting or home team.
 
-      - name: box
-        description: Indicates whether a box score is available. Blank indicates no.
+      - name: has_box_score
+        description: Indicates whether a box score is available.
 
-      - name: pbp
+      - name: pbp_source
         description: >
           Indicates whether a play-by-play account is available. d = deduced account;
           y = play-by-play account from a newspaper or scorecard. Blank indicates no account.

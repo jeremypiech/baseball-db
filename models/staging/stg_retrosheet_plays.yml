@@ -9,13 +9,25 @@ models:
       and granular event flags for every type of batting and baserunning outcome.
     columns:
       - name: unique_key
-        descripton: "Combination of the game ID and play number."
+        description: "Combination of the game ID and play number."
         data_tests:
           - unique
           - not_null
 
       - name: game_id
-        description: Unique Retrosheet Game ID.
+        description: Retrosheet game ID.
+
+      - name: play_number
+        description: Play number — the sequential order of plays within a particular game.
+
+      - name: game_date
+        description: >
+          Date of the game. If a game was suspended and later resumed on a different date, this
+          value changes mid-game to indicate the resumption date. It does not change for games
+          played continuously that end after midnight local time.
+
+      - name: game_type
+        description: Type of game (e.g., regular-season, exhibition, post-season).
 
       - name: event
         description: The play as it appears in the Retrosheet event file notation.
@@ -26,8 +38,14 @@ models:
       - name: top_bot
         description: Indicates whether the play occurred in the top (0) or bottom (1) of the inning.
 
-      - name: vis_home
+      - name: vis_home_at_bat
         description: Indicates whether the visiting (0) or home (1) team is batting.
+
+      - name: vis_score
+        description: Visiting team score at the start of the play.
+
+      - name: home_score
+        description: Home team score at the start of the play.
 
       - name: park_id
         description: >
@@ -36,27 +54,159 @@ models:
           reflect the site of specific events.
 
       - name: bat_team_id
-        description: Retrosheet Team ID of the batting team.
+        description: Retrosheet team ID of the batting team.
 
       - name: pitch_team_id
-        description: Retrosheet Team ID of the pitching team.
-
-      - name: score_vis
-        description: Visiting team score at the start of the play.
-
-      - name: score_home
-        description: Home team score at the start of the play.
+        description: Retrosheet team ID of the pitching team.
 
       - name: batter_id
-        description: Retrosheet Player ID of the batter.
+        description: Retrosheet player ID of the batter.
 
       - name: pitcher_id
-        description: Retrosheet Player ID of the pitcher.
+        description: Retrosheet player ID of the pitcher.
 
-      - name: batter_lpos
+      - name: br_1b_pre_player_id
+        description: Retrosheet player ID of the runner on first base prior to the play, if any.
+
+      - name: br_2b_pre_player_id
+        description: Retrosheet player ID of the runner on second base prior to the play, if any.
+
+      - name: br_3b_pre_player_id
+        description: Retrosheet player ID of the runner on third base prior to the play, if any.
+
+      - name: br_1b_post_player_id
+        description: Retrosheet player ID of the runner on first base at the conclusion of the play, if any.
+
+      - name: br_2b_post_player_id
+        description: Retrosheet player ID of the runner on second base at the conclusion of the play, if any.
+
+      - name: br_3b_post_player_id
+        description: Retrosheet player ID of the runner on third base at the conclusion of the play, if any.
+
+      - name: lob_1b_player_id
+        description: Retrosheet player ID of the first baserunner left on base after the third out of the inning.
+
+      - name: lob_2b_player_id
+        description: Retrosheet player ID of the second baserunner left on base after the third out of the inning.
+
+      - name: lob_3b_player_id
+        description: Retrosheet player ID of the third baserunner left on base after the third out of the inning.
+
+      - name: run_bat_player_id
+        description: Retrosheet player ID of the batter if the batter scored a run on this play.
+
+      - name: run_1b_player_id
+        description: Retrosheet player ID of the runner on first base if that runner scored on this play.
+
+      - name: run_2b_player_id
+        description: Retrosheet player ID of the runner on second base if that runner scored on this play.
+
+      - name: run_3b_player_id
+        description: Retrosheet player ID of the runner on third base if that runner scored on this play.
+
+      - name: l1_player_id
+        description: Retrosheet player ID of the batting team's player in lineup position 1 at the time of the play.
+
+      - name: l2_player_id
+        description: Retrosheet player ID of the batting team's player in lineup position 2 at the time of the play.
+
+      - name: l3_player_id
+        description: Retrosheet player ID of the batting team's player in lineup position 3 at the time of the play.
+
+      - name: l4_player_id
+        description: Retrosheet player ID of the batting team's player in lineup position 4 at the time of the play.
+
+      - name: l5_player_id
+        description: Retrosheet player ID of the batting team's player in lineup position 5 at the time of the play.
+
+      - name: l6_player_id
+        description: Retrosheet player ID of the batting team's player in lineup position 6 at the time of the play.
+
+      - name: l7_player_id
+        description: Retrosheet player ID of the batting team's player in lineup position 7 at the time of the play.
+
+      - name: l8_player_id
+        description: Retrosheet player ID of the batting team's player in lineup position 8 at the time of the play.
+
+      - name: l9_player_id
+        description: Retrosheet player ID of the batting team's player in lineup position 9 at the time of the play.
+
+      - name: pr_1b_pre_player_id
+        description: Retrosheet player ID of the pitcher responsible for the runner on first base prior to the play.
+
+      - name: pr_2b_pre_player_id
+        description: Retrosheet player ID of the pitcher responsible for the runner on second base prior to the play.
+
+      - name: pr_3b_pre_player_id
+        description: Retrosheet player ID of the pitcher responsible for the runner on third base prior to the play.
+
+      - name: pr_1b_post_player_id
+        description: Retrosheet player ID of the pitcher responsible for the runner on first base at the conclusion of the play.
+
+      - name: pr_2b_post_player_id
+        description: Retrosheet player ID of the pitcher responsible for the runner on second base at the conclusion of the play.
+
+      - name: pr_3b_post_player_id
+        description: Retrosheet player ID of the pitcher responsible for the runner on third base at the conclusion of the play.
+
+      - name: prun_bat_player_id
+        description: Retrosheet player ID of the pitcher charged with the run scored by the batter.
+
+      - name: prun_1b_player_id
+        description: Retrosheet player ID of the pitcher charged with the run scored by the runner on first base.
+
+      - name: prun_2b_player_id
+        description: Retrosheet player ID of the pitcher charged with the run scored by the runner on second base.
+
+      - name: prun_3b_player_id
+        description: Retrosheet player ID of the pitcher charged with the run scored by the runner on third base.
+
+      - name: f2_player_id
+        description: Retrosheet player ID of the catcher at the time of the play.
+
+      - name: f3_player_id
+        description: Retrosheet player ID of the first baseman at the time of the play.
+
+      - name: f4_player_id
+        description: Retrosheet player ID of the second baseman at the time of the play.
+
+      - name: f5_player_id
+        description: Retrosheet player ID of the third baseman at the time of the play.
+
+      - name: f6_player_id
+        description: Retrosheet player ID of the shortstop at the time of the play.
+
+      - name: f7_player_id
+        description: Retrosheet player ID of the left fielder at the time of the play.
+
+      - name: f8_player_id
+        description: Retrosheet player ID of the center fielder at the time of the play.
+
+      - name: f9_player_id
+        description: Retrosheet player ID of the right fielder at the time of the play.
+
+      - name: ump_home_id
+        description: Retrosheet player ID of the home plate umpire.
+
+      - name: ump_1b_id
+        description: Retrosheet player ID of the first base umpire.
+
+      - name: ump_2b_id
+        description: Retrosheet player ID of the second base umpire.
+
+      - name: ump_3b_id
+        description: Retrosheet player ID of the third base umpire.
+
+      - name: ump_lf_id
+        description: Retrosheet player ID of the left field umpire.
+
+      - name: ump_rf_id
+        description: Retrosheet player ID of the right field umpire.
+
+      - name: batter_lineup_pos
         description: Lineup position of the batter in the batting order.
 
-      - name: batter_fpos
+      - name: batter_field_pos
         description: Fielding position of the batter (relevant when the batter is also a fielder, e.g., pitcher batting).
 
       - name: batter_hand
@@ -76,11 +226,17 @@ models:
           Full pitch count (balls-strikes) if known; '??' if unknown. Note: balls, strikes,
           and count do not include the final pitch of the play.
 
-      - name: pitches
-        description: Pitch sequence string for the plate appearance, if known. Blank if unknown.
-
       - name: pa_pitches
         description: Number of pitches in the plate appearance, if known. Blank if unknown.
+
+      - name: pitch_seq
+        description: Pitch sequence string for the plate appearance, if known. Blank if unknown.
+
+      - name: outs_pre
+        description: Number of outs prior to the play.
+
+      - name: outs_post
+        description: Number of outs at the conclusion of the play.
 
       - name: pa
         description: Indicates whether the play resulted in a plate appearance (1 = yes, 0 = no).
@@ -112,11 +268,17 @@ models:
       - name: hbp
         description: Indicates whether the batter was hit by a pitch (1 = yes).
 
-      - name: walk
+      - name: bb
         description: Indicates whether the batter drew a walk, including intentional walks (1 = yes).
+
+      - name: ibb
+        description: Indicates whether the walk was intentional (1 = yes). Subset of the walk column.
 
       - name: k
         description: Indicates whether the batter struck out (1 = yes).
+
+      - name: k_safe
+        description: Indicates whether the batter struck out but reached base safely (e.g., on a passed ball or wild pitch). Subset of the k column.
 
       - name: xi
         description: Indicates whether the batter reached base on interference or obstruction with no at bat charged (1 = yes).
@@ -128,34 +290,14 @@ models:
         description: Indicates whether the batter reached base on a fielder's choice (1 = yes).
 
       - name: other_out
-        description: Indicates whether the batter made a batting out not specified by another category (1 = yes).
+        description: >
+          Indicates whether the batter made a batting out not specified by another category
+          (single, double, triple, hr, sh, sf, hbp, bb, k, xi, roe, fc).
 
-      - name: no_out
+      - name: other_no_out
         description: >
           Indicates whether the plate appearance resulted in an outcome not otherwise specified
-          and did not produce an out (1 = yes). Every plate appearance maps to exactly one of
-          the columns from single through noout.
-
-      - name: other_plus_no_out
-        description: Sum of othout and noout. Legacy field retained from earlier releases of the plays file.
-
-      - name: bip
-        description: Indicates whether the play resulted in a ball in play (1 = yes). Hit type is identified in subsequent columns.
-
-      - name: bunt
-        description: Indicates whether the batted ball was a bunt (1 = yes).
-
-      - name: ground
-        description: Indicates whether the batted ball was a ground ball (1 = yes).
-
-      - name: fly
-        description: Indicates whether the batted ball was a fly ball or pop up (1 = yes).
-
-      - name: line
-        description: Indicates whether the batted ball was a line drive (1 = yes).
-
-      - name: iw
-        description: Indicates whether the walk was intentional (1 = yes). Subset of the walk column.
+          and did not produce an out (single, double, triple, hr, sh, sf, hbp, bb, k, xi, roe, fc).
 
       - name: gdp
         description: Indicates whether the batter grounded into a double play (1 = yes). This is an official statistic.
@@ -183,38 +325,146 @@ models:
           Indicates a non-plate-appearance event not identified by any other statistic (1 = yes).
           Covers 'out advancing' or 'other advance' plays.
 
+      - name: ur_bat
+        description: Indicates whether the run scored by the batter was an unearned run (1 = yes).
+
+      - name: ur_1b
+        description: Indicates whether the run scored by the runner originally on first base was an unearned run (1 = yes).
+
+      - name: ur_2b
+        description: Indicates whether the run scored by the runner originally on second base was an unearned run (1 = yes).
+
+      - name: ur_3b
+        description: Indicates whether the run scored by the runner originally on third base was an unearned run (1 = yes).
+
+      - name: rbi_bat
+        description: Indicates whether the batter was credited with an RBI for the run scored by the batter (1 = yes).
+
+      - name: rbi_1b
+        description: Indicates whether the batter was credited with an RBI for the run scored by the runner on first base (1 = yes).
+
+      - name: rbi_2b
+        description: Indicates whether the batter was credited with an RBI for the run scored by the runner on second base (1 = yes).
+
+      - name: rbi_3b
+        description: Indicates whether the batter was credited with an RBI for the run scored by the runner on third base (1 = yes).
+
+      - name: runs
+        description: Total runs scored on the play.
+
+      - name: rbi
+        description: Total RBI credited to the batter on the play.
+
+      - name: er
+        description: Total earned runs scored on the play.
+
+      - name: team_unearned_runs
+        description: >
+          Runs scored on the play credited as team unearned runs (TUR). In modern seasons,
+          relief pitchers do not benefit from errors that occurred before they entered when
+          calculating pitcher-specific earned runs. Team earned runs account for all errors
+          in the inning.
+
+      - name: hit_type
+        description: >
+          Hit type of the ball in play, if known. BG = bunt ground ball, BP = bunt pop-up,
+          BL = bunt line drive, G = ground ball, P = pop up, F = fly ball, L = line drive.
+
+      - name: loc
+        description: Location on the field where the ball was put in play, if known.
+
+      - name: bip
+        description: Indicates whether the play resulted in a ball in play (1 = yes). Hit type is identified in subsequent columns.
+
+      - name: bunt
+        description: Indicates whether the batted ball was a bunt (1 = yes).
+
+      - name: ground
+        description: Indicates whether the batted ball was a ground ball (1 = yes).
+
+      - name: fly
+        description: Indicates whether the batted ball was a fly ball or pop up (1 = yes).
+
+      - name: line
+        description: Indicates whether the batted ball was a line drive (1 = yes).
+
       - name: di
         description: Indicates whether defensive indifference was ruled on a stolen base attempt (1 = yes).
 
-      - name: sb2
+      - name: sb_2b
         description: Indicates whether a stolen base of second base occurred on the play (1 = yes).
 
-      - name: sb3
+      - name: sb_3b
         description: Indicates whether a stolen base of third base occurred on the play (1 = yes).
 
-      - name: sbh
+      - name: sb_home
         description: Indicates whether a stolen base of home occurred on the play (1 = yes).
 
-      - name: cs2
+      - name: cs_2b
         description: Indicates whether the baserunner was caught stealing second base on the play (1 = yes).
 
-      - name: cs3
+      - name: cs_3b
         description: Indicates whether the baserunner was caught stealing third base on the play (1 = yes).
 
-      - name: csh
+      - name: cs_home
         description: Indicates whether the baserunner was caught stealing home on the play (1 = yes).
 
-      - name: pko1
+      - name: po_att_1b
         description: Indicates whether a pickoff attempt at first base occurred on the play (1 = yes).
 
-      - name: pko2
+      - name: po_att_2b
         description: Indicates whether a pickoff attempt at second base occurred on the play (1 = yes).
 
-      - name: pko3
+      - name: po_att_3b
         description: Indicates whether a pickoff attempt at third base occurred on the play (1 = yes).
 
-      - name: k_safe
-        description: Indicates whether the batter struck out but reached base safely (e.g., on a passed ball or wild pitch). Subset of the k column.
+      - name: bat_out1_field_pos
+        description: Fielding position of the player who initiated the first batting out on the play.
+
+      - name: bat_out2_field_pos
+        description: Fielding position of the player who initiated the second batting out (for a double play).
+
+      - name: bat_out3_field_pos
+        description: Fielding position of the player who initiated the third batting out (for a triple play).
+
+      - name: br_out_bat_field_pos
+        description: Fielding position of the player who initiated the baserunning out by the batter.
+
+      - name: br_out_1b_field_pos
+        description: Fielding position of the player who initiated the baserunning out by the runner originally on first base.
+
+      - name: br_out_2b_field_pos
+        description: Fielding position of the player who initiated the baserunning out by the runner originally on second base.
+
+      - name: br_out_3b_field_pos
+        description: Fielding position of the player who initiated the baserunning out by the runner originally on third base.
+
+      - name: l1_field_pos
+        description: Fielding position of the batting team's lineup position 1 player at the time of the play.
+
+      - name: l2_field_pos
+        description: Fielding position of the batting team's lineup position 2 player at the time of the play.
+
+      - name: l3_field_pos
+        description: Fielding position of the batting team's lineup position 3 player at the time of the play.
+
+      - name: l4_field_pos
+        description: Fielding position of the batting team's lineup position 4 player at the time of the play.
+
+      - name: l5_field_pos
+        description: Fielding position of the batting team's lineup position 5 player at the time of the play.
+
+      - name: l6_field_pos
+        description: Fielding position of the batting team's lineup position 6 player at the time of the play.
+
+      - name: l7_field_pos
+        description: Fielding position of the batting team's lineup position 7 player at the time of the play.
+
+      - name: l8_field_pos
+        description: Fielding position of the batting team's lineup position 8 player at the time of the play.
+
+      - name: l9_field_pos
+        description: Fielding position of the batting team's lineup position 9 player at the time of the play.
 
       - name: e1
         description: Number of errors committed by the pitcher on this play (multiple errors on a single play are possible).
@@ -242,199 +492,6 @@ models:
 
       - name: e9
         description: Number of errors committed by the right fielder on this play.
-
-      - name: outs_pre
-        description: Number of outs prior to the play.
-
-      - name: outs_post
-        description: Number of outs at the conclusion of the play.
-
-      - name: br1_pre_player_id
-        description: Retrosheet Player ID of the runner on first base prior to the play, if any.
-
-      - name: br2_pre_player_id
-        description: Retrosheet Player ID of the runner on second base prior to the play, if any.
-
-      - name: br3_pre_player_id
-        description: Retrosheet Player ID of the runner on third base prior to the play, if any.
-
-      - name: br1_post_player_id
-        description: Retrosheet Player ID of the runner on first base at the conclusion of the play, if any.
-
-      - name: br2_post_player_id
-        description: Retrosheet Player ID of the runner on second base at the conclusion of the play, if any.
-
-      - name: br3_post_player_id
-        description: Retrosheet Player ID of the runner on third base at the conclusion of the play, if any.
-
-      - name: lob1_player_id
-        description: Retrosheet Player ID of the first baserunner left on base after the third out of the inning.
-
-      - name: lob2_player_id
-        description: Retrosheet Player ID of the second baserunner left on base after the third out of the inning.
-
-      - name: lob3_player_id
-        description: Retrosheet Player ID of the third baserunner left on base after the third out of the inning.
-
-      - name: pr1_pre_player_id
-        description: Retrosheet Player ID of the pitcher responsible for the runner on first base prior to the play.
-
-      - name: pr2_pre_player_id
-        description: Retrosheet Player ID of the pitcher responsible for the runner on second base prior to the play.
-
-      - name: pr3_pre_player_id
-        description: Retrosheet Player ID of the pitcher responsible for the runner on third base prior to the play.
-
-      - name: pr1_post_player_id
-        description: Retrosheet Player ID of the pitcher responsible for the runner on first base at the conclusion of the play.
-
-      - name: pr2_post_player_id
-        description: Retrosheet Player ID of the pitcher responsible for the runner on second base at the conclusion of the play.
-
-      - name: pr3_post_player_id
-        description: Retrosheet Player ID of the pitcher responsible for the runner on third base at the conclusion of the play.
-
-      - name: run_b_player_id
-        description: Retrosheet Player ID of the batter if the batter scored a run on this play.
-
-      - name: run1_player_id
-        description: Retrosheet Player ID of the runner on first base if that runner scored on this play.
-
-      - name: run2_player_id
-        description: Retrosheet Player ID of the runner on second base if that runner scored on this play.
-
-      - name: run3_player_id
-        description: Retrosheet Player ID of the runner on third base if that runner scored on this play.
-
-      - name: prun_b_player_id
-        description: Retrosheet Player ID of the pitcher charged with the run scored by the batter.
-
-      - name: prun1_player_id
-        description: Retrosheet Player ID of the pitcher charged with the run scored by the runner on first base.
-
-      - name: prun2_player_id
-        description: Retrosheet Player ID of the pitcher charged with the run scored by the runner on second base.
-
-      - name: prun3_player_id
-        description: Retrosheet Player ID of the pitcher charged with the run scored by the runner on third base.
-
-      - name: ur_b
-        description: Indicates whether the run scored by the batter was an unearned run (1 = yes).
-
-      - name: ur1
-        description: Indicates whether the run scored by the runner originally on first base was an unearned run (1 = yes).
-
-      - name: ur2
-        description: Indicates whether the run scored by the runner originally on second base was an unearned run (1 = yes).
-
-      - name: ur3
-        description: Indicates whether the run scored by the runner originally on third base was an unearned run (1 = yes).
-
-      - name: rbi_b
-        description: Indicates whether the batter was credited with an RBI for the run scored by the batter (1 = yes).
-
-      - name: rbi1
-        description: Indicates whether the batter was credited with an RBI for the run scored by the runner on first base (1 = yes).
-
-      - name: rbi2
-        description: Indicates whether the batter was credited with an RBI for the run scored by the runner on second base (1 = yes).
-
-      - name: rbi3
-        description: Indicates whether the batter was credited with an RBI for the run scored by the runner on third base (1 = yes).
-
-      - name: runs
-        description: Total runs scored on the play.
-
-      - name: rbi
-        description: Total RBI credited to the batter on the play.
-
-      - name: er
-        description: Total earned runs scored on the play.
-
-      - name: tur
-        description: >
-          Runs scored on the play credited as team unearned runs (TUR). In modern seasons,
-          relief pitchers do not benefit from errors that occurred before they entered when
-          calculating pitcher-specific earned runs. Team earned runs account for all errors
-          in the inning.
-
-      - name: l1_player_id
-        description: Retrosheet Player ID of the batting team's player in lineup position 1 at the time of the play.
-
-      - name: l2_player_id
-        description: Retrosheet Player ID of the batting team's player in lineup position 2 at the time of the play.
-
-      - name: l3_player_id
-        description: Retrosheet Player ID of the batting team's player in lineup position 3 at the time of the play.
-
-      - name: l4_player_id
-        description: Retrosheet Player ID of the batting team's player in lineup position 4 at the time of the play.
-
-      - name: l5_player_id
-        description: Retrosheet Player ID of the batting team's player in lineup position 5 at the time of the play.
-
-      - name: l6_player_id
-        description: Retrosheet Player ID of the batting team's player in lineup position 6 at the time of the play.
-
-      - name: l7_player_id
-        description: Retrosheet Player ID of the batting team's player in lineup position 7 at the time of the play.
-
-      - name: l8_player_id
-        description: Retrosheet Player ID of the batting team's player in lineup position 8 at the time of the play.
-
-      - name: l9_player_id
-        description: Retrosheet Player ID of the batting team's player in lineup position 9 at the time of the play.
-
-      - name: lf1_fpos
-        description: Fielding position of the batting team's lineup position 1 player at the time of the play.
-
-      - name: lf2_fpos
-        description: Fielding position of the batting team's lineup position 2 player at the time of the play.
-
-      - name: lf3_fpos
-        description: Fielding position of the batting team's lineup position 3 player at the time of the play.
-
-      - name: lf4_fpos
-        description: Fielding position of the batting team's lineup position 4 player at the time of the play.
-
-      - name: lf5_fpos
-        description: Fielding position of the batting team's lineup position 5 player at the time of the play.
-
-      - name: lf6_fpos
-        description: Fielding position of the batting team's lineup position 6 player at the time of the play.
-
-      - name: lf7_fpos
-        description: Fielding position of the batting team's lineup position 7 player at the time of the play.
-
-      - name: lf8_fpos
-        description: Fielding position of the batting team's lineup position 8 player at the time of the play.
-
-      - name: lf9_fpos
-        description: Fielding position of the batting team's lineup position 9 player at the time of the play.
-
-      - name: f2_player_id
-        description: Retrosheet Player ID of the catcher at the time of the play.
-
-      - name: f3_player_id
-        description: Retrosheet Player ID of the first baseman at the time of the play.
-
-      - name: f4_player_id
-        description: Retrosheet Player ID of the second baseman at the time of the play.
-
-      - name: f5_player_id
-        description: Retrosheet Player ID of the third baseman at the time of the play.
-
-      - name: f6_player_id
-        description: Retrosheet Player ID of the shortstop at the time of the play.
-
-      - name: f7_player_id
-        description: Retrosheet Player ID of the left fielder at the time of the play.
-
-      - name: f8_player_id
-        description: Retrosheet Player ID of the center fielder at the time of the play.
-
-      - name: f9_player_id
-        description: Retrosheet Player ID of the right fielder at the time of the play.
 
       - name: po0
         description: Putouts on the play for which the fielder is not identified (scored as position 99 in event files).
@@ -498,39 +555,10 @@ models:
           Fielding sequence string for outs on the play (e.g., "643" for a 6-4-3 double play).
           0 indicates an unknown fielder.
 
-      - name: bat_out1_field_pos
-        description: Fielding position of the player who initiated the first batting out on the play.
-
-      - name: bat_out2_field_pos
-        description: Fielding position of the player who initiated the second batting out (for a double play).
-
-      - name: bat_out3_field_pos
-        description: Fielding position of the player who initiated the third batting out (for a triple play).
-
-      - name: br_out_b_field_pos
-        description: Fielding position of the player who initiated the baserunning out by the batter.
-
-      - name: br_out1_field_pos
-        description: Fielding position of the player who initiated the baserunning out by the runner originally on first base.
-
-      - name: br_out2_field_pos
-        description: Fielding position of the player who initiated the baserunning out by the runner originally on second base.
-
-      - name: br_out3_field_pos
-        description: Fielding position of the player who initiated the baserunning out by the runner originally on third base.
-
-      - name: first_fpos
+      - name: first_fielder_pos
         description: >
           Fielding position (1–9) of the first player to field the ball in play. 0 if unknown.
           For assisted plays, the player who 'initiated' an out is the one who earned the first assist.
-
-      - name: loc
-        description: Location on the field where the ball was put in play, if known.
-
-      - name: hit_type
-        description: >
-          Hit type of the ball in play, if known. BG = bunt ground ball, BP = bunt pop-up,
-          BL = bunt line drive, G = ground ball, P = pop up, F = fly ball, L = line drive.
 
       - name: dp_opp
         description: >
@@ -543,36 +571,6 @@ models:
           the player who made the initial putout if a baserunner was forced out, or the fielder
           of the ground ball (firstf) if no force out occurred. Used to share credit or blame for
           converting double play opportunities.
-
-      - name: play_number
-        description: Play number — the sequential order of plays within a particular game.
-
-      - name: ump_home_id
-        description: Retrosheet Player ID of the home plate umpire.
-
-      - name: ump_1b_id
-        description: Retrosheet Player ID of the first base umpire.
-
-      - name: ump_2b_id
-        description: Retrosheet Player ID of the second base umpire.
-
-      - name: ump_3b_id
-        description: Retrosheet Player ID of the third base umpire.
-
-      - name: ump_lf_id
-        description: Retrosheet Player ID of the left field umpire.
-
-      - name: ump_rf_id
-        description: Retrosheet Player ID of the right field umpire.
-
-      - name: game_date
-        description: >
-          Date of the game. If a game was suspended and later resumed on a different date, this
-          value changes mid-game to indicate the resumption date. It does not change for games
-          played continuously that end after midnight local time.
-
-      - name: game_type
-        description: Type of game (e.g., regular-season, exhibition, post-season).
 
       - name: pbp_source
         description: Indicates the play-by-play source. 'deduced' = deduced account; 'full' = full play-by-play from newspaper or scorecard.

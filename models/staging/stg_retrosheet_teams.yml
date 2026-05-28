@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: stg_retrosheet_teams
+    description: ""
+    columns:
+      - name: team_id
+        description: "Retrosheet team ID."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: city
+        description: "Location of the team."
+
+      - name: nickname
+        description: "Team nickname."
+
+      - name: league
+        description: "Leagues the team has played in."
+
+      - name: first_season
+        description: "Debut season."
+
+      - name: last_season
+        description: "Most recent season."

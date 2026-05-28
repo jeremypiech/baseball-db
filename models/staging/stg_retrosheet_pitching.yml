@@ -7,242 +7,142 @@ models:
       pitcher per game appearance. The stattype column indicates whether values are standard,
       official, or bounded estimates.
     columns:
-      - name: gid
-        description: Unique Retrosheet Game ID.
+      - name: unique_key
+        description: "Combination of the game ID, player ID, team ID, stat type, and appearance sequence."
+        data_tests:
+          - unique
+          - not_null
 
-      - name: id
-        description: Retrosheet Player ID.
+      - name: game_id
+        description: Retrosheet game ID.
 
-      - name: team
-        description: Retrosheet Team ID.
+      - name: player_id
+        description: Retrosheet player ID.
 
-      - name: p_seq
+      - name: team_id
+        description: Retrosheet team ID.
+
+      - name: stat_type
+        description: >
+          Indicates the nature of the statistics row. 'value' = standard computed stats;
+          'official' = identifies discrepancies between Retrosheet accounts and official statistics;
+          'lower' = lower bound estimate to highlight data uncertainty;
+          'upper' = upper bound estimate to highlight data uncertainty.
+
+      - name: app_seq
         description: >
           The sequence order in which the pitcher appeared in the game.
           1 = starter; 2 = second pitcher of the game, etc.
 
-      - name: stattype
-        description: >
-          Indicates the nature of the statistics row. 'value' = standard computed stats;
-          'official' = identifies discrepancies between Retrosheet accounts and official statistics;
-          'lower' = lower bound estimate to highlight data uncertainty;
-          'upper' = upper bound estimate to highlight data uncertainty.
+      - name: game_date
+        description: Date of the game.
 
-      - name: p_ipouts
+      - name: date_game_number
+        description: Game number for the date.
+
+      - name: game_type
+        description: Type of game (e.g., regular-season, exhibition, post-season).
+
+      - name: opp_team_id
+        description: Retrosheet team ID of the opponent.
+
+      - name: park_id
+        description: Retrosheet Park ID indicating the location of the game.
+
+      - name: outs_recorded
         description: Outs recorded by the pitcher, expressed as innings pitched multiplied by 3.
 
-      - name: p_noout
+      - name: no_out_inning_bf
         description: Batters faced by the pitcher in any innings in which no outs were recorded.
 
-      - name: p_bfp
+      - name: bf
         description: Total batters faced by the pitcher.
 
-      - name: p_h
+      - name: h
         description: Hits allowed.
 
-      - name: p_d
+      - name: d
         description: Doubles allowed.
 
-      - name: p_t
+      - name: t
         description: Triples allowed.
 
-      - name: p_hr
+      - name: hr
         description: Home runs allowed.
 
-      - name: p_r
+      - name: r
         description: Runs allowed.
 
-      - name: p_er
+      - name: er
         description: Earned runs allowed.
 
-      - name: p_w
+      - name: bb
         description: Walks allowed (including intentional).
 
-      - name: p_iw
+      - name: ibb
         description: Intentional walks allowed.
 
-      - name: p_k
+      - name: k
         description: Strikeouts recorded.
 
-      - name: p_hbp
+      - name: hbp
         description: Batters hit by pitch.
 
-      - name: p_wp
+      - name: wp
         description: Wild pitches.
 
-      - name: p_bk
+      - name: bk
         description: Balks.
 
-      - name: p_sh
+      - name: sh
         description: Sacrifice hits allowed.
 
-      - name: p_sf
+      - name: sf
         description: Sacrifice flies allowed.
 
-      - name: p_sb
+      - name: sb
         description: Stolen bases allowed.
 
-      - name: p_cs
+      - name: cs
         description: Opposing baserunners caught stealing.
 
-      - name: p_pb
+      - name: pb
         description: Passed balls allowed (catcher, attributed to pitching game context).
 
-      - name: wp
+      - name: w
         description: Indicates whether the pitcher was the winning pitcher of the game.
 
-      - name: lp
+      - name: l
         description: Indicates whether the pitcher was the losing pitcher of the game.
 
-      - name: save
+      - name: sv
         description: Indicates whether the pitcher earned a save.
 
-      - name: gs
+      - name: is_gs
         description: Indicates whether the pitcher started the game (game started).
 
-      - name: gf
+      - name: is_gf
         description: Indicates whether the pitcher finished the game in relief (game finished).
 
-      - name: cg
+      - name: is_cg
         description: Indicates whether the pitcher threw a complete game.
 
-      - name: date
-        description: Date of the game.
-
-      - name: number
-        description: Game number (0 if single game; 1, 2, etc. if multiple games on the same date).
-
-      - name: site
-        description: Retrosheet Park ID indicating the location of the game.
-
-      - name: vishome
-        description: Indicates whether the team was the visiting or home team. v = visiting, h = home.
-
-      - name: opp
-        description: Retrosheet Team ID of the opponent.
-
-      - name: win
+      - name: team_win
         description: Equal to 1 if the team won the game.
 
-      - name: loss
+      - name: team_loss
         description: Equal to 1 if the team lost the game.
 
-      - name: tie
+      - name: team_tie
         description: Equal to 1 if the game ended in a tie.
 
-      - name: gametype
-        description: Type of game (e.g., regular-season, exhibition, post-season).
+      - name: vis_home
+        description: Indicates whether the team was the visiting or home team.
 
-      - name: box
-        description: Indicates whether a box score is available. Blank indicates no.
+      - name: has_box_score
+        description: Indicates whether a box score is available.
 
-      - name: pbp
-        description: >
-          Indicates whether a play-by-play account is available. d = deduced account;
-          y = play-by-play account from a newspaper or scorecard. Blank indicates no account.
-
-
-  # -----------------------------------------------------------------------
-  # fielding.csv
-  # -----------------------------------------------------------------------
-  - name: fielding
-    description: >
-      Individual player fielding statistics at the game level from Retrosheet. One row per
-      player per fielding position per game. Players who played multiple positions in a game
-      will have multiple rows distinguished by d_seq. Catcher-specific stats (d_pb, d_wp,
-      d_sb, d_cs) are only populated for catchers (d_pos = 2).
-    columns:
-      - name: gid
-        description: Unique Retrosheet Game ID.
-
-      - name: id
-        description: Retrosheet Player ID.
-
-      - name: team
-        description: Retrosheet Team ID.
-
-      - name: d_seq
-        description: >
-          The sequence order of fielding positions for a player who played multiple positions
-          in a game. 1 = first position played, 2 = second position played, etc.
-
-      - name: d_pos
-        description: >
-          Fielding position played. Standard numeric position codes apply:
-          1 = Pitcher, 2 = Catcher, 3 = 1B, 4 = 2B, 5 = 3B, 6 = SS,
-          7 = LF, 8 = CF, 9 = RF, 10 = DH.
-
-      - name: stattype
-        description: >
-          Indicates the nature of the statistics row. 'value' = standard computed stats;
-          'official' = identifies discrepancies between Retrosheet accounts and official statistics;
-          'lower' = lower bound estimate to highlight data uncertainty;
-          'upper' = upper bound estimate to highlight data uncertainty.
-
-      - name: d_ifouts
-        description: Defensive outs (innings) for which the player played this specific fielding position.
-
-      - name: d_po
-        description: Putouts recorded by the player at this fielding position.
-
-      - name: d_a
-        description: Assists recorded by the player at this fielding position.
-
-      - name: d_e
-        description: Errors committed by the player at this fielding position.
-
-      - name: d_dp
-        description: Double plays turned by the player at this fielding position.
-
-      - name: d_tp
-        description: Triple plays turned by the player at this fielding position.
-
-      - name: d_pb
-        description: Passed balls allowed. Populated only for catchers (d_pos = 2).
-
-      - name: d_wp
-        description: Wild pitches allowed while catching. Populated only for catchers (d_pos = 2).
-
-      - name: d_sb
-        description: Stolen bases allowed while catching. Populated only for catchers (d_pos = 2).
-
-      - name: d_cs
-        description: Opposing baserunners caught stealing while catching. Populated only for catchers (d_pos = 2).
-
-      - name: d_gs
-        description: Indicates whether the player started the game at this fielding position.
-
-      - name: date
-        description: Date of the game.
-
-      - name: number
-        description: Game number (0 if single game; 1, 2, etc. if multiple games on the same date).
-
-      - name: site
-        description: Retrosheet Park ID indicating the location of the game.
-
-      - name: vishome
-        description: Indicates whether the team was the visiting or home team. v = visiting, h = home.
-
-      - name: opp
-        description: Retrosheet Team ID of the opponent.
-
-      - name: win
-        description: Equal to 1 if the team won the game.
-
-      - name: loss
-        description: Equal to 1 if the team lost the game.
-
-      - name: tie
-        description: Equal to 1 if the game ended in a tie.
-
-      - name: gametype
-        description: Type of game (e.g., regular-season, exhibition, post-season).
-
-      - name: box
-        description: Indicates whether a box score is available. Blank indicates no.
-
-      - name: pbp
+      - name: pbp_source
         description: >
           Indicates whether a play-by-play account is available. d = deduced account;
           y = play-by-play account from a newspaper or scorecard. Blank indicates no account.

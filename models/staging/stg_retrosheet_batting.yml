@@ -8,127 +8,133 @@ models:
       lineup slots. The stattype column indicates whether values are standard, official,
       or bounded estimates.
     columns:
-      - name: gid
-        description: Unique Retrosheet Game ID.
+      - name: unique_key
+        description: "Combination of the game ID, player ID, team ID, stat type, and lineup position."
+        data_tests:
+          - unique
+          - not_null
 
-      - name: id
-        description: Retrosheet Player ID.
+      - name: game_id
+        description: Retrosheet game ID.
 
-      - name: team
-        description: Retrosheet Team ID.
+      - name: player_id
+        description: Retrosheet player ID.
 
-      - name: b_lp
-        description: The player's lineup position in the batting order, if known.
+      - name: team_id
+        description: Retrosheet team ID.
 
-      - name: b_seq
-        description: >
-          The sequence order in which the player appears at a given lineup slot.
-          1 = starter at that slot; 2 = second player at that slot, etc.
-
-      - name: stattype
+      - name: stat_type
         description: >
           Indicates the nature of the statistics row. 'value' = standard computed stats;
           'official' = identifies discrepancies between Retrosheet accounts and official statistics;
           'lower' = lower bound estimate to highlight data uncertainty;
           'upper' = upper bound estimate to highlight data uncertainty.
 
-      - name: b_pa
-        description: Plate appearances.
+      - name: lineup_pos
+        description: The player's lineup position in the batting order, if known.
 
-      - name: b_ab
-        description: At bats.
+      - name: app_seq
+        description: >
+          The sequence order in which the player appears at a given lineup slot.
+          1 = starter at that slot; 2 = second player at that slot, etc.
 
-      - name: b_r
-        description: Runs scored.
-
-      - name: b_h
-        description: Hits.
-
-      - name: b_d
-        description: Doubles.
-
-      - name: b_t
-        description: Triples.
-
-      - name: b_hr
-        description: Home runs.
-
-      - name: b_rbi
-        description: Runs batted in.
-
-      - name: b_sh
-        description: Sacrifice hits (bunts).
-
-      - name: b_sf
-        description: Sacrifice flies.
-
-      - name: b_hbp
-        description: Times hit by pitch.
-
-      - name: b_w
-        description: Walks (including intentional).
-
-      - name: b_iw
-        description: Intentional walks.
-
-      - name: b_k
-        description: Strikeouts.
-
-      - name: b_sb
-        description: Stolen bases.
-
-      - name: b_cs
-        description: Times caught stealing.
-
-      - name: b_gdp
-        description: Times grounded into a double play.
-
-      - name: b_xi
-        description: Times reached base on catcher's interference.
-
-      - name: b_roe
-        description: Times reached base via error.
-
-      - name: dh
-        description: Indicates whether the player served as the designated hitter in this game.
-
-      - name: ph
-        description: Indicates whether the player pinch hit in this game.
-
-      - name: pr
-        description: Indicates whether the player pinch ran in this game.
-
-      - name: date
+      - name: game_date
         description: Date of the game.
 
-      - name: number
-        description: Game number (0 if single game; 1, 2, etc. if multiple games on the same date).
+      - name: date_game_number
+        description: Game number for the date.
 
-      - name: site
-        description: Retrosheet Park ID indicating the location of the game.
-
-      - name: vishome
-        description: Indicates whether the team was the visiting or home team. v = visiting, h = home.
-
-      - name: opp
-        description: Retrosheet Team ID of the opponent.
-
-      - name: win
-        description: Equal to 1 if the team won the game.
-
-      - name: loss
-        description: Equal to 1 if the team lost the game.
-
-      - name: tie
-        description: Equal to 1 if the game ended in a tie.
-
-      - name: gametype
+      - name: game_type
         description: Type of game (e.g., regular-season, exhibition, post-season).
 
-      - name: box
-        description: Indicates whether a box score is available. Blank indicates no.
+      - name: opp_team_id
+        description: Retrosheet team ID of the opponent.
 
-      - name: pbp
+      - name: park_id
+        description: Retrosheet Park ID indicating the location of the game.
+
+      - name: pa
+        description: Plate appearances.
+
+      - name: ab
+        description: At bats.
+
+      - name: r
+        description: Runs scored.
+
+      - name: h
+        description: Hits.
+
+      - name: d
+        description: Doubles.
+
+      - name: t
+        description: Triples.
+
+      - name: hr
+        description: Home runs.
+
+      - name: rbi
+        description: Runs batted in.
+
+      - name: sh
+        description: Sacrifice hits (bunts).
+
+      - name: sf
+        description: Sacrifice flies.
+
+      - name: hbp
+        description: Times hit by pitch.
+
+      - name: bb
+        description: Walks (including intentional).
+
+      - name: ibb
+        description: Intentional walks.
+
+      - name: k
+        description: Strikeouts.
+
+      - name: sb
+        description: Stolen bases.
+
+      - name: cs
+        description: Times caught stealing.
+
+      - name: gdp
+        description: Times grounded into a double play.
+
+      - name: xi
+        description: Times reached base on catcher's interference.
+
+      - name: roe
+        description: Times reached base via error.
+
+      - name: is_dh
+        description: Indicates whether the player served as the designated hitter in this game.
+
+      - name: is_ph
+        description: Indicates whether the player pinch hit in this game.
+
+      - name: is_pr
+        description: Indicates whether the player pinch ran in this game.
+
+      - name: team_win
+        description: Equal to 1 if the team won the game.
+
+      - name: team_loss
+        description: Equal to 1 if the team lost the game.
+
+      - name: team_tie
+        description: Equal to 1 if the game ended in a tie.
+
+      - name: vis_home
+        description: Indicates whether the team was the visiting or home team.
+
+      - name: has_box_score
+        description: Indicates whether a box score is available.
+
+      - name: pbp_source
         description: >
           Indicates whether a play-by-play account is available. d = deduced account;
           y = play-by-play account from a newspaper or scorecard. Blank indicates no account.
