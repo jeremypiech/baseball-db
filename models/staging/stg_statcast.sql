@@ -127,7 +127,7 @@ SELECT
     ax,
     ay,
     az,
-    
+
     pfx_x,
     pfx_z,
 

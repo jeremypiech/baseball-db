@@ -51,6 +51,6 @@ SELECT
     pro_umpired_first AS pro_umpired_first_season,
     pro_umpired_last AS pro_umpired_last_season,
     mlb_umpired_first AS mlb_umpired_first_season,
-    mlb_umpired_last AS mlb_umpired_last_season,
+    mlb_umpired_last AS mlb_umpired_last_season
 
 FROM source

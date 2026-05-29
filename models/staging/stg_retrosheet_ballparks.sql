@@ -14,7 +14,7 @@ SELECT
     city,
     state,
 
-    STRPTIME("start", '%m/%d/%Y')::DATE AS first_game,
+    STRPTIME(start, '%m/%d/%Y')::DATE AS first_game,
     STRPTIME("end", '%m/%d/%Y')::DATE AS last_game,
 
     notes
