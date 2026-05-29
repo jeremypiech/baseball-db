@@ -1,6 +1,5 @@
 import duckdb
 import requests
-import shutil
 
 from pathlib import Path
 from zipfile import ZipFile
@@ -633,23 +632,21 @@ class Retrosheet:
 
     def extract_load_all(self) -> None:
         """Download files and upload to database."""
-        # for file in ['ballparks', 'csvdownloads', 'teams']:
-        for file in ['ballparks', 'teams']:
+        for file in ['ballparks', 'csvdownloads', 'teams']:
             self.download(file)
             self.unzip(file)
 
         self.cleanup()
 
-        # for data_model in [
-        #     'allplayers',
-        #     'batting',
-        #     'discreps',
-        #     'ejections',
-        #     'fielding',
-        #     'gameinfo',
-        #     'pitching',
-        #     'plays',
-        #     'teamstats'
-        # ]:
-        for data_model in ['ballparks', 'teams']:
+        for data_model in [
+            'allplayers',
+            'batting',
+            'discreps',
+            'ejections',
+            'fielding',
+            'gameinfo',
+            'pitching',
+            'plays',
+            'teamstats'
+        ]:
             self.load(data_model)
