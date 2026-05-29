@@ -17,23 +17,40 @@ SELECT
         - umpire
     */
 
+    ---------- primary
     {{ dbt_utils.generate_surrogate_key(['game_pk', 'at_bat_number', 'pitch_number']) }}
         AS unique_key,
 
-    pitch_type,
-    game_date,
-    release_speed,
-    release_pos_x,
-    release_pos_z,
+    game_pk AS game_id,
+    at_bat_number AS game_pa_number,
+    pitch_number AS pa_pitch_number,
 
-    batter AS batter_id,
-    pitcher AS pitcher_id,
-    events,
+    game_date,
+    home_team,
+    away_team,
+
     description AS pitch_result_desc,
 
-    zone,
+    ---------- foreign keys
+    batter AS batter_id,
+    pitcher AS pitcher_id,
 
-    des AS pa_desc,
+    fielder_2 AS fielder_2_id,
+    fielder_3 AS fielder_3_id,
+    fielder_4 AS fielder_4_id,
+    fielder_5 AS fielder_5_id,
+    fielder_6 AS fielder_6_id,
+    fielder_7 AS fielder_7_id,
+    fielder_8 AS fielder_8_id,
+    fielder_9 AS fielder_9_id,
+
+    on_1b AS on_1b_id,
+    on_2b AS on_2b_id,
+    on_3b AS on_3b_id,
+
+    ---------- attributes
+    ----- game
+    game_year AS season,
 
     CASE game_type
         WHEN 'E' THEN 'Exhibition'
@@ -45,66 +62,110 @@ SELECT
         WHEN 'W' THEN 'World Series'
     END AS game_type,
 
-    stand AS batter_stands,
-    p_throws AS pitcher_throws,
-
-    home_team,
-    away_team,
-
-    type AS pitch_result,
-
-    hit_location,
-    bb_type,
-    balls,
-    strikes,
-    game_year,
-    pfx_x,
-    pfx_z,
-    plate_x,
-    plate_z,
-
-    on_3b AS on_3b_id,
-    on_2b AS on_2b_id,
-    on_1b AS on_1b_id,
-    outs_when_up AS outs,
+    ----- situation
+    events AS pa_event,
+    des AS pa_desc,
 
     inning,
     inning_topbot,
-    hc_x,
-    hc_y,
-    sv_id,
-    vx0,
-    vy0,
-    vz0,
-    ax,
-    ay,
-    az,
+    outs_when_up AS outs,
+    balls,
+    strikes,
+
+    home_score,
+    away_score,
+    home_score_diff,
+    post_home_score,
+    post_away_score,
+
+    bat_score,
+    fld_score,
+    bat_score_diff,
+    post_bat_score,
+    post_fld_score,
+
+    ----- pitcher
+    p_throws AS pitcher_throws,
+
+    age_pit,
+    age_pit_legacy,
+
+    n_thruorder_pitcher,
+    pitcher_days_since_prev_game,
+    pitcher_days_until_next_game,
+
+    ----- batter
+    stand AS batter_stands,
+
+    age_bat,
+    age_bat_legacy,
+
     sz_top,
     sz_bot,
-    hit_distance_sc,
-    launch_speed,
-    launch_angle,
-    effective_speed,
+
+    n_priorpa_thisgame_player_at_bat,
+    batter_days_since_prev_game,
+    batter_days_until_next_game,
+
+    ----- pitch
+    pitch_name,
+    pitch_type,
+
+    release_speed,
+    release_pos_x,
+    release_pos_y,
+    release_pos_z,
     release_spin_rate,
     release_extension,
 
-    game_pk AS game_id,
-    fielder_2 AS fielder_2_id,
-    fielder_3 AS fielder_3_id,
-    fielder_4 AS fielder_4_id,
-    fielder_5 AS fielder_5_id,
-    fielder_6 AS fielder_6_id,
-    fielder_7 AS fielder_7_id,
-    fielder_8 AS fielder_8_id,
-    fielder_9 AS fielder_9_id,
+    effective_speed,
 
-    release_pos_y,
+    vx0,
+    vy0,
+    vz0,
+
+    ax,
+    ay,
+    az,
+    
+    pfx_x,
+    pfx_z,
+
+    plate_x,
+    plate_z,
+
+    arm_angle,
+    api_break_x_arm,
+    api_break_x_batter_in,
+    api_break_z_with_gravity,
+    spin_axis,
+
+    zone AS zone_loc,
+    type AS pitch_result,
+
+    ----- swing
+    bat_speed,
+    swing_length,
+    hyper_speed,
+    attack_angle,
+    attack_direction,
+    swing_path_tilt,
+    intercept_ball_minus_batter_pos_x_inches,
+    intercept_ball_minus_batter_pos_y_inches,
+
+    ----- batted ball
+    bb_type,
+    hit_location,
+    hc_x,
+    hc_y,
+
+    hit_distance_sc,
+    launch_speed,
+    launch_angle,
+
     estimated_ba_using_speedangle,
+    estimated_slg_using_speedangle,
     estimated_woba_using_speedangle,
-    woba_value,
-    woba_denom,
-    babip_value,
-    iso_value,
 
     CASE launch_speed_angle
         WHEN 1 THEN 'Weak'
@@ -115,46 +176,25 @@ SELECT
         WHEN 6 THEN 'Barrel'
     END AS launch_speed_angle_type,
 
-    at_bat_number AS game_pa_number,
-    pitch_number AS pa_pitch_number,
-
-    pitch_name,
-    home_score,
-    away_score,
-    bat_score,
-    fld_score,
-    post_away_score,
-    post_home_score,
-    post_bat_score,
-    post_fld_score,
+    ----- fielding
     if_fielding_alignment,
     of_fielding_alignment,
-    spin_axis,
-    delta_home_win_exp,
-    delta_run_exp,
-    bat_speed,
-    swing_length,
-    estimated_slg_using_speedangle,
-    delta_pitcher_run_exp,
-    hyper_speed,
-    home_score_diff,
-    bat_score_diff,
-    bat_score_diff,
+
+    ----- play result
+    woba_value,
+    woba_denom,
+    babip_value,
+    iso_value,
+
+    ----- win expectancy
     home_win_exp,
     bat_win_exp,
-    n_thruorder_pitcher,
-    n_priorpa_thisgame_player_at_bat,
-    batter_days_since_prev_game,
-    pitcher_days_until_next_game,
-    batter_days_until_next_game,
-    api_break_z_with_gravity,
-    api_break_x_arm,
-    api_break_x_batter_in,
-    arm_angle,
-    attack_angle,
-    attack_direction,
-    swing_path_tilt,
-    intercept_ball_minus_batter_pos_x_inches,
-    intercept_ball_minus_batter_pos_y_inches
+    delta_home_win_exp,
+
+    delta_run_exp,
+    delta_pitcher_run_exp,
+
+    ----- other
+    sv_id
 
 FROM source
