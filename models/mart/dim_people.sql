@@ -3,45 +3,54 @@ WITH stg_chadwick_people AS (
 )
 
 SELECT
-    key_uuid,
-    key_person,
-    key_mlbam,
-    key_retro,
-    key_bbref,
-    key_bbref_minors,
-    key_fangraphs,
-    key_npb,
-    key_sr_nfl,
-    key_sr_nba,
-    key_sr_nhl,
-    key_wikidata,
-    name_last,
-    name_first,
-    name_given,
-    name_suffix,
-    name_matrilineal,
-    name_nick,
+    ---------- primary
+    chadwick_unique_id,
+    chadwick_person_id,
+
+    ---------- foreign keys
+    retrosheet_id,
+    mlbam_id,
+    bbref_id,
+    bbref_minors_id,
+    fangraphs_id,
+    npb_id,
+    sr_nfl_id,
+    sr_nba_id,
+    sr_nhl_id,
+    wikidata_id,
+
+    ---------- attributes
+    first_name,
+    last_name,
+    given_name,
+    suffix_name,
+    matrilineal_name,
+    nickname,
+
     birth_year,
     birth_month,
     birth_day,
     death_year,
     death_month,
     death_day,
-    pro_played_first,
-    pro_played_last,
-    mlb_played_first,
-    mlb_played_last,
-    col_played_first,
-    col_played_last,
-    pro_managed_first,
-    pro_managed_last,
-    mlb_managed_first,
-    mlb_managed_last,
-    col_managed_first,
-    col_managed_last,
-    pro_umpired_first,
-    pro_umpired_last,
-    mlb_umpired_first,
-    mlb_umpired_last
+
+    pro_played_first_season,
+    pro_played_last_season,
+    mlb_played_first_season,
+    mlb_played_last_season,
+    col_played_first_season,
+    col_played_last_season,
+
+    pro_managed_first_season,
+    pro_managed_last_season,
+    mlb_managed_first_season,
+    mlb_managed_last_season,
+    col_managed_first_season,
+    col_managed_last_season,
+
+    pro_umpired_first_season,
+    pro_umpired_last_season,
+    mlb_umpired_first_season,
+    mlb_umpired_last_season
 
 FROM stg_chadwick_people
