@@ -53,7 +53,7 @@ SELECT
     NULLIF(fieldcond, 'unknown') AS field_cond,
     NULLIF(precip, 'unknown') AS precip,
     NULLIF(sky, 'unknown') AS sky,
-    NULLIF(temp, 'unknown')::INTEGER AS temp,
+    NULLIF(temp, 'unknown')::INTEGER AS temperature,
     NULLIF(winddir, 'unknown') AS wind_dir,
     NULLIF(NULLIF(windspeed, 'unknown'), '-1')::INTEGER AS wind_speed,
 

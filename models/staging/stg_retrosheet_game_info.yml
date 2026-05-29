@@ -121,7 +121,7 @@ models:
       - name: sky
         description: Sky conditions at game time, if known (e.g., sunny, cloudy, overcast).
 
-      - name: temp
+      - name: temperature
         description: >
           Temperature in degrees Fahrenheit at game time. Zero (0) degree games are
           overrepresented as it's used as a placeholder for unknown.
