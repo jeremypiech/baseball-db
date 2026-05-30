@@ -9,4 +9,4 @@ Retrosheet events are simplified for these comparisons:
 - Most outs take into account which position fielded the ball and which baserunner was out.
     - An exception to this is fielder's choice plays — it's simply split into out and no out.
 - Reached on error plays are classified by the erroring player, e.g., a 1B who misplays
-    a grounder and a 1B who drops the ball are both "E3".
+  a grounder and a 1B who drops the ball are both "E3".
