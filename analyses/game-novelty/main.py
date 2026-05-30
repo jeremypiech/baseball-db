@@ -6,7 +6,7 @@ from baseball_db.constants import DATABASE_NAME
 
 
 def get_data() -> pd.DataFrame:
-    with open('analyses/novelty/simplified_events.sql', 'r') as sqlfile:
+    with open('analyses/game-novelty/simplified_events.sql', 'r') as sqlfile:
         sql = sqlfile.read()
 
     con = duckdb.connect(DATABASE_NAME)
