@@ -1,0 +1,398 @@
+version: 2
+
+models:
+  - name: fact_statcast_pitches
+    description: >
+      Statcast pitch-level data from Baseball Savant. Contains one row per pitch with
+      tracking data including pitch characteristics, batted ball metrics, player context,
+      game state, and advanced Statcast metrics. Data from 2008–2016 uses PitchFX tracking;
+      2017 and beyond uses Statcast.
+    columns:
+      - name: unique_key
+        description: "Combination of the game ID, plate appearance number, and pitch number."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: game_id
+        description: Unique identifier for the game.
+
+      - name: game_pa_number
+        description: Plate appearance number within the game (sequential, starting at 1).
+
+      - name: pa_pitch_number
+        description: Total pitch number within the plate appearance (sequential, starting at 1).
+
+      - name: game_date
+        description: Date of the game.
+
+      - name: home_team
+        description: Abbreviation of the home team.
+
+      - name: away_team
+        description: Abbreviation of the away team.
+
+      - name: pitch_result_desc
+        description: Description of the resulting pitch (e.g. called_strike, swinging_strike, ball, hit_into_play).
+
+      - name: batter_id
+        description: MLB player ID tied to the batter in the play event.
+
+      - name: pitcher_id
+        description: MLB player ID tied to the pitcher in the play event.
+
+      - name: fielder_2_id
+        description: MLB player ID for the catcher (C).
+
+      - name: fielder_3_id
+        description: MLB player ID for the first baseman (1B).
+
+      - name: fielder_4_id
+        description: MLB player ID for the second baseman (2B).
+
+      - name: fielder_5_id
+        description: MLB player ID for the third baseman (3B).
+
+      - name: fielder_6_id
+        description: MLB player ID for the shortstop (SS).
+
+      - name: fielder_7_id
+        description: MLB player ID for the left fielder (LF).
+
+      - name: fielder_8_id
+        description: MLB player ID for the center fielder (CF).
+
+      - name: fielder_9_id
+        description: MLB player ID for the right fielder (RF).
+
+      - name: on_1b_id
+        description: Pre-pitch MLB player ID of the runner on 1st base (null if base is empty).
+
+      - name: on_2b_id
+        description: Pre-pitch MLB player ID of the runner on 2nd base (null if base is empty).
+
+      - name: on_3b_id
+        description: Pre-pitch MLB player ID of the runner on 3rd base (null if base is empty).
+
+      - name: season
+        description: Year the game took place.
+
+      - name: game_type
+        description: Type of game.
+
+      - name: pa_event
+        description: Event of the resulting plate appearance (e.g. single, home_run, strikeout, walk).
+
+      - name: pa_desc
+        description: Plate appearance description from game day data.
+
+      - name: inning
+        description: Pre-pitch inning number.
+
+      - name: inning_topbot
+        description: Pre-pitch indicator of top or bottom of the inning (Top or Bot).
+
+      - name: outs
+        description: Pre-pitch number of outs in the inning.
+
+      - name: balls
+        description: Pre-pitch number of balls in the count.
+
+      - name: strikes
+        description: Pre-pitch number of strikes in the count.
+
+      - name: home_score
+        description: Pre-pitch home team score.
+
+      - name: away_score
+        description: Pre-pitch away team score.
+
+      - name: home_score_diff
+        description: Home team score minus away team score at the time of the pitch.
+
+      - name: post_home_score
+        description: Post-pitch home team score.
+
+      - name: post_away_score
+        description: Post-pitch away team score.
+
+      - name: bat_score
+        description: Pre-pitch score of the batting team.
+
+      - name: fld_score
+        description: Pre-pitch score of the fielding team.
+
+      - name: bat_score_diff
+        description: Batting team score minus pitching team score at the time of the pitch.
+
+      - name: post_bat_score
+        description: Post-pitch score of the batting team.
+
+      - name: post_fld_score
+        description: Post-pitch score of the fielding team.
+
+      - name: pitcher_throws
+        description: Hand the pitcher throws with (L = Left, R = Right).
+
+      - name: age_pit
+        description: Pitcher's age as of December 31 of the game year.
+
+      - name: age_pit_legacy
+        description: Pitcher's age as of June 30 of the game year (legacy calculation method).
+
+      - name: n_thruorder_pitcher
+        description: Number of times the pitcher has been through the batting order in this game.
+
+      - name: pitcher_days_since_prev_game
+        description: Number of days since the pitcher's previous game appearance.
+
+      - name: pitcher_days_until_next_game
+        description: Number of days until the pitcher's next game appearance.
+
+      - name: batter_stands
+        description: Side of the plate the batter is standing on (L = Left, R = Right).
+
+      - name: age_bat
+        description: Batter's age as of December 31 of the game year.
+
+      - name: age_bat_legacy
+        description: Batter's age as of June 30 of the game year (legacy calculation method).
+
+      - name: sz_top
+        description: >
+          Top of the batter's strike zone in feet.
+          Through 2025, set by the operator when the ball is halfway to the plate.
+          From 2026 onward, this is the top of the batter's ABS-defined strike zone.
+
+      - name: sz_bot
+        description: >
+          Bottom of the batter's strike zone in feet.
+          Through 2025, set by the operator when the ball is halfway to the plate.
+          From 2026 onward, this is the bottom of the batter's ABS-defined strike zone.
+
+      - name: n_priorpa_thisgame_player_at_bat
+        description: Number of prior plate appearances the batter has had in this game before this PA.
+
+      - name: batter_days_since_prev_game
+        description: Number of days since the batter's previous game appearance.
+
+      - name: batter_days_until_next_game
+        description: Number of days until the batter's next game appearance.
+
+      - name: pitch_name
+        description: The full name of the pitch type derived from Statcast data (e.g. 4-Seam Fastball, Slider, Changeup).
+
+      - name: pitch_type
+        description: The type of pitch derived from Statcast (e.g. FF, SL, CH, CU).
+
+      - name: release_speed
+        description: >
+          Pitch velocity in MPH out-of-hand at release point. Values from 2008–2016 are via
+          PitchFX and adjusted to roughly match out-of-hand release. All velocities from
+          2017 onward are Statcast. All values are on the same scale.
+
+      - name: release_pos_x
+        description: Horizontal release position of the ball measured in feet from the catcher's perspective.
+
+      - name: release_pos_y
+        description: Release position of the pitch measured in feet from the catcher's perspective (depth/distance from plate).
+
+      - name: release_pos_z
+        description: Vertical release position of the ball measured in feet from the catcher's perspective.
+
+      - name: release_spin_rate
+        description: Spin rate of the pitch in revolutions per minute (RPM) as tracked by Statcast.
+
+      - name: release_extension
+        description: Release extension of the pitch in feet as tracked by Statcast — how far down the mound the pitcher releases the ball.
+
+      - name: effective_speed
+        description: Derived pitch speed in MPH based on the extension of the pitcher's release — accounts for how close to the plate the ball is released.
+
+      - name: vx0
+        description: Velocity of the pitch in feet per second in the x-dimension (horizontal), determined at y = 50 feet from home plate.
+
+      - name: vy0
+        description: Velocity of the pitch in feet per second in the y-dimension (toward home plate), determined at y = 50 feet from home plate.
+
+      - name: vz0
+        description: Velocity of the pitch in feet per second in the z-dimension (vertical), determined at y = 50 feet from home plate.
+
+      - name: ax
+        description: Acceleration of the pitch in feet per second squared in the x-dimension (horizontal), determined at y = 50 feet from home plate.
+
+      - name: ay
+        description: Acceleration of the pitch in feet per second squared in the y-dimension (toward home plate), determined at y = 50 feet from home plate.
+
+      - name: az
+        description: Acceleration of the pitch in feet per second squared in the z-dimension (vertical), determined at y = 50 feet from home plate.
+
+      - name: pfx_x
+        description: Horizontal pitch movement in feet from the catcher's perspective, relative to a theoretical spinless pitch.
+
+      - name: pfx_z
+        description: Vertical pitch movement in feet from the catcher's perspective, relative to a theoretical spinless pitch.
+
+      - name: plate_x
+        description: >
+          Horizontal position of the ball when it crosses home plate from the catcher's perspective.
+          Through 2025, measured at the front of the plate. From 2026 onward, measured at the
+          middle of the plate to align with the ABS system.
+
+      - name: plate_z
+        description: >
+          Vertical position of the ball when it crosses home plate from the catcher's perspective.
+          Through 2025, measured at the front of the plate. From 2026 onward, measured at the
+          middle of the plate to align with the ABS system.
+
+      - name: arm_angle
+        description: >
+          The angle in degrees between a line parallel to the ground and a line extending from
+          the pitcher's throwing shoulder to the ball at the time of release. Higher values
+          indicate a more over-the-top delivery; lower values indicate a sidearm delivery.
+
+      - name: api_break_x_arm
+        description: Horizontal break of the pitch in inches toward the pitcher's arm side.
+
+      - name: api_break_x_batter_in
+        description: Horizontal break of the pitch in inches toward the batter's side of the plate.
+
+      - name: api_break_z_with_gravity
+        description: Vertical break of the pitch in inches with gravity included in the calculation.
+
+      - name: spin_axis
+        description: >
+          Spin axis of the pitch in the 2D X-Z plane, in degrees from 0 to 360.
+          180 degrees represents pure backspin (fastball); 0 degrees represents pure topspin
+          (12-6 curveball).
+
+      - name: zone_loc
+        description: >
+          Zone location of the ball when it crosses the plate from the catcher's perspective.
+          Zones 1–9 represent the strike zone grid; zones 11–14 represent balls outside the zone.
+
+      - name: pitch_result
+        description: Short-hand of the pitch result. B = Ball, S = Strike, X = In Play.
+
+      - name: bat_speed
+        description: Bat speed is measured at the sweet-spot of the bat in mph.
+
+      - name: swing_length
+        description: >
+          The total (sum) distance in feet traveled of the head of the bat in X/Y/Z space,
+          from start of tracking data until impact point.
+
+      - name: hyper_speed
+        description: >
+          Adjusted Exit Velocity (displayed on Savant as "Adjusted EV"). Sets any batted ball
+          hit below 88 mph to 88 mph; otherwise uses the actual exit velocity. Reduces the
+          penalty for weak contact on topped or checked-swing balls.
+
+      - name: attack_angle
+        description: >
+          The vertical angle in degrees of the direction in which the sweet spot of the bat is
+          traveling as it impacts the ball, relative to the ground. Positive values indicate an
+          uppercut swing; negative values indicate a downward swing.
+
+      - name: attack_direction
+        description: >
+          The horizontal angle in degrees of the direction in which the sweet spot of the bat
+          is traveling as it impacts the ball, relative to a line from home plate to straightaway
+          center field. Positive values indicate pull direction; negative values indicate oppo direction.
+
+      - name: swing_path_tilt
+        description: >
+          The vertical angular orientation in degrees of the plane of the swing relative to the
+          ground, defined by the path of the bat in the 40 ms prior to contact. Higher tilt
+          indicates a steeper (more downward) swing; lower tilt indicates a flatter swing.
+
+      - name: intercept_ball_minus_batter_pos_x_inches
+        description: >
+          Distance in inches between the bat/ball intercept point and the batter's center of
+          mass in the X (horizontal) direction at the time of contact.
+
+      - name: intercept_ball_minus_batter_pos_y_inches
+        description: >
+          Distance in inches between the bat/ball intercept point and the batter's center of
+          mass in the Y (mound-to-plate) direction at the time of contact.
+
+      - name: bb_type
+        description: Batted ball type. One of ground_ball, line_drive, fly_ball, or popup.
+
+      - name: hit_location
+        description: Position number of the first fielder to touch the ball (1–9 standard fielding positions).
+
+      - name: hc_x
+        description: Hit coordinate X of the batted ball on the field diagram.
+
+      - name: hc_y
+        description: Hit coordinate Y of the batted ball on the field diagram.
+
+      - name: spray_angle
+        description: Derived angle of the ball off the bat based on the hit coordinates.
+
+      - name: hit_distance_sc
+        description: Projected hit distance of the batted ball in feet.
+
+      - name: launch_speed
+        description: >
+          Exit velocity of the batted ball in MPH as tracked by Statcast. For the limited subset
+          of batted balls not tracked directly, estimates are included based on a modeling process
+          using available tracking parameters.
+
+      - name: launch_angle
+        description: >
+          Launch angle of the batted ball in degrees as tracked by Statcast. For the limited subset
+          of batted balls not tracked directly, estimates are included based on a modeling process
+          using available tracking parameters.
+
+      - name: estimated_ba_using_speedangle
+        description: Estimated batting average (xBA) based on the launch angle and exit velocity of the batted ball.
+
+      - name: estimated_slg_using_speedangle
+        description: Estimated slugging percentage based on launch angle and exit velocity.
+
+      - name: estimated_woba_using_speedangle
+        description: Estimated wOBA (xwOBA) based on the launch angle and exit velocity of the batted ball.
+
+      - name: launch_speed_angle_type
+        description: Launch speed/angle zone classification based on exit velocity and launch angle.
+
+      - name: if_fielding_alignment
+        description: Infield fielding alignment at the time of the pitch (e.g. Standard, Shift, Strategic).
+
+      - name: of_fielding_alignment
+        description: Outfield fielding alignment at the time of the pitch (e.g. Standard, Strategic).
+
+      - name: woba_value
+        description: wOBA value assigned based on the result of the play.
+
+      - name: woba_denom
+        description: wOBA denominator indicator based on the result of the play (1 if the PA counts toward wOBA, 0 otherwise).
+
+      - name: babip_value
+        description: BABIP value assigned based on the result of the play.
+
+      - name: iso_value
+        description: Isolated power (ISO) value assigned based on the result of the play.
+
+      - name: home_win_exp
+        description: Home team win expectancy at the time of the pitch (value between 0 and 1).
+
+      - name: bat_win_exp
+        description: Batting team win expectancy at the time of the pitch (value between 0 and 1).
+
+      - name: delta_home_win_exp
+        description: The change in win expectancy for the home team from before to after the plate appearance.
+
+      - name: delta_run_exp
+        description: The change in run expectancy from before to after the pitch.
+
+      - name: delta_pitcher_run_exp
+        description: The change in run expectancy for the pitcher from before to after the pitch.
+
+      - name: sv_id
+        description: Non-unique identifier of the play event within a game.
+
+      - name: name_
+        description: Non-unique identifier of the play event within a game.
