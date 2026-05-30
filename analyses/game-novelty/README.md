@@ -1,4 +1,4 @@
-# Novelty
+# Game Novelty
 
 This analysis determines when a baseball game becomes a novelty, i.e., reaches
 a sequence that has never previously occurred.

@@ -73,7 +73,7 @@ def main():
                 results.append(result)
 
         results = pd.DataFrame(results)
-        results.to_csv(f'analyses/novelty/output/novelty-{season}.csv', index=False)
+        results.to_csv(f'analyses/game-novelty/output/game-novelty-{season}.csv', index=False)
 
 
 if __name__ == '__main__':
