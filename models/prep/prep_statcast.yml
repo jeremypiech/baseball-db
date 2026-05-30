@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: stg_statcast
+  - name: prep_statcast
     description: >
       Statcast pitch-level data from Baseball Savant. Contains one row per pitch with
       tracking data including pitch characteristics, batted ball metrics, player context,
