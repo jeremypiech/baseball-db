@@ -12,6 +12,8 @@ SELECT
     home_team,
     away_team,
     pitch_result_desc,
+    gameday_desc,
+    pa_event,
 
     ---------- primary
     batter_id,
@@ -31,8 +33,6 @@ SELECT
     ---------- attributes
     season,
     game_type,
-    pa_event,
-    pa_desc,
     inning,
     inning_topbot,
     outs,
@@ -132,6 +132,7 @@ SELECT
     delta_home_win_exp,
     delta_run_exp,
     delta_pitcher_run_exp,
-    sv_id
+    sv_id,
+    is_pa_event
 
 FROM statcast

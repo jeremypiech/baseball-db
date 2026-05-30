@@ -35,6 +35,12 @@ models:
       - name: pitch_result_desc
         description: Description of the resulting pitch (e.g. called_strike, swinging_strike, ball, hit_into_play).
 
+      - name: gameday_desc
+        description: Description from gameday data.
+
+      - name: pa_event
+        description: Event of the resulting plate appearance (e.g. single, home_run, strikeout, walk).
+
       - name: batter_id
         description: MLB player ID tied to the batter in the play event.
 
@@ -79,12 +85,6 @@ models:
 
       - name: game_type
         description: Type of game.
-
-      - name: pa_event
-        description: Event of the resulting plate appearance (e.g. single, home_run, strikeout, walk).
-
-      - name: pa_desc
-        description: Plate appearance description from game day data.
 
       - name: inning
         description: Pre-pitch inning number.
@@ -390,3 +390,8 @@ models:
 
       - name: sv_id
         description: Non-unique identifier of the play event within a game.
+
+      - name: is_pa_event
+        description: >
+          Indicates whether the pitch results in a PA event. This should be the
+          final pitch of the plate appearance.

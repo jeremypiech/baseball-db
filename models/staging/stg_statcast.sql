@@ -30,6 +30,8 @@ SELECT
     away_team,
 
     description AS pitch_result_desc,
+    des AS gameday_desc,
+    events AS pa_event,
 
     ---------- foreign keys
     batter AS batter_id,
@@ -63,9 +65,6 @@ SELECT
     END AS game_type,
 
     ----- situation
-    events AS pa_event,
-    des AS pa_desc,
-
     inning,
     inning_topbot,
     outs_when_up AS outs,
@@ -195,6 +194,9 @@ SELECT
     delta_pitcher_run_exp,
 
     ----- other
-    sv_id
+    sv_id,
+
+    ----- booleans
+    pa_event IS NOT NULL AS is_pa_event
 
 FROM source
