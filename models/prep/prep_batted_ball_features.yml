@@ -2,3 +2,10 @@ version: 2
 
 models:
   - name: prep_batted_ball_features
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - batter_id
+              - game_date
+              - batter_stands
