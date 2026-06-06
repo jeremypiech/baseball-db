@@ -38,8 +38,7 @@ batter_spine AS (
     ['SUM(launch_speed)', 'launch_speed_sum'],
     ['SUM(launch_angle)', 'launch_angle_sum'],
     ['COUNT(*)', 'obs_count']
-]%}
-
+] %}
 
 launch_features AS (
     SELECT
@@ -59,7 +58,7 @@ launch_features AS (
         {% endfor %}
 
         launch_speed_sum / obs_count AS last_100_avg_launch_speed,
-        launch_angle_sum / obs_count AS last_100_avg_launch_angle,
+        launch_angle_sum / obs_count AS last_100_avg_launch_angle
 
     FROM prep_statcast
     WHERE pitch_result_desc = 'hit_into_play'
@@ -67,7 +66,12 @@ launch_features AS (
         AND launch_angle IS NOT NULL
 
     /* Get the last observation for each batter date */
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY batter_id, batter_stands, game_date ORDER BY game_id DESC, game_pa_number DESC) = 1
+    QUALIFY ROW_NUMBER()
+            OVER (
+                PARTITION BY batter_id, batter_stands, game_date
+                ORDER BY game_id DESC, game_pa_number DESC
+            )
+        = 1
 ),
 
 {% set spray_feature_funcs = [
@@ -75,7 +79,7 @@ launch_features AS (
     ['SUM(IF(-15 < spray_angle AND spray_angle < 15, 1, 0))', 'spray_center_count'],
     ['SUM(IF(15 < spray_angle, 1, 0))', 'spray_right_count'],
     ['COUNT(*)', 'obs_count']
-]%}
+] %}
 
 spray_features AS (
     SELECT
@@ -104,13 +108,18 @@ spray_features AS (
         AND hc_y IS NOT NULL
 
     /* Get the last observation for each batter date */
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY batter_id, is_ground_ball, batter_stands, game_date ORDER BY game_id DESC, game_pa_number DESC) = 1
+    QUALIFY ROW_NUMBER()
+            OVER (
+                PARTITION BY batter_id, is_ground_ball, batter_stands, game_date
+                ORDER BY game_id DESC, game_pa_number DESC
+            )
+        = 1
 ),
 
 {% set season_to_date_feature_funcs = [
     ['LIST(launch_speed)', 'launch_speed_list'],
     ['COUNT(*)', 'obs_count']
-]%}
+] %}
 
 season_to_date_features_window AS (
     SELECT
@@ -135,7 +144,12 @@ season_to_date_features_window AS (
         AND launch_angle IS NOT NULL
 
     /* Get the last observation for each batter date */
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY batter_id, batter_stands, game_date ORDER BY game_id DESC, game_pa_number DESC) = 1
+    QUALIFY ROW_NUMBER()
+            OVER (
+                PARTITION BY batter_id, batter_stands, game_date
+                ORDER BY game_id DESC, game_pa_number DESC
+            )
+        = 1
 ),
 
 season_to_date_features AS (
@@ -146,7 +160,7 @@ season_to_date_features AS (
         LIST_AVG(LIST_SLICE(LIST_REVERSE_SORT(launch_speed_list), 0, obs_count // 2)) AS ev50,
         LIST_AVG(LIST_SLICE(LIST_REVERSE_SORT(launch_speed_list), 0, obs_count // 4)) AS ev25,
 
-        LIST_AVG(LIST_TRANSFORM(launch_speed_list, lambda x: IF(x >= 95, 1, 0))) AS hard_hit_pct
+        LIST_AVG(LIST_TRANSFORM(launch_speed_list, LAMBDA x: IF(x >= 95, 1, 0))) AS hard_hit_pct
 
     FROM season_to_date_features_window
 ),
@@ -215,7 +229,7 @@ joined_features AS (
     'std_ev50',
     'std_ev25',
     'std_hard_hit_pct'
-]%}
+] %}
 
 filled_nulls AS (
     SELECT
@@ -226,7 +240,8 @@ filled_nulls AS (
         {% for field in final_fields %}
             COALESCE(
                 {{ field }},
-                LAG({{ field }} IGNORE NULLS) OVER (PARTITION BY batter_id, batter_stands ORDER BY game_date)
+                LAG({{ field }} IGNORE NULLS)
+                    OVER (PARTITION BY batter_id, batter_stands ORDER BY game_date)
             ) AS {{ field }}
             {%- if not loop.last -%} , {%- endif %}
         {% endfor %}
