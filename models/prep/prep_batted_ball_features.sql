@@ -2,6 +2,7 @@
 
 WITH prep_statcast AS (
     SELECT * FROM {{ ref('prep_statcast') }}
+    WHERE game_type != 'Spring Training'
 ),
 
 batter_dates AS (
@@ -39,6 +40,7 @@ batter_spine AS (
     ['COUNT(*)', 'obs_count']
 ]%}
 
+
 launch_features AS (
     SELECT
         batter_id,
@@ -57,10 +59,11 @@ launch_features AS (
         {% endfor %}
 
         launch_speed_sum / obs_count AS last_100_avg_launch_speed,
-        launch_angle_sum / obs_count AS last_100_avg_launch_angle
+        launch_angle_sum / obs_count AS last_100_avg_launch_angle,
 
     FROM prep_statcast
-    WHERE launch_speed IS NOT NULL
+    WHERE pitch_result_desc = 'hit_into_play'
+        AND launch_speed IS NOT NULL
         AND launch_angle IS NOT NULL
 
     /* Get the last observation for each batter date */
@@ -96,11 +99,56 @@ spray_features AS (
         spray_right_count / obs_count AS last_100_spray_right_pct
 
     FROM prep_statcast
-    WHERE hc_x IS NOT NULL
+    WHERE pitch_result_desc = 'hit_into_play'
+        AND hc_x IS NOT NULL
         AND hc_y IS NOT NULL
 
     /* Get the last observation for each batter date */
     QUALIFY ROW_NUMBER() OVER (PARTITION BY batter_id, is_ground_ball, batter_stands, game_date ORDER BY game_id DESC, game_pa_number DESC) = 1
+),
+
+{% set season_to_date_feature_funcs = [
+    ['LIST(launch_speed)', 'launch_speed_list'],
+    ['COUNT(*)', 'obs_count']
+]%}
+
+season_to_date_features_window AS (
+    SELECT
+        batter_id,
+        batter_stands,
+        season,
+
+        game_date,
+        game_pa_number,
+
+        {% for func, field_name in season_to_date_feature_funcs %}
+            {{ func }} OVER (
+                PARTITION BY batter_id, season
+                ORDER BY game_date, game_id, game_pa_number
+            ) AS {{ field_name }}
+            {%- if not loop.last -%} , {%- endif %}
+        {% endfor %}
+
+    FROM prep_statcast
+    WHERE pitch_result_desc = 'hit_into_play'
+        AND launch_speed IS NOT NULL
+        AND launch_angle IS NOT NULL
+
+    /* Get the last observation for each batter date */
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY batter_id, batter_stands, game_date ORDER BY game_id DESC, game_pa_number DESC) = 1
+),
+
+season_to_date_features AS (
+    SELECT
+        *,
+
+        LIST_AVG(launch_speed_list) AS ev100,
+        LIST_AVG(LIST_SLICE(LIST_REVERSE_SORT(launch_speed_list), 0, obs_count // 2)) AS ev50,
+        LIST_AVG(LIST_SLICE(LIST_REVERSE_SORT(launch_speed_list), 0, obs_count // 4)) AS ev25,
+
+        LIST_AVG(LIST_TRANSFORM(launch_speed_list, lambda x: IF(x >= 95, 1, 0))) AS hard_hit_pct
+
+    FROM season_to_date_features_window
 ),
 
 joined_features AS (
@@ -121,7 +169,13 @@ joined_features AS (
         ground_spray.obs_count AS ground_obs_count,
         ground_spray.last_100_spray_left_pct AS last_100_ground_spray_left_pct,
         ground_spray.last_100_spray_center_pct AS last_100_ground_spray_center_pct,
-        ground_spray.last_100_spray_right_pct AS last_100_ground_spray_right_pct
+        ground_spray.last_100_spray_right_pct AS last_100_ground_spray_right_pct,
+
+        season_to_date_features.obs_count AS std_obs_count,
+        season_to_date_features.ev100 AS std_ev100,
+        season_to_date_features.ev50 AS std_ev50,
+        season_to_date_features.ev25 AS std_ev25,
+        season_to_date_features.hard_hit_pct AS std_hard_hit_pct
 
     FROM batter_spine
     LEFT JOIN launch_features
@@ -138,6 +192,10 @@ joined_features AS (
         AND batter_spine.game_date = ground_spray.game_date
         AND batter_spine.batter_stands = ground_spray.batter_stands
         AND ground_spray.is_ground_ball
+    LEFT JOIN season_to_date_features
+        ON batter_spine.batter_id = season_to_date_features.batter_id
+        AND batter_spine.game_date = season_to_date_features.game_date
+        AND batter_spine.batter_stands = season_to_date_features.batter_stands
 ),
 
 {% set final_fields = [
@@ -151,7 +209,12 @@ joined_features AS (
     'ground_obs_count',
     'last_100_ground_spray_left_pct',
     'last_100_ground_spray_center_pct',
-    'last_100_ground_spray_right_pct'
+    'last_100_ground_spray_right_pct',
+    'std_obs_count',
+    'std_ev100',
+    'std_ev50',
+    'std_ev25',
+    'std_hard_hit_pct'
 ]%}
 
 filled_nulls AS (
@@ -190,8 +253,14 @@ final AS (
         ground_obs_count,
         last_100_ground_spray_left_pct,
         last_100_ground_spray_center_pct,
-        last_100_ground_spray_right_pct
-    
+        last_100_ground_spray_right_pct,
+
+        std_obs_count,
+        std_ev100,
+        std_ev50,
+        std_ev25,
+        std_hard_hit_pct
+
     FROM filled_nulls
 )
 
