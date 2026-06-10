@@ -145,6 +145,7 @@ SELECT
     ----- swing
     bat_speed,
     swing_length,
+    miss_distance,
     hyper_speed,
     attack_angle,
     attack_direction,

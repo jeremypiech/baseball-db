@@ -111,6 +111,7 @@ class Statcast:
         'delta_run_exp': 'DECIMAL(9, 4)',
         'bat_speed': 'DECIMAL(9, 4)',
         'swing_length': 'DECIMAL(9, 4)',
+        'miss_distance': 'DECIMAL(9, 4)',
         'estimated_slg_using_speedangle': 'DECIMAL(9, 4)',
         'delta_pitcher_run_exp': 'DECIMAL(9, 4)',
         'hyper_speed': 'DECIMAL(9, 4)',
@@ -186,7 +187,8 @@ class Statcast:
                     FROM read_csv(
                         {filepaths},
                         header = true,
-                        columns = {self.FIELD_DTYPES}
+                        union_by_name = true,
+                        types = {self.FIELD_DTYPES}
                     );
             """
             con.execute(sql)

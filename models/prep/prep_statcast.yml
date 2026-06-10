@@ -282,6 +282,13 @@ models:
           The total (sum) distance in feet traveled of the head of the bat in X/Y/Z space,
           from start of tracking data until impact point.
 
+      - name: miss_distance
+        description: >
+          The distance (at moment of closest approach) between the top half of the bat and the ball,
+          in inches. Only the half of the bat away from the hands, the barrel end, is considered,
+          because the batter’s goal on a swing is not to make contact off the handle. Bunt attempts
+          are excluded. 
+
       - name: hyper_speed
         description: >
           Adjusted Exit Velocity (displayed on Savant as "Adjusted EV"). Sets any batted ball
